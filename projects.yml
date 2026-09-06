@@ -1,0 +1,55 @@
+portfolio:
+  title: AI and Machine Learning for Quantitative Research
+  subtitle: Building intelligent, reproducible systems for quantitative modeling, financial analysis, forecasting, and risk management.
+  repository: ai-ml-quantitative-research-portfolio
+  owner: Lameck Nyakweba
+  objective: AI Engineer specializing in quantitative research
+
+categories:
+  - Quantitative Machine Learning
+  - Financial Time Series
+  - Mathematical Finance
+  - Deep Learning
+  - Natural Language Processing
+  - Portfolio and Risk Analytics
+  - Numerical Computing
+  - MLOps and Deployment
+  - Responsible AI
+
+projects:
+  - id: numerical-methods
+    title: Numerical Methods for Quantitative Research
+    path: projects/01-numerical-methods
+    categories: [Numerical Computing, Mathematical Finance]
+    data: simulated
+    status: foundation-implemented
+    interfaces: [Python, R]
+  - id: monte-carlo-options
+    title: Monte Carlo Option Pricing and Risk Analysis
+    path: projects/02-monte-carlo-option-pricing
+    categories: [Mathematical Finance, Portfolio and Risk Analytics, MLOps and Deployment]
+    data: simulated
+    status: planned
+    interfaces: [Streamlit, Docker]
+  - id: financial-forecasting
+    title: Financial Time-Series Forecasting
+    path: projects/03-financial-time-series
+    categories: [Financial Time Series, Quantitative Machine Learning]
+    data: real
+    status: planned
+    interfaces: [Jupyter, Quarto]
+  - id: credit-risk
+    title: Machine Learning for Credit-Risk Prediction
+    path: projects/04-credit-risk-ml
+    categories: [Quantitative Machine Learning, Responsible AI, MLOps and Deployment]
+    data: public-or-simulated
+    status: planned
+    interfaces: [FastAPI, Docker]
+  - id: financial-nlp
+    title: Financial News and SEC Filing Analysis
+    path: projects/05-financial-nlp
+    categories: [Natural Language Processing, Deep Learning, Responsible AI]
+    data: real-public
+    status: planned
+    interfaces: [Gradio, Hugging Face Spaces]
+

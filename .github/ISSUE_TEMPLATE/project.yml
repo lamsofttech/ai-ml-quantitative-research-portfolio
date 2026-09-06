@@ -1,0 +1,26 @@
+name: Quantitative research project
+description: Propose a reproducible research-to-production project
+title: "[Project]: "
+labels: [research]
+body:
+  - type: textarea
+    attributes:
+      label: Research question
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Data provenance and validation
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Baseline, evaluation, and leakage controls
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Deployment, monitoring, risks, and limitations
+    validations:
+      required: true
+
