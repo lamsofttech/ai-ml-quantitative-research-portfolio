@@ -74,21 +74,31 @@ def main() -> None:
         s0 = st.number_input("Spot price S0", min_value=0.01, value=100.0, step=1.0)
         k = st.number_input("Strike K", min_value=0.01, value=100.0, step=1.0)
         r = st.slider("Risk-free rate r", min_value=-0.02, max_value=0.15, value=0.03, step=0.005)
-        sigma = st.slider("Volatility (sigma)", min_value=0.01, max_value=1.0, value=0.20, step=0.01)
-        maturity = st.slider("Maturity T (years)", min_value=0.05, max_value=3.0, value=1.0, step=0.05)
+        sigma = st.slider(
+            "Volatility (sigma)", min_value=0.01, max_value=1.0, value=0.20, step=0.01
+        )
+        maturity = st.slider(
+            "Maturity T (years)", min_value=0.05, max_value=3.0, value=1.0, step=0.05
+        )
         option_type = st.selectbox("Option type", ["call", "put"])
 
         st.header("Simulation settings")
         n_paths = st.select_slider(
-            "Number of simulated paths", options=[1_000, 5_000, 20_000, 50_000, 100_000, 300_000], value=50_000
+            "Number of simulated paths",
+            options=[1_000, 5_000, 20_000, 50_000, 100_000, 300_000],
+            value=50_000,
         )
         antithetic = st.checkbox("Antithetic variance reduction", value=True)
         seed = st.number_input("Random seed", min_value=0, value=2026, step=1)
 
         st.header("Risk settings")
-        alpha = st.select_slider("VaR / CVaR confidence level", options=[0.90, 0.95, 0.975, 0.99], value=0.95)
+        alpha = st.select_slider(
+            "VaR / CVaR confidence level", options=[0.90, 0.95, 0.975, 0.99], value=0.95
+        )
 
-    mc_result, bs_val = compute_price(s0, k, r, sigma, maturity, option_type, n_paths, seed, antithetic)
+    mc_result, bs_val = compute_price(
+        s0, k, r, sigma, maturity, option_type, n_paths, seed, antithetic
+    )
 
     col1, col2, col3 = st.columns(3)
     col1.metric("Black-Scholes price", f"{bs_val:.4f}")

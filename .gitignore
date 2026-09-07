@@ -16,3 +16,7 @@ mlruns/
 dist/
 build/
 
+# Local clone of the Hugging Face Space (spaces/portfolio-hub is the
+# version-controlled source; this is just a working copy for manual pushes).
+/hf-space/
+

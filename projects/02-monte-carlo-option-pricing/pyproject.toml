@@ -6,7 +6,10 @@ build-backend = "setuptools.build_meta"
 name = "quant-mc-option-pricing"
 version = "0.1.0"
 description = "Vectorized Monte Carlo option pricing, Black-Scholes comparison, and risk analysis"
-requires-python = ">=3.11"
+# 3.10, not 3.11 (unlike the other projects), because this package is installed
+# straight from GitHub by the Hugging Face Space in spaces/portfolio-hub, whose
+# build image runs Python 3.10.13. The code has no 3.11+-only syntax.
+requires-python = ">=3.10"
 dependencies = ["numpy>=1.26,<3", "scipy>=1.11,<2"]
 
 [project.optional-dependencies]
@@ -20,7 +23,7 @@ addopts = "-ra"
 
 [tool.ruff]
 line-length = 100
-target-version = "py311"
+target-version = "py310"
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "B", "UP"]
