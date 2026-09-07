@@ -11,7 +11,7 @@ dependencies = ["numpy>=1.26,<3"]
 
 [project.optional-dependencies]
 viz = ["matplotlib>=3.8,<4"]
-dev = ["pytest>=8,<9", "ruff>=0.6,<1", "matplotlib>=3.8,<4"]
+dev = ["pytest>=8,<10", "ruff>=0.6,<1", "matplotlib>=3.8,<4"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
