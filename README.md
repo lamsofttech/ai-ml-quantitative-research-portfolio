@@ -1,5 +1,9 @@
 # AI and Machine Learning for Quantitative Research
 
+[![CI](https://github.com/lamsofttech/ai-ml-quantitative-research-portfolio/actions/workflows/ci.yml/badge.svg)](https://github.com/lamsofttech/ai-ml-quantitative-research-portfolio/actions/workflows/ci.yml)
+[![Security](https://github.com/lamsofttech/ai-ml-quantitative-research-portfolio/actions/workflows/security.yml/badge.svg)](https://github.com/lamsofttech/ai-ml-quantitative-research-portfolio/actions/workflows/security.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 **Building intelligent, reproducible systems for quantitative modeling, financial analysis, forecasting, and risk management.**
 
 I am pursuing an M.S. in Quantitative Methods with a concentration in Mathematical Finance, and my career goal is to become an AI Engineer in Quantitative Research. This portfolio presents reproducible projects combining machine learning, statistics, mathematical modeling, financial analysis, and production software engineering. Each project progresses from a clearly defined research question to tested code, documented results, containerized execution, and automated CI/CD.
@@ -78,4 +82,3 @@ This repository is for education and research. It is not investment advice. Simu
 ## Author
 
 Lameck Nyakweba — M.S. Quantitative Methods, Mathematical Finance concentration; aspiring AI Engineer in Quantitative Research.
-
