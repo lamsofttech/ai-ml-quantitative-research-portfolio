@@ -6,7 +6,18 @@ currently has an interactive interface (Monte Carlo option pricing). The
 pricing/risk math itself is not reimplemented here — it is installed
 straight from the project's own package (see requirements.txt), so this
 Space can never drift from the tested, reviewed source of truth on GitHub.
+
+This account's free Space hosting tier requires ZeroGPU hardware (plain
+CPU hosting for Gradio Spaces needs a paid plan here), and ZeroGPU refuses
+to start a Space with no `@spaces.GPU`-decorated function. Rather than add
+a fake one, `run_gpu_simulation` below is a genuine, separate use of it: a
+large-N GBM Monte Carlo pricer implemented in torch, so the GPU allocation
+is doing real work instead of sitting there only to satisfy a startup
+check. The CPU-based `quant_mc_options` package above remains the primary,
+tested demo; this is an additional scaling/engineering demonstration.
 """
+
+import time
 
 import matplotlib
 
@@ -15,6 +26,7 @@ matplotlib.use("Agg")
 import gradio as gr
 import matplotlib.pyplot as plt
 import numpy as np
+import torch
 from quant_mc_options import (
     bs_greeks,
     bs_price,
@@ -25,6 +37,8 @@ from quant_mc_options import (
     price_european,
     simulate_paths,
 )
+
+import spaces
 
 REPO_URL = "https://github.com/lamsofttech/ai-ml-quantitative-research-portfolio"
 
@@ -125,6 +139,44 @@ def run_pricing(s0, k, r, sigma, maturity, option_type, n_paths, seed, alpha, an
     return price_md, greeks_md, risk_md, fig
 
 
+GPU_NOTE = """
+Same GBM pricing model as the CPU demo, reimplemented in torch to scale to path counts the CPU
+version isn't meant for (tens of millions), using a ZeroGPU allocation. This is a scaling/engineering
+demonstration, not a more accurate price -- the CPU Monte Carlo result already agrees with
+Black-Scholes to within its reported confidence interval at far smaller path counts.
+"""
+
+
+@spaces.GPU(duration=30)
+def run_gpu_simulation(s0, k, r, sigma, maturity, option_type, n_paths, seed):
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    n_paths = int(n_paths)
+    generator = torch.Generator(device=device).manual_seed(int(seed))
+
+    start = time.perf_counter()
+    z = torch.randn(n_paths, device=device, generator=generator)
+    drift = (r - 0.5 * sigma**2) * maturity
+    diffusion = sigma * (maturity**0.5) * z
+    s_t = s0 * torch.exp(drift + diffusion)
+    payoff = torch.clamp(s_t - k, min=0.0) if option_type == "call" else torch.clamp(k - s_t, min=0.0)
+    discounted = payoff * float(np.exp(-r * maturity))
+    price = discounted.mean().item()
+    std_error = (discounted.std(unbiased=True) / (n_paths**0.5)).item()
+    elapsed = time.perf_counter() - start
+
+    bs = bs_price(s0, k, r, sigma, maturity, option_type)
+    return (
+        f"### GPU Monte Carlo ({n_paths:,} paths)\n\n"
+        f"| | Value |\n|---|---|\n"
+        f"| Device | {device} |\n"
+        f"| GPU price | {price:.4f} |\n"
+        f"| Standard error | {std_error:.4f} |\n"
+        f"| Black-Scholes (closed form) | {bs:.4f} |\n"
+        f"| abs(GPU - BS) in std errors | {abs(price - bs) / std_error:.2f} |\n"
+        f"| Simulation time | {elapsed:.3f}s |\n"
+    )
+
+
 with gr.Blocks(title="AI and ML for Quantitative Research") as demo:  # noqa: SIM117
     # Nested `with` is the idiomatic Gradio Blocks layout API, not a
     # candidate for collapsing into a single `with` statement.
@@ -162,6 +214,34 @@ with gr.Blocks(title="AI and ML for Quantitative Research") as demo:  # noqa: SI
             outputs = [price_out, greeks_out, risk_out, plot_out]
             run_btn.click(fn=run_pricing, inputs=inputs, outputs=outputs)
             demo.load(fn=run_pricing, inputs=inputs, outputs=outputs)
+
+        with gr.Tab("GPU-Accelerated Simulation"):
+            gr.Markdown("## Large-N Monte Carlo on ZeroGPU")
+            gr.Markdown(GPU_NOTE)
+            with gr.Row():
+                with gr.Column(scale=1):
+                    gpu_s0 = gr.Number(label="Spot price S0", value=100.0, minimum=0.01)
+                    gpu_k = gr.Number(label="Strike K", value=100.0, minimum=0.01)
+                    gpu_r = gr.Slider(label="Risk-free rate r", minimum=-0.02, maximum=0.15, value=0.03, step=0.005)
+                    gpu_sigma = gr.Slider(
+                        label="Volatility (sigma)", minimum=0.01, maximum=1.0, value=0.20, step=0.01
+                    )
+                    gpu_maturity = gr.Slider(
+                        label="Maturity T (years)", minimum=0.05, maximum=3.0, value=1.0, step=0.05
+                    )
+                    gpu_option_type = gr.Radio(["call", "put"], label="Option type", value="call")
+                    gpu_n_paths = gr.Dropdown(
+                        [1_000_000, 5_000_000, 20_000_000, 50_000_000],
+                        label="Number of simulated paths",
+                        value=5_000_000,
+                    )
+                    gpu_seed = gr.Number(label="Random seed", value=2026, precision=0)
+                    gpu_run_btn = gr.Button("Run GPU simulation", variant="primary")
+                with gr.Column(scale=1):
+                    gpu_out = gr.Markdown()
+
+            gpu_inputs = [gpu_s0, gpu_k, gpu_r, gpu_sigma, gpu_maturity, gpu_option_type, gpu_n_paths, gpu_seed]
+            gpu_run_btn.click(fn=run_gpu_simulation, inputs=gpu_inputs, outputs=gpu_out)
 
 if __name__ == "__main__":
     demo.launch()
