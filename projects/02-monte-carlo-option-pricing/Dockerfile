@@ -1,7 +1,7 @@
 # Builds the interactive Streamlit app for this project only. The
 # repository-root Dockerfile builds the numerical-methods demo; each project
 # owns its own container image rather than sharing one environment.
-FROM python:3.12-slim AS runtime
+FROM python:3.14-slim AS runtime
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
