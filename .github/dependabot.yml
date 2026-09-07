@@ -4,12 +4,20 @@ updates:
     directory: /projects/01-numerical-methods
     schedule:
       interval: monthly
+  - package-ecosystem: pip
+    directory: /projects/02-monte-carlo-option-pricing
+    schedule:
+      interval: monthly
   - package-ecosystem: github-actions
     directory: /
     schedule:
       interval: monthly
   - package-ecosystem: docker
     directory: /
+    schedule:
+      interval: monthly
+  - package-ecosystem: docker
+    directory: /projects/02-monte-carlo-option-pricing
     schedule:
       interval: monthly
 

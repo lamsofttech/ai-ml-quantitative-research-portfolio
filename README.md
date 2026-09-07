@@ -30,7 +30,7 @@ Every project reports research results, predictive performance, financial or bus
 | Project | Focus | Delivery target | Status |
 |---|---|---|---|
 | [Numerical Methods for Quantitative Research](projects/01-numerical-methods/) | Lagrange interpolation, error, stability, Python and R | Tested research package | Implemented foundation |
-| [Monte Carlo Option Pricing and Risk Analysis](projects/02-monte-carlo-option-pricing/) | GBM, Black–Scholes, confidence intervals, VaR | Dockerized Streamlit app | Planned |
+| [Monte Carlo Option Pricing and Risk Analysis](projects/02-monte-carlo-option-pricing/) | GBM, Black–Scholes, confidence intervals, VaR | Dockerized Streamlit app | Implemented |
 | [Financial Time-Series Forecasting](projects/03-financial-time-series/) | Baselines, walk-forward validation, leakage control | Explainable forecasting pipeline | Planned |
 | [Machine Learning for Credit-Risk Prediction](projects/04-credit-risk-ml/) | Calibration, imbalance, fairness, explainability | FastAPI service | Planned |
 | [Financial News and SEC Filing Analysis](projects/05-financial-nlp/) | Sentiment, topics, transformers | Hugging Face Gradio app | Planned |
@@ -62,6 +62,17 @@ Run the interpolation demonstration:
 ```bash
 python projects/01-numerical-methods/examples.py
 Rscript projects/01-numerical-methods/r/lagrange_interpolation.R
+```
+
+Run the Monte Carlo option pricing demonstration, or its interactive app:
+
+```bash
+python -m pip install -e "projects/02-monte-carlo-option-pricing[dev]"
+pytest projects/02-monte-carlo-option-pricing/tests
+python projects/02-monte-carlo-option-pricing/examples.py
+
+python -m pip install -e "projects/02-monte-carlo-option-pricing[app]"
+streamlit run projects/02-monte-carlo-option-pricing/app/streamlit_app.py
 ```
 
 ## Repository map

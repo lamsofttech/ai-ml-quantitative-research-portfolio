@@ -29,7 +29,7 @@ projects:
     path: projects/02-monte-carlo-option-pricing
     categories: [Mathematical Finance, Portfolio and Risk Analytics, MLOps and Deployment]
     data: simulated
-    status: planned
+    status: implemented
     interfaces: [Streamlit, Docker]
   - id: financial-forecasting
     title: Financial Time-Series Forecasting
