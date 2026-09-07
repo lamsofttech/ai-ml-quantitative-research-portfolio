@@ -30,7 +30,7 @@ Every project reports research results, predictive performance, financial or bus
 | Project | Focus | Delivery target | Status |
 |---|---|---|---|
 | [Numerical Methods for Quantitative Research](projects/01-numerical-methods/) | Lagrange interpolation, error, stability, Python and R | Tested research package | Implemented foundation |
-| [Monte Carlo Option Pricing and Risk Analysis](projects/02-monte-carlo-option-pricing/) | GBM, Black–Scholes, confidence intervals, VaR | Dockerized Streamlit app | Implemented |
+| [Monte Carlo Option Pricing and Risk Analysis](projects/02-monte-carlo-option-pricing/) | GBM, Black–Scholes, confidence intervals, VaR | Dockerized Streamlit app; [live demo](https://huggingface.co/spaces/nyakslamo/ai-ml-quantitative-research-portfolio) | Implemented |
 | [Financial Time-Series Forecasting](projects/03-financial-time-series/) | Baselines, walk-forward validation, leakage control | Explainable forecasting pipeline | Planned |
 | [Machine Learning for Credit-Risk Prediction](projects/04-credit-risk-ml/) | Calibration, imbalance, fairness, explainability | FastAPI service | Planned |
 | [Financial News and SEC Filing Analysis](projects/05-financial-nlp/) | Sentiment, topics, transformers | Hugging Face Gradio app | Planned |
@@ -80,6 +80,7 @@ streamlit run projects/02-monte-carlo-option-pricing/app/streamlit_app.py
 ```text
 portfolio/                    Portfolio metadata and profile
 projects/                     Independent quantitative research projects
+spaces/portfolio-hub/         Gradio app mirrored to a Hugging Face Space
 docs/                         Standards shared by all projects
 scripts/                      Repository validation utilities
 .github/workflows/            CI, security, and container automation
