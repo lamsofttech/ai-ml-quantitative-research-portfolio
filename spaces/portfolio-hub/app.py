@@ -17,7 +17,10 @@ check. The CPU-based `quant_mc_options` package above remains the primary,
 tested demo; this is an additional scaling/engineering demonstration.
 """
 
+import inspect
+import tempfile
 import time
+from pathlib import Path
 
 import matplotlib
 
@@ -26,6 +29,7 @@ matplotlib.use("Agg")
 import gradio as gr
 import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
 import torch
 from quant_mc_options import (
     bs_greeks,
@@ -37,10 +41,13 @@ from quant_mc_options import (
     price_european,
     simulate_paths,
 )
+from quant_numerical import neville_interpolate, table_grid, write_csv
+from quant_numerical.neville import ASSIGNMENT_TARGET, ASSIGNMENT_X, ASSIGNMENT_Y
 
 import spaces
 
 REPO_URL = "https://github.com/lamsofttech/ai-ml-quantitative-research-portfolio"
+NEVILLE_CSV_DIR = Path(tempfile.gettempdir()) / "neville-space-output"
 
 OVERVIEW_MD = f"""
 # AI and Machine Learning for Quantitative Research
@@ -58,7 +65,7 @@ results, containerized execution, and automated CI/CD — full source, tests, an
 
 | Project | Focus | Status |
 |---|---|---|
-| [Numerical Methods for Quantitative Research]({REPO_URL}/tree/main/projects/01-numerical-methods) | Lagrange interpolation, error, stability, Python and R | Implemented foundation |
+| [Numerical Methods for Quantitative Research]({REPO_URL}/tree/main/projects/01-numerical-methods) | Lagrange and Neville interpolation, error, stability, Python and R — **live demo in the next tab** | Implemented foundation |
 | [Monte Carlo Option Pricing and Risk Analysis]({REPO_URL}/tree/main/projects/02-monte-carlo-option-pricing) | GBM, Black–Scholes, confidence intervals, VaR — **live demo in the next tab** | Implemented |
 | [Financial Time-Series Forecasting]({REPO_URL}/tree/main/projects/03-financial-time-series) | Baselines, walk-forward validation, leakage control | Planned |
 | [Machine Learning for Credit-Risk Prediction]({REPO_URL}/tree/main/projects/04-credit-risk-ml) | Calibration, imbalance, fairness, explainability | Planned |
@@ -73,6 +80,54 @@ trading strategy without appropriate out-of-sample evidence, costs, and risk ana
 **Author:** Lameck Nyakweba — M.S. Quantitative Methods, Mathematical Finance concentration;
 aspiring AI Engineer in Quantitative Research.
 """
+
+NEVILLE_NOTE = f"""
+Every number below comes from the exact same `quant_numerical.neville` module used in the
+project's own test suite — this Space installs it directly from the GitHub repository rather
+than re-implementing the recurrence. Defaults are the project's assignment data; edit any field
+and press Calculate to try other values. See the
+[project README]({REPO_URL}/tree/main/projects/01-numerical-methods) for the full methodology.
+"""
+
+
+def _parse_floats(raw: str) -> list[float]:
+    return [chunk.strip() for chunk in raw.split(",") if chunk.strip() != ""]
+
+
+def run_neville(x_text, y_text, target_text):
+    try:
+        x_values = [float(v) for v in _parse_floats(x_text)]
+        y_values = [float(v) for v in _parse_floats(y_text)]
+        target = float(target_text)
+        result = neville_interpolate(x_values, y_values, target)
+    except ValueError as exc:
+        error_md = (
+            f"### Input error\n\n**{exc}**\n\nCorrect the values above and press Calculate again."
+        )
+        return error_md, None, "", None
+    except Exception as exc:  # malformed number text
+        error_md = f"### Input error\n\nCould not read the values above as numbers: **{exc}**"
+        return error_md, None, "", None
+
+    estimate_md = (
+        f"### Result\n\n**f({target:g}) ≈ {result.estimate:.10f}**\n\n"
+        f"({len(result.steps)} calculations total: {len(x_values)} initial values Q[i,0] "
+        f"plus {len(result.steps) - len(x_values)} recursive entries.)"
+    )
+    grid = table_grid(result)
+    table_df = pd.DataFrame(grid[1:], columns=grid[0])
+
+    lines = ["### Every calculation step\n", "**Initial values:**\n"]
+    lines += [f"- `{s.formula}`" for s in result.steps if s.j == 0]
+    lines += ["\n**Recursive calculations:**\n"]
+    lines += [f"- `{s.formula}`" for s in result.steps if s.j != 0]
+    steps_md = "\n".join(lines)
+
+    NEVILLE_CSV_DIR.mkdir(parents=True, exist_ok=True)
+    csv_path = write_csv(result, NEVILLE_CSV_DIR / "neville_complete_table.csv")
+
+    return estimate_md, table_df, steps_md, str(csv_path)
+
 
 PRICING_NOTE = f"""
 Every number below comes from the exact same `quant_mc_options` package used in the project's own test
@@ -183,6 +238,38 @@ with gr.Blocks(title="AI and ML for Quantitative Research") as demo:  # noqa: SI
     with gr.Tabs():
         with gr.Tab("Overview"):
             gr.Markdown(OVERVIEW_MD)
+
+        with gr.Tab("Neville's Method"):
+            gr.Markdown("## Neville's Method — Polynomial Interpolation with Full Evidence")
+            gr.Markdown(NEVILLE_NOTE)
+            with gr.Row():
+                with gr.Column(scale=1):
+                    nv_x = gr.Textbox(
+                        label="x-values (comma-separated)",
+                        value=", ".join(f"{v:g}" for v in ASSIGNMENT_X),
+                    )
+                    nv_y = gr.Textbox(
+                        label="f(x)-values (comma-separated)",
+                        value=", ".join(f"{v:g}" for v in ASSIGNMENT_Y),
+                    )
+                    nv_target = gr.Textbox(
+                        label="Evaluation point (target x)", value=f"{ASSIGNMENT_TARGET:g}"
+                    )
+                    nv_run_btn = gr.Button("Calculate", variant="primary")
+                with gr.Column(scale=1):
+                    nv_result = gr.Markdown()
+                    nv_csv = gr.File(label="Download the complete table as CSV")
+            nv_table = gr.Dataframe(label="Complete recursive table", interactive=False)
+            nv_steps = gr.Markdown()
+            gr.File(
+                value=inspect.getfile(neville_interpolate),
+                label="Calculation engine source (quant_numerical/neville.py, from GitHub above)",
+            )
+
+            nv_inputs = [nv_x, nv_y, nv_target]
+            nv_outputs = [nv_result, nv_table, nv_steps, nv_csv]
+            nv_run_btn.click(fn=run_neville, inputs=nv_inputs, outputs=nv_outputs)
+            demo.load(fn=run_neville, inputs=nv_inputs, outputs=nv_outputs)
 
         with gr.Tab("Monte Carlo Option Pricing"):
             gr.Markdown("## Monte Carlo Option Pricing and Risk Analysis — live demo")
