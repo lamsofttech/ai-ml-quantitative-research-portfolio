@@ -235,11 +235,11 @@ def run_gpu_simulation(s0, k, r, sigma, maturity, option_type, n_paths, seed):
 with gr.Blocks(title="AI and ML for Quantitative Research") as demo:  # noqa: SIM117
     # Nested `with` is the idiomatic Gradio Blocks layout API, not a
     # candidate for collapsing into a single `with` statement.
-    with gr.Tabs():
+    with gr.Tabs(selected="neville"):
         with gr.Tab("Overview"):
             gr.Markdown(OVERVIEW_MD)
 
-        with gr.Tab("Neville's Method"):
+        with gr.Tab("Neville's Method", id="neville"):
             gr.Markdown("## Neville's Method — Polynomial Interpolation with Full Evidence")
             gr.Markdown(NEVILLE_NOTE)
             with gr.Row():
