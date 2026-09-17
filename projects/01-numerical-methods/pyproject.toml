@@ -6,7 +6,11 @@ build-backend = "setuptools.build_meta"
 name = "quant-numerical-methods"
 version = "0.1.0"
 description = "Reproducible numerical methods for quantitative research"
-requires-python = ">=3.11"
+# 3.10, not 3.11, for the same reason documented in project 02's pyproject.toml:
+# this package is installed straight from GitHub by the Hugging Face Space in
+# spaces/portfolio-hub, whose build image runs Python 3.10.13. Nothing here
+# actually needs 3.11+ (checked: no match statements, except*, tomllib, etc.).
+requires-python = ">=3.10"
 dependencies = ["numpy>=1.26,<3"]
 
 [project.optional-dependencies]
@@ -20,7 +24,7 @@ addopts = "-ra"
 
 [tool.ruff]
 line-length = 100
-target-version = "py311"
+target-version = "py310"
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "B", "UP"]
