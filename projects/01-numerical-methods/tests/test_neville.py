@@ -91,6 +91,23 @@ def test_rejects_non_finite_target():
         neville_interpolate(ASSIGNMENT_X, ASSIGNMENT_Y, float("nan"))
 
 
+def test_assignment_data_survives_a_gui_display_round_trip():
+    """Guards a real bug found by inspection: the Gradio apps format ASSIGNMENT_Y for their
+    default textbox value with a %g-style specifier before the user ever presses Calculate.
+    Python's default `:g` precision is 6 significant figures, which silently rounds
+    0.7651977 -> "0.765198" and 0.2818186 -> "0.281819" -- close enough to look right at a
+    glance, but the app then parses that *rounded string* back into a float and computes
+    from it, so the very first thing a visitor sees no longer reproduces the assignment's own
+    f(1.5) = 0.5118276664. `.10g` (used by both app.py files) must round-trip exactly.
+    """
+    displayed = [f"{v:.10g}" for v in ASSIGNMENT_Y]
+    reparsed = [float(text) for text in displayed]
+    assert reparsed == list(ASSIGNMENT_Y)
+
+    result = neville_interpolate(ASSIGNMENT_X, reparsed, ASSIGNMENT_TARGET)
+    assert result.estimate == pytest.approx(ASSIGNMENT_EXPECTED, abs=1e-9)
+
+
 def test_csv_export_writes_one_row_per_step(tmp_path):
     result = neville_interpolate(ASSIGNMENT_X, ASSIGNMENT_Y, ASSIGNMENT_TARGET)
     csv_path = write_csv(result, tmp_path / "neville_complete_table.csv")

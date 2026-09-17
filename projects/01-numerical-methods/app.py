@@ -120,7 +120,7 @@ with gr.Blocks(title="Neville's Method Interpolation") as demo:
             )
             y_input = gr.Textbox(
                 label="f(x)-values (comma-separated)",
-                value=", ".join(f"{v:g}" for v in ASSIGNMENT_Y),
+                value=", ".join(f"{v:.10g}" for v in ASSIGNMENT_Y),
             )
             target_input = gr.Textbox(
                 label="Evaluation point (target x)", value=f"{ASSIGNMENT_TARGET:g}"
