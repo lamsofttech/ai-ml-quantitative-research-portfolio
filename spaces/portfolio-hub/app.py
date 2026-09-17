@@ -81,12 +81,21 @@ trading strategy without appropriate out-of-sample evidence, costs, and risk ana
 aspiring AI Engineer in Quantitative Research.
 """
 
-NEVILLE_NOTE = f"""
-Every number below comes from the exact same `quant_numerical.neville` module used in the
-project's own test suite — this Space installs it directly from the GitHub repository rather
-than re-implementing the recurrence. Defaults are the project's assignment data; edit any field
-and press Calculate to try other values. See the
-[project README]({REPO_URL}/tree/main/projects/01-numerical-methods) for the full methodology.
+NEVILLE_NOTE = """
+On my last submission for this Neville's Method question, I lost marks because I only handed
+in the final answer with no working shown — there was nothing to check my process against.
+This page accompanies that submission with the full working, computed live rather than typed
+by hand, using the exact recurrence we covered in class:
+
+```
+Q[i, 0] = f(x_i)
+
+Q[i, j] = ((x_target - x[i-j]) * Q[i, j-1] - (x_target - x[i]) * Q[i-1, j-1])
+          / (x[i] - x[i-j])
+```
+
+Defaults below are the assignment's own data (x = 1.0 to 2.5, target x = 1.5, expected result
+f(1.5) = 0.5118276664).
 """
 
 
@@ -240,7 +249,7 @@ with gr.Blocks(title="AI and ML for Quantitative Research") as demo:  # noqa: SI
             gr.Markdown(OVERVIEW_MD)
 
         with gr.Tab("Neville's Method", id="neville"):
-            gr.Markdown("## Neville's Method — Polynomial Interpolation with Full Evidence")
+            gr.Markdown("## Appeal: Sample Workings to Augment an Earlier Submitted Assignment")
             gr.Markdown(NEVILLE_NOTE)
             with gr.Row():
                 with gr.Column(scale=1):
@@ -263,7 +272,7 @@ with gr.Blocks(title="AI and ML for Quantitative Research") as demo:  # noqa: SI
             nv_steps = gr.Markdown()
             gr.File(
                 value=inspect.getfile(neville_interpolate),
-                label="Calculation engine source (quant_numerical/neville.py, from GitHub above)",
+                label="Calculation engine source (neville.py) — real, running code",
             )
 
             nv_inputs = [nv_x, nv_y, nv_target]

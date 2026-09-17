@@ -34,13 +34,12 @@ ENGINE_SOURCE = PROJECT_DIR / "src" / "quant_numerical" / "neville.py"
 CLI_SOURCE = PROJECT_DIR / "nevilles_method.py"
 
 EXPLANATION_MD = """
-# Neville's Method — Polynomial Interpolation with Full Calculation Evidence
+# Appeal: Sample Workings to Augment an Earlier Submitted Assignment
 
-This tool exists to make the *process* of Neville's method checkable, not just the final
-number. Every entry of the recursive table is shown with its complete numerical substitution,
-so the calculation can be verified by hand step by step.
-
-**Recurrence:**
+On my last submission for this Neville's Method question, I lost marks because I only handed
+in the final answer with no working shown — there was nothing to check my process against.
+This page accompanies that submission with the full working, computed live rather than typed
+by hand, using the exact recurrence we covered in class:
 
 ```
 Q[i, 0] = f(x_i)
@@ -49,16 +48,15 @@ Q[i, j] = ((x_target - x[i-j]) * Q[i, j-1] - (x_target - x[i]) * Q[i-1, j-1])
           / (x[i] - x[i-j])
 ```
 
-`Q[n-1, n-1]` — the bottom-right corner of the table — is the interpolated value at the target
-point. The fields below default to the assignment's own data (six points, target `x = 1.5`,
-expected result `f(1.5) = 0.5118276664`); edit them and press **Calculate** to try other data.
+Defaults below are the assignment's own data (x = 1.0 to 2.5, target x = 1.5, expected result
+f(1.5) = 0.5118276664).
 """
 
 DOWNLOADS_NOTE = """
 ### Source code
 
-Both files below are the actual code that produced every number above — nothing in this
-interface is a separate, undocumented implementation.
+Both files are the actual code that produced every number above — real, running code, not
+hand-typed workings.
 """
 
 
@@ -109,7 +107,7 @@ def calculate(x_text: str, y_text: str, target_text: str):
     return estimate_md, table_df, steps_md, str(csv_path)
 
 
-with gr.Blocks(title="Neville's Method Interpolation") as demo:
+with gr.Blocks(title="Appeal: Neville's Method Workings") as demo:
     gr.Markdown(EXPLANATION_MD)
 
     with gr.Row():
