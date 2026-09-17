@@ -95,7 +95,22 @@ Q[i, j] = ((x_target - x[i-j]) * Q[i, j-1] - (x_target - x[i]) * Q[i-1, j-1])
 ```
 
 Defaults below are the assignment's own data (x = 1.0 to 2.5, target x = 1.5, expected result
-f(1.5) = 0.5118276664).
+f(1.5) = 0.5118276664). Every working can be checked two ways: directly on this page — the
+table and every substituted calculation below — or independently, using the CSV and Python
+downloads at the bottom.
+"""
+
+NEVILLE_DOWNLOADS_NOTE = """
+### Download and check independently
+
+- **CSV** — not just a transcript: alongside the finished value, each row also has the
+  recurrence's five numeric inputs in their own columns. Open it in Excel, build the formula
+  yourself in a spare column from those columns, and confirm it matches — a ready-to-test
+  solution, not only something to read.
+- **Python source (`neville.py`)** — the real code that produced every number above, not
+  hand-typed workings. It needs only `numpy` and nothing else from this project, so it can be
+  downloaded on its own and run/validated on any other machine: `pip install numpy` then
+  `python neville.py` reproduces the table above from scratch.
 """
 
 
@@ -270,9 +285,10 @@ with gr.Blocks(title="AI and ML for Quantitative Research") as demo:  # noqa: SI
                     nv_csv = gr.File(label="Download the complete table as CSV")
             nv_table = gr.Dataframe(label="Complete recursive table", interactive=False)
             nv_steps = gr.Markdown()
+            gr.Markdown(NEVILLE_DOWNLOADS_NOTE)
             gr.File(
                 value=inspect.getfile(neville_interpolate),
-                label="Calculation engine source (neville.py) — real, running code",
+                label="Python source (neville.py) — runs standalone anywhere",
             )
 
             nv_inputs = [nv_x, nv_y, nv_target]

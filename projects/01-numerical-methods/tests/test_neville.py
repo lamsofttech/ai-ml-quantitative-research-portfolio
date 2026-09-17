@@ -1,3 +1,5 @@
+import csv
+
 import numpy as np
 import pytest
 
@@ -9,6 +11,7 @@ from quant_numerical import (
     neville_interpolate,
     write_csv,
 )
+from quant_numerical.neville import CSV_HEADER, main
 
 
 def test_assignment_result_matches_expected_value():
@@ -114,10 +117,57 @@ def test_csv_export_writes_one_row_per_step(tmp_path):
 
     assert csv_path.exists()
     lines = csv_path.read_text(encoding="utf-8").strip().splitlines()
-    assert lines[0] == "i,j,value,substitution"
+    assert lines[0] == ",".join(CSV_HEADER)
     # header + 6 leaf rows + 15 recursive rows
     assert len(lines) == 1 + 6 + 15
 
     last_row = lines[-1]
     assert last_row.startswith("5,5,")
     assert "0.5118276664" in last_row
+
+
+def test_csv_numeric_columns_are_actually_recomputable(tmp_path):
+    """The whole point of breaking the substitution into its own numeric columns: a
+    spreadsheet formula built from just those columns (not the value column) must reproduce
+    it -- confirms the CSV is something to test, not only something to read.
+    """
+    result = neville_interpolate(ASSIGNMENT_X, ASSIGNMENT_Y, ASSIGNMENT_TARGET)
+    csv_path = write_csv(result, tmp_path / "neville_complete_table.csv")
+
+    with csv_path.open(newline="", encoding="utf-8") as handle:
+        rows = list(csv.DictReader(handle))
+
+    recursive_rows = [row for row in rows if int(row["j"]) != 0]
+    assert len(recursive_rows) == 15
+    for row in recursive_rows:
+        x_target = float(row["x_target"])
+        x_i_minus_j = float(row["x_i_minus_j"])
+        q_i_jminus1 = float(row["Q_i_jminus1"])
+        x_i = float(row["x_i"])
+        q_iminus1_jminus1 = float(row["Q_iminus1_jminus1"])
+        recomputed = (
+            (x_target - x_i_minus_j) * q_i_jminus1 - (x_target - x_i) * q_iminus1_jminus1
+        ) / (x_i - x_i_minus_j)
+        assert recomputed == pytest.approx(float(row["value"]), abs=1e-9)
+
+    leaf_rows = [row for row in rows if int(row["j"]) == 0]
+    assert all(row["x_target"] == "" for row in leaf_rows)
+
+
+def test_cli_main_reproduces_assignment_result_and_writes_csv(tmp_path, capsys):
+    """quant_numerical/neville.py's own CLI (not nevilles_method.py's wrapper) end to end --
+    this is the entry point someone gets if they download only this one file.
+    """
+    csv_path = tmp_path / "out.csv"
+    exit_code = main(["--csv", str(csv_path)])
+
+    assert exit_code == 0
+    assert csv_path.exists()
+    captured = capsys.readouterr()
+    assert "f(1.5) ~= 0.5118276664" in captured.out
+
+
+def test_cli_main_reports_invalid_input_without_crashing(capsys):
+    exit_code = main(["--x", "1.0,1.0", "--y", "1.0,2.0", "--target", "1.5"])
+    assert exit_code == 1
+    assert "distinct" in capsys.readouterr().err

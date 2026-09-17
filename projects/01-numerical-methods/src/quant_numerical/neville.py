@@ -19,7 +19,9 @@ recursive step, so a repeated x-value would divide by zero.
 
 from __future__ import annotations
 
+import argparse
 import csv
+import sys
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -38,12 +40,24 @@ ASSIGNMENT_EXPECTED: float = 0.5118276664
 
 @dataclass(frozen=True)
 class NevilleStep:
-    """One computed entry ``Q[i, j]`` of the Neville table, with its full substitution."""
+    """One computed entry ``Q[i, j]`` of the Neville table, with its full substitution.
+
+    The five ``*_input`` fields below are ``None`` for a leaf entry (``j == 0``, which is
+    simply ``f(x_i)``, nothing to substitute) and hold the recurrence's five numeric inputs
+    for every other entry -- broken out as their own values, not just baked into ``formula``'s
+    text, specifically so a CSV export can be recomputed and cross-checked in a spreadsheet
+    rather than only read.
+    """
 
     i: int
     j: int
     value: float
     formula: str
+    x_target_input: float | None = None
+    x_i_minus_j_input: float | None = None
+    q_i_jminus1_input: float | None = None
+    x_i_input: float | None = None
+    q_iminus1_jminus1_input: float | None = None
 
 
 @dataclass(frozen=True, eq=False)
@@ -126,7 +140,19 @@ def neville_interpolate(x_nodes: ArrayLike, y_nodes: ArrayLike, x_target: float)
                 f"- ({target:g} - {x_right:g})({right:.10f})) "
                 f"/ ({x_right:g} - {x_left:g}) = {value:.10f}"
             )
-            steps.append(NevilleStep(i=i, j=j, value=float(value), formula=formula))
+            steps.append(
+                NevilleStep(
+                    i=i,
+                    j=j,
+                    value=float(value),
+                    formula=formula,
+                    x_target_input=target,
+                    x_i_minus_j_input=float(x_left),
+                    q_i_jminus1_input=float(left),
+                    x_i_input=float(x_right),
+                    q_iminus1_jminus1_input=float(right),
+                )
+            )
 
     estimate = float(table[n - 1, n - 1])
     return NevilleResult(
@@ -162,14 +188,122 @@ def format_table(result: NevilleResult) -> str:
     return "\n".join(lines)
 
 
+CSV_HEADER = [
+    "i",
+    "j",
+    "value",
+    "x_target",
+    "x_i_minus_j",
+    "Q_i_jminus1",
+    "x_i",
+    "Q_iminus1_jminus1",
+    "substitution",
+]
+
+
 def write_csv(result: NevilleResult, path: str | Path) -> Path:
-    """Write every computed step (i, j, value, substitution) to a CSV file and return its path."""
+    """Write every computed step to a CSV file and return its path.
+
+    Deliberately more than a display log: alongside the human-readable ``substitution``
+    string, each recursive row's five numeric inputs are their own columns
+    (``x_target``, ``x_i_minus_j``, ``Q_i_jminus1``, ``x_i``, ``Q_iminus1_jminus1``) --
+    blank for a leaf row (``j == 0``), since ``Q[i,0]`` has nothing to substitute. Opened in
+    Excel, this is ready to test: build the recurrence yourself in a spare column, e.g.
+    ``=((D2-E2)*F2-(D2-G2)*H2)/(G2-E2)`` against this file's own column order, and confirm it
+    matches the stored ``value`` -- not just a transcript to read, something to check.
+    """
     out_path = Path(path)
     if out_path.parent != Path():
         out_path.parent.mkdir(parents=True, exist_ok=True)
+
+    def fmt(value: float | None) -> str:
+        return "" if value is None else f"{value:.10f}"
+
     with out_path.open("w", newline="", encoding="utf-8") as handle:
         writer = csv.writer(handle)
-        writer.writerow(["i", "j", "value", "substitution"])
+        writer.writerow(CSV_HEADER)
         for step in result.steps:
-            writer.writerow([step.i, step.j, f"{step.value:.10f}", step.formula])
+            writer.writerow(
+                [
+                    step.i,
+                    step.j,
+                    f"{step.value:.10f}",
+                    fmt(step.x_target_input),
+                    fmt(step.x_i_minus_j_input),
+                    fmt(step.q_i_jminus1_input),
+                    fmt(step.x_i_input),
+                    fmt(step.q_iminus1_jminus1_input),
+                    step.formula,
+                ]
+            )
     return out_path
+
+
+# ---------------------------------------------------------------------------------------
+# Command-line entry point. This file needs only numpy beyond the standard library, so it
+# can be downloaded on its own -- no other file from this project -- and validated
+# independently: `pip install numpy` then `python neville.py`.
+# ---------------------------------------------------------------------------------------
+
+
+def _parse_floats(raw: str) -> list[float]:
+    values = [chunk.strip() for chunk in raw.split(",")]
+    return [float(chunk) for chunk in values if chunk != ""]
+
+
+def build_arg_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(
+        description=(
+            "Run Neville's method with no arguments to reproduce the assignment's own "
+            "data and its expected result, f(1.5) = 0.5118276664."
+        ),
+    )
+    parser.add_argument(
+        "--x", type=str, default=None, help="Comma-separated x-values (default: assignment data)"
+    )
+    parser.add_argument(
+        "--y", type=str, default=None, help="Comma-separated f(x)-values (default: assignment data)"
+    )
+    parser.add_argument(
+        "--target",
+        type=float,
+        default=None,
+        help="Evaluation point (default: assignment target, 1.5)",
+    )
+    parser.add_argument(
+        "--csv", type=str, default=None, help="Optional path to write the complete table as CSV"
+    )
+    return parser
+
+
+def main(argv: list[str] | None = None) -> int:
+    args = build_arg_parser().parse_args(argv)
+    x_values = _parse_floats(args.x) if args.x is not None else list(ASSIGNMENT_X)
+    y_values = _parse_floats(args.y) if args.y is not None else list(ASSIGNMENT_Y)
+    target = args.target if args.target is not None else ASSIGNMENT_TARGET
+
+    try:
+        result = neville_interpolate(x_values, y_values, target)
+    except ValueError as exc:
+        print(f"Error: {exc}", file=sys.stderr)
+        return 1
+
+    print(f"Neville's method interpolation at x = {target:g}\n")
+    print("Complete recursive table (blank cells are not part of the recurrence):\n")
+    print(format_table(result))
+
+    print("\nEvery calculation step:\n")
+    for step in result.steps:
+        print(f"  {step.formula}")
+
+    print(f"\nf({target:g}) ~= {result.estimate:.10f}")
+
+    if args.csv:
+        csv_path = write_csv(result, args.csv)
+        print(f"\nWrote complete table ({len(result.steps)} rows) to {csv_path}")
+
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

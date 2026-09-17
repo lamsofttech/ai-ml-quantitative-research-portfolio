@@ -31,7 +31,6 @@ from quant_numerical.neville import (  # noqa: E402
 PROJECT_DIR = Path(__file__).parent
 ARTIFACTS_DIR = PROJECT_DIR / "artifacts"
 ENGINE_SOURCE = PROJECT_DIR / "src" / "quant_numerical" / "neville.py"
-CLI_SOURCE = PROJECT_DIR / "nevilles_method.py"
 
 EXPLANATION_MD = """
 # Appeal: Sample Workings to Augment an Earlier Submitted Assignment
@@ -49,14 +48,22 @@ Q[i, j] = ((x_target - x[i-j]) * Q[i, j-1] - (x_target - x[i]) * Q[i-1, j-1])
 ```
 
 Defaults below are the assignment's own data (x = 1.0 to 2.5, target x = 1.5, expected result
-f(1.5) = 0.5118276664).
+f(1.5) = 0.5118276664). Every working can be checked two ways: directly on this page — the
+table and every substituted calculation below — or independently, using the CSV and Python
+downloads at the bottom.
 """
 
 DOWNLOADS_NOTE = """
-### Source code
+### Download and check independently
 
-Both files are the actual code that produced every number above — real, running code, not
-hand-typed workings.
+- **CSV** — not just a transcript: alongside the finished value, each row also has the
+  recurrence's five numeric inputs in their own columns. Open it in Excel, build the formula
+  yourself in a spare column from those columns, and confirm it matches — a ready-to-test
+  solution, not only something to read.
+- **Python source (`neville.py`)** — the real code that produced every number on this page,
+  not hand-typed workings. It needs only `numpy` and nothing else from this project, so it can
+  be downloaded on its own and run/validated on any other machine: `pip install numpy` then
+  `python neville.py` reproduces the table above from scratch.
 """
 
 
@@ -133,9 +140,7 @@ with gr.Blocks(title="Appeal: Neville's Method Workings") as demo:
     steps_out = gr.Markdown()
 
     gr.Markdown(DOWNLOADS_NOTE)
-    with gr.Row():
-        gr.File(value=str(ENGINE_SOURCE), label="Calculation engine (quant_numerical/neville.py)")
-        gr.File(value=str(CLI_SOURCE), label="Standalone command-line runner (nevilles_method.py)")
+    gr.File(value=str(ENGINE_SOURCE), label="Python source (neville.py) — runs standalone anywhere")
 
     inputs = [x_input, y_input, target_input]
     outputs = [result_out, table_out, steps_out, csv_out]
