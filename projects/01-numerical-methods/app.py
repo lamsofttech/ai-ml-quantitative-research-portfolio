@@ -50,7 +50,7 @@ Q[i, j] = ((x_target - x[i-j]) * Q[i, j-1] - (x_target - x[i]) * Q[i-1, j-1])
 Defaults below are the assignment's own data (x = 1.0 to 2.5, target x = 1.5, expected result
 f(1.5) = 0.5118276664). Every working can be checked two ways: directly on this page — the
 table and every substituted calculation below — or independently, using the CSV and Python
-downloads at the bottom.
+downloads next to the result.
 """
 
 DOWNLOADS_NOTE = """
@@ -134,13 +134,16 @@ with gr.Blocks(title="Appeal: Neville's Method Workings") as demo:
 
         with gr.Column(scale=1):
             result_out = gr.Markdown()
-            csv_out = gr.File(label="Download the complete table as CSV")
+            gr.Markdown(DOWNLOADS_NOTE)
+            with gr.Row():
+                csv_out = gr.File(label="Download the complete table as CSV")
+                gr.File(
+                    value=str(ENGINE_SOURCE),
+                    label="Python source (neville.py) — runs standalone anywhere",
+                )
 
     table_out = gr.Dataframe(label="Complete recursive table", interactive=False)
     steps_out = gr.Markdown()
-
-    gr.Markdown(DOWNLOADS_NOTE)
-    gr.File(value=str(ENGINE_SOURCE), label="Python source (neville.py) — runs standalone anywhere")
 
     inputs = [x_input, y_input, target_input]
     outputs = [result_out, table_out, steps_out, csv_out]

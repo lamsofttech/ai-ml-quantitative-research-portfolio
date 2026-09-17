@@ -97,7 +97,7 @@ Q[i, j] = ((x_target - x[i-j]) * Q[i, j-1] - (x_target - x[i]) * Q[i-1, j-1])
 Defaults below are the assignment's own data (x = 1.0 to 2.5, target x = 1.5, expected result
 f(1.5) = 0.5118276664). Every working can be checked two ways: directly on this page — the
 table and every substituted calculation below — or independently, using the CSV and Python
-downloads at the bottom.
+downloads next to the result.
 """
 
 NEVILLE_DOWNLOADS_NOTE = """
@@ -282,14 +282,15 @@ with gr.Blocks(title="AI and ML for Quantitative Research") as demo:  # noqa: SI
                     nv_run_btn = gr.Button("Calculate", variant="primary")
                 with gr.Column(scale=1):
                     nv_result = gr.Markdown()
-                    nv_csv = gr.File(label="Download the complete table as CSV")
+                    gr.Markdown(NEVILLE_DOWNLOADS_NOTE)
+                    with gr.Row():
+                        nv_csv = gr.File(label="Download the complete table as CSV")
+                        gr.File(
+                            value=inspect.getfile(neville_interpolate),
+                            label="Python source (neville.py) — runs standalone anywhere",
+                        )
             nv_table = gr.Dataframe(label="Complete recursive table", interactive=False)
             nv_steps = gr.Markdown()
-            gr.Markdown(NEVILLE_DOWNLOADS_NOTE)
-            gr.File(
-                value=inspect.getfile(neville_interpolate),
-                label="Python source (neville.py) — runs standalone anywhere",
-            )
 
             nv_inputs = [nv_x, nv_y, nv_target]
             nv_outputs = [nv_result, nv_table, nv_steps, nv_csv]
