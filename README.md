@@ -29,7 +29,7 @@ Every project reports research results, predictive performance, financial or bus
 
 | Project | Focus | Delivery target | Status |
 |---|---|---|---|
-| [Numerical Methods for Quantitative Research](projects/01-numerical-methods/) | Lagrange interpolation, error, stability, Python and R | Tested research package | Implemented foundation |
+| [Numerical Methods for Quantitative Research](projects/01-numerical-methods/) | Lagrange and Neville interpolation, error, stability, Python and R | Tested research package with a Gradio interface | Implemented foundation |
 | [Monte Carlo Option Pricing and Risk Analysis](projects/02-monte-carlo-option-pricing/) | GBM, Black–Scholes, confidence intervals, VaR | Dockerized Streamlit app; [live demo](https://huggingface.co/spaces/nyakslamo/ai-ml-quantitative-research-portfolio) | Implemented |
 | [Financial Time-Series Forecasting](projects/03-financial-time-series/) | Baselines, walk-forward validation, leakage control | Explainable forecasting pipeline | Planned |
 | [Machine Learning for Credit-Risk Prediction](projects/04-credit-risk-ml/) | Calibration, imbalance, fairness, explainability | FastAPI service | Planned |
@@ -62,6 +62,16 @@ Run the interpolation demonstration:
 ```bash
 python projects/01-numerical-methods/examples.py
 Rscript projects/01-numerical-methods/r/lagrange_interpolation.R
+```
+
+Run Neville's method (recursive interpolation with a full calculation trace) from the command
+line, or its interactive Gradio interface:
+
+```bash
+python projects/01-numerical-methods/nevilles_method.py
+
+python -m pip install -e "projects/01-numerical-methods[app]"
+python projects/01-numerical-methods/app.py
 ```
 
 Run the Monte Carlo option pricing demonstration, or its interactive app:
