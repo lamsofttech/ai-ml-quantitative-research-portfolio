@@ -20,10 +20,17 @@
     "repo_id": "nyakslamo/ai-ml-quantitative-research-portfolio",
     "repo_type": "space",
     "source": "spaces/portfolio-hub",
-    "status": "authentication and live build not verified"
+    "status": "Publishing prepared; Python syntax and YAML parsed; credential, workflow execution and live build not verified",
+    "workflow": ".github/workflows/publish-huggingface.yml",
+    "publish_script": "scripts/publish_huggingface.py"
   },
   "learning": {
     "status": "No comprehension evidence collected; daily reading and checks required"
   },
-  "latest_log": "portfolio/progress/2026-11-11.md"
+  "latest_log": "portfolio/progress/2026-11-11.md",
+  "automation": {
+    "id": "Automation_826d2e5b7734819180c3f3fc1c7b06c4",
+    "schedule": "Daily around 08:00 America/Chicago; first run 2026-11-12",
+    "status": "enabled; first execution pending"
+  }
 }
