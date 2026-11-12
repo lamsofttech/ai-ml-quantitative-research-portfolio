@@ -1,36 +1,89 @@
 {
   "schema_version": 1,
-  "updated_on": "2026-11-11",
+  "updated_on": "2026-11-12",
   "vision_file": "docs/PORTFOLIO_VISION.md",
   "expected_graduation": "2028-05",
   "active_milestone": "Verify foundations and establish reproducible delivery for projects 01/02",
-  "next_task": "Inspect and restore CI: README and CONTRIBUTING reference .github/workflows/ci.yml, but the inspected main tree has no workflow files. Run existing project tests before extending models.",
+  "next_task": "Review low severity catalog assert findings and improve validation under python -O; continue reproducible baselines for projects 01/02. Once GitHub account billing lock is resolved, verify full CI matrix and Space publishing.",
   "projects": {
-    "numerical-methods": "foundation-implemented; execution not revalidated during setup",
-    "monte-carlo-options": "implemented; execution not revalidated during setup",
+    "numerical-methods": "foundation-implemented; 23 existing tests passed on Python 3.12.14",
+    "monte-carlo-options": "implemented; 41 existing tests passed on Python 3.12.14",
     "financial-forecasting": "planned",
     "credit-risk": "planned",
     "financial-nlp": "planned"
   },
   "github": {
     "branch": "main",
-    "setup_status": "delivery contract established"
+    "setup_status": "delivery contract established",
+    "last_implementation_commit": "3b1403fc19d1582e466484f884eb4ffcd2c82971",
+    "validation": {
+      "local_python": "3.12.14",
+      "tests_passed": 64,
+      "ruff": "passed after import-spacing correction",
+      "catalog": "passed",
+      "bandit": {
+        "medium": 0,
+        "high": 0,
+        "low": 5
+      },
+      "workflow_yaml_and_bash_syntax": "passed",
+      "remote_runs": [
+        {
+          "id": 43240967753,
+          "name": "CI",
+          "status": "completed",
+          "conclusion": "failure",
+          "url": "https://github.com/lamsofttech/ai-ml-quantitative-research-portfolio/actions/runs/43240967753"
+        },
+        {
+          "id": 43240967945,
+          "name": "Security",
+          "status": "completed",
+          "conclusion": "failure",
+          "url": "https://github.com/lamsofttech/ai-ml-quantitative-research-portfolio/actions/runs/43240967945"
+        },
+        {
+          "id": 43240967785,
+          "name": "Publish portfolio hub to Hugging Face",
+          "status": "completed",
+          "conclusion": "failure",
+          "url": "https://github.com/lamsofttech/ai-ml-quantitative-research-portfolio/actions/runs/43240967785"
+        }
+      ],
+      "limitations": [
+        "Python 3.10/3.14 and Docker builds not executed locally",
+        "GitHub Actions publish run 43105699484 could not start because account is locked due to a billing issue"
+      ]
+    }
   },
   "hugging_face": {
     "repo_id": "nyakslamo/ai-ml-quantitative-research-portfolio",
     "repo_type": "space",
     "source": "spaces/portfolio-hub",
-    "status": "Publishing prepared; Python syntax and YAML parsed; credential, workflow execution and live build not verified",
+    "status": "No new upload. Existing Space API reports RUNNING at 40efb957fa2f67f3100d16421a1ffc583fd1ebeb. Actions publishing blocked by GitHub account billing lock; HF_TOKEN presence/validity unknown.",
     "workflow": ".github/workflows/publish-huggingface.yml",
-    "publish_script": "scripts/publish_huggingface.py"
+    "publish_script": "scripts/publish_huggingface.py",
+    "runtime_checked_on": "2026-11-12",
+    "runtime_commit": "40efb957fa2f67f3100d16421a1ffc583fd1ebeb"
   },
   "learning": {
-    "status": "No comprehension evidence collected; daily reading and checks required"
+    "status": "assigned; understanding not yet demonstrated",
+    "reading": [
+      "docs/VALIDATION.md",
+      ".github/workflows/ci.yml"
+    ],
+    "question": "Why can all 64 local tests pass while the GitHub badge and Hugging Face deployment still fail?"
   },
-  "latest_log": "portfolio/progress/2026-11-11.md",
+  "latest_log": "portfolio/progress/2026-11-12.md",
   "automation": {
     "id": "Automation_826d2e5b7734819180c3f3fc1c7b06c4",
     "schedule": "Daily around 08:00 America/Chicago; first run 2026-11-12",
-    "status": "enabled; first execution pending"
+    "status": "first implementation run completed; continuing active milestone"
+  },
+  "weekly_review": {
+    "baseline_on": "2026-11-12",
+    "next_review_on": "2026-11-19",
+    "alignment": "Original five-project scope preserved. November-December foundations milestone remains active; no completion claim for full research projects.",
+    "next_week_focus": "Reproducible baselines, robust validation, deployment verification after account lock resolution."
   }
 }
