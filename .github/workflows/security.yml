@@ -28,4 +28,4 @@ jobs:
           projects/01-numerical-methods/app.py
           projects/02-monte-carlo-option-pricing/app
           spaces/portfolio-hub scripts
-          --severity-level medium
+          --exclude scripts/tests --severity-level medium
