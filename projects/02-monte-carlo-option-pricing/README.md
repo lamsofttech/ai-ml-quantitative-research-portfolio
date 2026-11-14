@@ -81,14 +81,12 @@ docker run --rm -p 8501:8501 mc-option-pricing
 
 ## Interpretation and limitations
 
-- **What the results show:** the Monte Carlo estimator is unbiased and its
-  reported uncertainty is well calibrated — the closed-form Black–Scholes
-  price consistently falls inside the simulation's 95% CI, and the CI
-  half-width shrinks at the theoretical $1/\sqrt n$ rate (see
-  `artifacts/convergence.png` after running `examples.py`). Empirical VaR
-  computed from simulated paths agrees with the closed-form GBM VaR, and
-  Monte Carlo Greeks under common random numbers agree with the closed-form
-  Greeks within simulation noise.
+- **What the results show:** fixed-seed unit tests check agreement with the
+  analytic benchmark for selected inputs. The replicated study below measures
+  RMSE, standard errors and empirical CI coverage across independent random
+  streams. A 95% interval need not contain the benchmark on every run, and
+  realized absolute error need not fall at each larger path budget. Coverage
+  from only 50 replications is noisy and does not establish general calibration.
 - **What the results do not show:** none of this is evidence about real
   option markets. GBM assumes constant volatility and no jumps, which is
   well known to conflict with the volatility smile/skew, fat tails, and
@@ -116,3 +114,31 @@ docker run --rm -p 8501:8501 mc-option-pricing
   Docker healthcheck; there is no trained model to drift or retrain, so
   production model-monitoring (as used for the forecasting and credit-risk
   projects) does not apply here in the same sense.
+
+## Replicated convergence baseline
+
+The runner compares plain and antithetic sampling for European calls and puts
+at equal terminal-path budgets of 1,000, 4,000, 16,000 and 64,000 paths, with
+50 independent streams per configuration. All budgets are even, ensuring
+complete antithetic pairs; this experiment does not exercise odd path counts.
+Antithetic standard errors use independent pair averages (n/2 effective
+samples), rather than treating correlated payoffs as independent.
+
+From the repository root after installing project 02:
+
+```bash
+python -m quant_mc_options.convergence --code-version YOUR_CHECKED_OUT_COMMIT --output projects/02-monte-carlo-option-pricing/results/convergence.json
+```
+
+Record the actual checked-out commit containing the runner. The JSON records
+source-file SHA-256 hashes, environment versions, fixed input parameters, seed
+construction, replication count, model/data version, RMSE, bias, mean reported
+standard error, effective sample size and coverage counts. Its study is entirely
+simulated with a one-year horizon; there is no historical evaluation period.
+Cross-version floating-point/RNG reproducibility is not promised.
+
+A fourfold increase in path budget should approximately halve standard error;
+RMSE estimated from 50 runs can fluctuate. Compare methods at equal path
+budgets, while noting that antithetic sampling uses half as many independent
+normal draws. No wall-clock speed claim is made. This tests numerical sampling
+under matching GBM assumptions, not real-market model fit or trading profit.
