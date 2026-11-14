@@ -1,13 +1,13 @@
 {
   "schema_version": 1,
-  "updated_on": "2026-11-13",
+  "updated_on": "2026-11-14",
   "vision_file": "docs/PORTFOLIO_VISION.md",
   "expected_graduation": "2028-05",
   "active_milestone": "Verify foundations and establish reproducible delivery for projects 01/02",
-  "next_task": "Add a reproducible seeded Monte Carlo convergence baseline against Black-Scholes, recording parameters, environment, code version and uncertainty for project 02. Recheck Actions account lock before deployment verification.",
+  "next_task": "Audit and fix odd-path antithetic pairing in project 02: simulate_terminal truncates to odd n while price_european splits at floor(n/2). Add regression tests before extending the convergence experiment; then study multi-strike/maturity coverage. Recheck Actions account lock.",
   "projects": {
     "numerical-methods": "foundation-implemented; 23 existing tests passed on Python 3.12.14",
-    "monte-carlo-options": "implemented; 41 existing tests passed on Python 3.12.14",
+    "monte-carlo-options": "implemented; 51 tests passed 2026-11-14; seeded 16-configuration convergence baseline recorded",
     "financial-forecasting": "planned",
     "credit-risk": "planned",
     "financial-nlp": "planned"
@@ -15,65 +15,70 @@
   "github": {
     "branch": "main",
     "setup_status": "delivery contract established",
-    "last_implementation_commit": "3908c7d8801ce35a1bd361ed9ddee4f79751f435",
+    "last_implementation_commit": "ba4e31c5212fba8a6a38d79ee785fc5bc022a537",
     "validation": {
       "local_python": "3.12.14",
-      "tests_passed": 64,
-      "ruff": "scripts passed on 2026-11-13",
+      "tests_passed": 51,
+      "ruff": "project 02 passed 2026-11-14",
       "catalog": "12 regression tests passed on 2026-11-13; valid/invalid CLI checked with normal and optimized Python",
       "bandit": {
         "low": 0,
         "medium": 0,
         "high": 0,
-        "checked_on": "2026-11-13",
-        "production_lines": 1331
+        "scope": "project 02 production source",
+        "production_lines": 461,
+        "checked_on": "2026-11-14"
       },
       "workflow_yaml_and_bash_syntax": "passed",
       "remote_runs": [
         {
-          "id": 43442916809,
+          "id": 43603150181,
           "name": "CI",
           "status": "completed",
           "conclusion": "failure",
-          "url": "https://github.com/lamsofttech/ai-ml-quantitative-research-portfolio/actions/runs/43442916809"
+          "url": "https://github.com/lamsofttech/ai-ml-quantitative-research-portfolio/actions/runs/43603150181"
         },
         {
-          "id": 43442916862,
+          "id": 43603150132,
           "name": "Security",
           "status": "completed",
           "conclusion": "failure",
-          "url": "https://github.com/lamsofttech/ai-ml-quantitative-research-portfolio/actions/runs/43442916862"
+          "url": "https://github.com/lamsofttech/ai-ml-quantitative-research-portfolio/actions/runs/43603150132"
         }
       ],
       "limitations": [
-        "Local validation uses Python 3.12.14; Python 3.10/3.14 and Docker not executed",
-        "GitHub Actions account billing lock reverified on 2026-11-13; latest prior Security job had 0 steps",
-        "64 mathematical tests last executed 2026-11-12; unchanged project math not rerun for this catalog-only change"
+        "Local Python 3.12.14 only; no Docker or remote matrix success",
+        "New convergence baseline uses even budgets only; odd-path antithetic pairing requires audit/fix",
+        "GitHub account billing lock reverified from CI job annotation 2026-11-14"
       ],
-      "math_tests_last_run_on": "2026-11-12",
-      "catalog_tests_passed": 12
+      "math_tests_last_run_on": "2026-11-14",
+      "catalog_tests_passed": 12,
+      "project02_tests_passed": 51,
+      "project02_tests_checked_on": "2026-11-14",
+      "tests_passed_scope": "project 02 only on 2026-11-14; project 01 and catalog counts remain historical"
     }
   },
   "hugging_face": {
     "repo_id": "nyakslamo/ai-ml-quantitative-research-portfolio",
     "repo_type": "space",
     "source": "spaces/portfolio-hub",
-    "status": "Public metadata still reports RUNNING/READY at existing commit 40efb957fa2f67f3100d16421a1ffc583fd1ebeb. No upload required for catalog-only changes; publishing via Actions remains blocked by account billing lock. HF_TOKEN validity unknown; interactive demo unverified.",
+    "status": "Existing Space API reports RUNNING/READY at 40efb957fa2f67f3100d16421a1ffc583fd1ebeb. Project 02 GitHub dependency pin updated to tested runner commit; Space upload not verified. Actions account billing lock blocks runner startup; HF_TOKEN validity unknown.",
     "workflow": ".github/workflows/publish-huggingface.yml",
     "publish_script": "scripts/publish_huggingface.py",
-    "runtime_checked_on": "2026-11-13",
-    "runtime_commit": "40efb957fa2f67f3100d16421a1ffc583fd1ebeb"
+    "runtime_checked_on": "2026-11-14",
+    "runtime_commit": "40efb957fa2f67f3100d16421a1ffc583fd1ebeb",
+    "prepared_project02_pin": "ba4e31c5212fba8a6a38d79ee785fc5bc022a537",
+    "upload_status": "not performed; dependency pin change will trigger publishing workflow"
   },
   "learning": {
     "status": "assigned; understanding not yet demonstrated",
     "reading": [
-      "scripts/validate_catalog.py",
-      "scripts/tests/test_validate_catalog.py",
-      "docs/VALIDATION.md"
+      "projects/02-monte-carlo-option-pricing/results/README.md",
+      "projects/02-monte-carlo-option-pricing/src/quant_mc_options/convergence.py"
     ],
-    "question": "Why is a normal-mode success test insufficient to prove that invalid catalog data is rejected under Python optimization?"
+    "question": "Why should quadrupling the path budget roughly halve standard error, while a single absolute pricing error can still increase?"
   },
-  "latest_log": "portfolio/progress/2026-11-13.md",
+  "latest_log": "portfolio/progress/2026-11-14.md",
   "automation": {
     "id": "Automation_826d2e5b7734819180c3f3fc1c7b06c4",
     "schedule": "Daily around 08:00 America/Chicago; first run 2026-11-12",
@@ -84,5 +89,15 @@
     "next_review_on": "2026-11-19",
     "alignment": "Original five-project scope preserved. November-December foundations milestone remains active; no completion claim for full research projects.",
     "next_week_focus": "Reproducible baselines, robust validation, deployment verification after account lock resolution."
+  },
+  "research_baseline": {
+    "file": "projects/02-monte-carlo-option-pricing/results/convergence.json",
+    "report": "projects/02-monte-carlo-option-pricing/results/README.md",
+    "code_commit": "ba4e31c5212fba8a6a38d79ee785fc5bc022a537",
+    "seed": 20261114,
+    "replications": 50,
+    "configurations": 16,
+    "repeatability": "two byte-identical local executions; source hashes verified",
+    "evidence_type": "simulated numerical validation; not real-market evidence"
   }
 }
