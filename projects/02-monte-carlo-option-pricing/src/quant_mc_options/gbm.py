@@ -37,10 +37,12 @@ def simulate_terminal(
 ) -> NDArray:
     """Draw terminal GBM values ``S_T`` using the exact lognormal solution.
 
-    With ``antithetic=True`` each standard normal draw ``z`` is paired with
-    ``-z``, halving Monte Carlo variance for symmetric payoffs at no extra
-    simulation cost. ``n_paths`` is rounded up to an even number in that case
-    so every draw has its antithetic partner.
+    With ``antithetic=True``, draw ceil(n_paths/2) normals and append their
+    negatives, truncating to the exact requested size. For odd counts the
+    final positive draw has no negative partner. Consumers estimating variance
+    from pair averages must request an even count, as price_european does.
+    Antithetic sampling can reduce variance for suitable payoffs; it does not
+    universally halve variance.
     """
     _validate_market_params(s0, sigma, maturity)
     if n_paths < 1:
@@ -73,6 +75,8 @@ def simulate_paths(
     Returns an array of shape ``(n_paths, n_steps + 1)`` including the
     starting value at column 0. Uses the exact per-step lognormal transition,
     so this is unbiased regardless of how coarse the grid is.
+    Odd antithetic counts preserve this shape but leave one unpaired path;
+    do not treat all paths as independent when estimating uncertainty.
     """
     _validate_market_params(s0, sigma, maturity)
     if n_steps < 1:

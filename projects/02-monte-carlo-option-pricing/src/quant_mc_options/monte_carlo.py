@@ -27,6 +27,8 @@ class MCPriceResult:
     ``ci95`` is a normal-approximation 95% confidence interval for the
     *estimator*, not a prediction interval for any single payoff outcome.
     It narrows at the standard Monte Carlo rate of ``1/sqrt(n_paths)``.
+    ``n_paths`` reports the actual terminal-path count after any rounding;
+    ``n_effective`` counts independent observations (pairs for antithetic sampling).
     """
 
     price: float
@@ -60,9 +62,16 @@ def price_european(
     before computing the sample mean and standard error, which is the
     statistically correct way to estimate variance under antithetic sampling
     (the paired averages, not the raw payoffs, are the i.i.d. sample).
+    Odd antithetic budgets are rounded up by one to retain complete pairs.
+    At least two independent pairs are required to estimate a sample variance
+    (requested n_paths >= 3, rounded to at least 4); plain sampling needs 2 paths.
     """
     if n_paths < 2:
         raise ValueError("n_paths must be at least 2")
+    if antithetic:
+        n_paths += n_paths % 2
+        if n_paths < 4:
+            raise ValueError("at least two antithetic pairs are required to estimate uncertainty")
 
     mu = r - q
     s_t = simulate_terminal(s0, mu, sigma, maturity, n_paths, rng, antithetic=antithetic)

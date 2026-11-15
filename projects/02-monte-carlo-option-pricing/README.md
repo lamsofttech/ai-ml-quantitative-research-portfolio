@@ -142,3 +142,28 @@ RMSE estimated from 50 runs can fluctuate. Compare methods at equal path
 budgets, while noting that antithetic sampling uses half as many independent
 normal draws. No wall-clock speed claim is made. This tests numerical sampling
 under matching GBM assumptions, not real-market model fit or trading profit.
+
+## Antithetic path budgets and small samples
+
+The pricing API rounds an odd antithetic request up by one: requesting 7
+terminal paths uses 8 paths and 4 independent pair averages. MCPriceResult
+reports the actual path count and effective independent sample count. A request
+of 3 uses 4 paths (2 pairs); a request of 2 with antithetic sampling raises
+ValueError because one pair cannot estimate sample variance. Plain sampling
+retains the exact requested count and needs at least 2 independent paths.
+These minimums make the standard error defined; they do not make the normal
+95% interval reliable at such small sample sizes.
+
+The low-level simulate_terminal and simulate_paths functions continue to
+return the exact requested shape. Their odd-sized antithetic arrays have
+ceil(n/2) positive draws followed by floor(n/2) negative partners, leaving
+one draw unpaired. The pricing API requests an even count before using these
+arrays, so its standard error uses complete independent pair averages.
+Even-budget results are unchanged. Regression tests check manual pair prices,
+sample standard errors, confidence intervals, actual/effective budgets and
+small-budget rejection for calls and puts.
+
+Read src/quant_mc_options/monte_carlo.py and tests/test_antithetic_pairing.py
+for 10-15 minutes. Trace a 7-path request to its 4 independent pair averages.
+Question: Why is the standard error computed from 4 pair averages rather
+than from the 8 correlated payoff values?
