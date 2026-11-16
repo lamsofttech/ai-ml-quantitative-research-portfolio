@@ -143,6 +143,30 @@ budgets, while noting that antithetic sampling uses half as many independent
 normal draws. No wall-clock speed claim is made. This tests numerical sampling
 under matching GBM assumptions, not real-market model fit or trading profit.
 
+## Strike/maturity coverage grid
+
+The second replicated study fixes the path budget at 4,000 and evaluates both
+sampling methods for calls and puts across strikes 80/100/120 and maturities
+0.25/1/2 years, using 200 independent replications per configuration. Coverage
+is a count of intervals containing the matching Black-Scholes benchmark. Because
+that count is binomial and finite, every observed rate is accompanied by a
+two-sided 95% Clopper-Pearson interval rather than presented as an exactly known
+calibration probability.
+
+From the repository root after installing project 02:
+
+```bash
+python -m quant_mc_options.convergence --study coverage-grid \
+  --code-version YOUR_CHECKED_OUT_COMMIT \
+  --output projects/02-monte-carlo-option-pricing/results/coverage-grid.json
+```
+
+The grid tests whether the numerical confidence interval behaves similarly
+away from the at-the-money, one-year baseline. It still compares a GBM simulator
+with a Black-Scholes formula under the same assumptions. It does not validate
+those assumptions against market prices, and it is not evidence of trading
+profitability.
+
 ## Antithetic path budgets and small samples
 
 The pricing API rounds an odd antithetic request up by one: requesting 7
