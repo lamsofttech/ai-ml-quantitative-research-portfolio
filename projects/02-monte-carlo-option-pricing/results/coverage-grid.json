@@ -1,0 +1,732 @@
+{
+  "schema_version": 1,
+  "study_type": "strike-maturity-coverage-grid",
+  "data": "simulated risk-neutral GBM; no market observations",
+  "parameters": {
+    "s0": 100.0,
+    "r": 0.03,
+    "sigma": 0.2,
+    "q": 0.0
+  },
+  "strikes": [
+    80.0,
+    100.0,
+    120.0
+  ],
+  "maturities": [
+    0.25,
+    1.0,
+    2.0
+  ],
+  "n_paths": 4000,
+  "replications": 200,
+  "seed": 20261116,
+  "coverage_interval": "two-sided 95% Clopper-Pearson exact binomial interval",
+  "rng": "NumPy default_rng(SeedSequence([seed, option_index, antithetic, strike_index, maturity_index, n_paths, replication]))",
+  "option_index": {
+    "call": 0,
+    "put": 1
+  },
+  "evaluation_period": "not applicable; simulated maturity grid",
+  "rows": [
+    {
+      "option_type": "call",
+      "antithetic": false,
+      "strike": 80.0,
+      "maturity": 0.25,
+      "n_paths": 4000,
+      "n_effective": 4000,
+      "black_scholes_price": 20.629740821032428,
+      "mean_price": 20.6302767492398,
+      "bias": 0.0005359282073720983,
+      "rmse": 0.16071574118274476,
+      "mean_reported_se": 0.1572048873443938,
+      "covered_replications": 190,
+      "ci95_coverage": 0.95,
+      "coverage_binomial_ci95": [
+        0.9099724622986486,
+        0.9757658345278915
+      ]
+    },
+    {
+      "option_type": "call",
+      "antithetic": false,
+      "strike": 80.0,
+      "maturity": 1.0,
+      "n_paths": 4000,
+      "n_effective": 4000,
+      "black_scholes_price": 23.223991292486772,
+      "mean_price": 23.256230610629064,
+      "bias": 0.03223931814229257,
+      "rmse": 0.27311598110918517,
+      "mean_reported_se": 0.29969860681826704,
+      "covered_replications": 193,
+      "ci95_coverage": 0.965,
+      "coverage_binomial_ci95": [
+        0.9292190016490228,
+        0.9858144741015807
+      ]
+    },
+    {
+      "option_type": "call",
+      "antithetic": false,
+      "strike": 80.0,
+      "maturity": 2.0,
+      "n_paths": 4000,
+      "n_effective": 4000,
+      "black_scholes_price": 26.687222454260322,
+      "mean_price": 26.653944677221844,
+      "bias": -0.03327777703848174,
+      "rmse": 0.42204057874694634,
+      "mean_reported_se": 0.4164313516391889,
+      "covered_replications": 189,
+      "ci95_coverage": 0.945,
+      "coverage_binomial_ci95": [
+        0.9037223555660872,
+        0.9722277454479935
+      ]
+    },
+    {
+      "option_type": "call",
+      "antithetic": false,
+      "strike": 100.0,
+      "maturity": 0.25,
+      "n_paths": 4000,
+      "n_effective": 4000,
+      "black_scholes_price": 4.3576193334575635,
+      "mean_price": 4.364452484126225,
+      "bias": 0.006833150668662093,
+      "rmse": 0.0894847329738582,
+      "mean_reported_se": 0.10187613933368596,
+      "covered_replications": 196,
+      "ci95_coverage": 0.98,
+      "coverage_binomial_ci95": [
+        0.9495863909101037,
+        0.9945244341204436
+      ]
+    },
+    {
+      "option_type": "call",
+      "antithetic": false,
+      "strike": 100.0,
+      "maturity": 1.0,
+      "n_paths": 4000,
+      "n_effective": 4000,
+      "black_scholes_price": 9.413403383853016,
+      "mean_price": 9.412946053987408,
+      "bias": -0.00045732986560710566,
+      "rmse": 0.2222784120293374,
+      "mean_reported_se": 0.22277856780753744,
+      "covered_replications": 191,
+      "ci95_coverage": 0.955,
+      "coverage_binomial_ci95": [
+        0.916297311924146,
+        0.9792195777729956
+      ]
+    },
+    {
+      "option_type": "call",
+      "antithetic": false,
+      "strike": 100.0,
+      "maturity": 2.0,
+      "n_paths": 4000,
+      "n_effective": 4000,
+      "black_scholes_price": 14.073636360337964,
+      "mean_price": 14.03833137109742,
+      "bias": -0.03530498924054484,
+      "rmse": 0.3343529634259591,
+      "mean_reported_se": 0.33798126694895186,
+      "covered_replications": 190,
+      "ci95_coverage": 0.95,
+      "coverage_binomial_ci95": [
+        0.9099724622986486,
+        0.9757658345278915
+      ]
+    },
+    {
+      "option_type": "call",
+      "antithetic": false,
+      "strike": 120.0,
+      "maturity": 0.25,
+      "n_paths": 4000,
+      "n_effective": 4000,
+      "black_scholes_price": 0.17712580605235573,
+      "mean_price": 0.17614171739387707,
+      "bias": -0.0009840886584786452,
+      "rmse": 0.020398960432756526,
+      "mean_reported_se": 0.019727826465168994,
+      "covered_replications": 190,
+      "ci95_coverage": 0.95,
+      "coverage_binomial_ci95": [
+        0.9099724622986486,
+        0.9757658345278915
+      ]
+    },
+    {
+      "option_type": "call",
+      "antithetic": false,
+      "strike": 120.0,
+      "maturity": 1.0,
+      "n_paths": 4000,
+      "n_effective": 4000,
+      "black_scholes_price": 2.7665576398914276,
+      "mean_price": 2.7797292732431798,
+      "bias": 0.013171633351751913,
+      "rmse": 0.1298480073006009,
+      "mean_reported_se": 0.1270815637306721,
+      "covered_replications": 188,
+      "ci95_coverage": 0.94,
+      "coverage_binomial_ci95": [
+        0.8975381686916755,
+        0.9686160461065165
+      ]
+    },
+    {
+      "option_type": "call",
+      "antithetic": false,
+      "strike": 120.0,
+      "maturity": 2.0,
+      "n_paths": 4000,
+      "n_effective": 4000,
+      "black_scholes_price": 6.566047301593045,
+      "mean_price": 6.576730610255486,
+      "bias": 0.010683308662441755,
+      "rmse": 0.25251732621785455,
+      "mean_reported_se": 0.24446306741879423,
+      "covered_replications": 191,
+      "ci95_coverage": 0.955,
+      "coverage_binomial_ci95": [
+        0.916297311924146,
+        0.9792195777729956
+      ]
+    },
+    {
+      "option_type": "call",
+      "antithetic": true,
+      "strike": 80.0,
+      "maturity": 0.25,
+      "n_paths": 4000,
+      "n_effective": 2000,
+      "black_scholes_price": 20.629740821032428,
+      "mean_price": 20.628631396161452,
+      "bias": -0.0011094248709740918,
+      "rmse": 0.01894756840180432,
+      "mean_reported_se": 0.020138026571154103,
+      "covered_replications": 191,
+      "ci95_coverage": 0.955,
+      "coverage_binomial_ci95": [
+        0.916297311924146,
+        0.9792195777729956
+      ]
+    },
+    {
+      "option_type": "call",
+      "antithetic": true,
+      "strike": 80.0,
+      "maturity": 1.0,
+      "n_paths": 4000,
+      "n_effective": 2000,
+      "black_scholes_price": 23.223991292486772,
+      "mean_price": 23.222301502170765,
+      "bias": -0.0016897903160080219,
+      "rmse": 0.10582456721355543,
+      "mean_reported_se": 0.10823604218094823,
+      "covered_replications": 189,
+      "ci95_coverage": 0.945,
+      "coverage_binomial_ci95": [
+        0.9037223555660872,
+        0.9722277454479935
+      ]
+    },
+    {
+      "option_type": "call",
+      "antithetic": true,
+      "strike": 80.0,
+      "maturity": 2.0,
+      "n_paths": 4000,
+      "n_effective": 2000,
+      "black_scholes_price": 26.687222454260322,
+      "mean_price": 26.703338683990665,
+      "bias": 0.016116229730341106,
+      "rmse": 0.20006294819638906,
+      "mean_reported_se": 0.2043224696641671,
+      "covered_replications": 191,
+      "ci95_coverage": 0.955,
+      "coverage_binomial_ci95": [
+        0.916297311924146,
+        0.9792195777729956
+      ]
+    },
+    {
+      "option_type": "call",
+      "antithetic": true,
+      "strike": 100.0,
+      "maturity": 0.25,
+      "n_paths": 4000,
+      "n_effective": 2000,
+      "black_scholes_price": 4.3576193334575635,
+      "mean_price": 4.357174218402698,
+      "bias": -0.00044511505486482416,
+      "rmse": 0.07639823100653445,
+      "mean_reported_se": 0.0749630336408258,
+      "covered_replications": 189,
+      "ci95_coverage": 0.945,
+      "coverage_binomial_ci95": [
+        0.9037223555660872,
+        0.9722277454479935
+      ]
+    },
+    {
+      "option_type": "call",
+      "antithetic": true,
+      "strike": 100.0,
+      "maturity": 1.0,
+      "n_paths": 4000,
+      "n_effective": 2000,
+      "black_scholes_price": 9.413403383853016,
+      "mean_price": 9.424462009751277,
+      "bias": 0.011058625898262049,
+      "rmse": 0.16019273731484057,
+      "mean_reported_se": 0.16638438599886576,
+      "covered_replications": 192,
+      "ci95_coverage": 0.96,
+      "coverage_binomial_ci95": [
+        0.922708031773984,
+        0.9825751910055194
+      ]
+    },
+    {
+      "option_type": "call",
+      "antithetic": true,
+      "strike": 100.0,
+      "maturity": 2.0,
+      "n_paths": 4000,
+      "n_effective": 2000,
+      "black_scholes_price": 14.073636360337964,
+      "mean_price": 14.098840483347017,
+      "bias": 0.025204123009051706,
+      "rmse": 0.255912495759656,
+      "mean_reported_se": 0.25526068989343875,
+      "covered_replications": 192,
+      "ci95_coverage": 0.96,
+      "coverage_binomial_ci95": [
+        0.922708031773984,
+        0.9825751910055194
+      ]
+    },
+    {
+      "option_type": "call",
+      "antithetic": true,
+      "strike": 120.0,
+      "maturity": 0.25,
+      "n_paths": 4000,
+      "n_effective": 2000,
+      "black_scholes_price": 0.17712580605235573,
+      "mean_price": 0.17699527846745203,
+      "bias": -0.0001305275849036884,
+      "rmse": 0.020172983274797468,
+      "mean_reported_se": 0.019545148432204652,
+      "covered_replications": 188,
+      "ci95_coverage": 0.94,
+      "coverage_binomial_ci95": [
+        0.8975381686916755,
+        0.9686160461065165
+      ]
+    },
+    {
+      "option_type": "call",
+      "antithetic": true,
+      "strike": 120.0,
+      "maturity": 1.0,
+      "n_paths": 4000,
+      "n_effective": 2000,
+      "black_scholes_price": 2.7665576398914276,
+      "mean_price": 2.777467164380933,
+      "bias": 0.010909524489505442,
+      "rmse": 0.12710460298498516,
+      "mean_reported_se": 0.11928730779421588,
+      "covered_replications": 190,
+      "ci95_coverage": 0.95,
+      "coverage_binomial_ci95": [
+        0.9099724622986486,
+        0.9757658345278915
+      ]
+    },
+    {
+      "option_type": "call",
+      "antithetic": true,
+      "strike": 120.0,
+      "maturity": 2.0,
+      "n_paths": 4000,
+      "n_effective": 2000,
+      "black_scholes_price": 6.566047301593045,
+      "mean_price": 6.586860077803501,
+      "bias": 0.020812776210457247,
+      "rmse": 0.21907441001149913,
+      "mean_reported_se": 0.22155425596412623,
+      "covered_replications": 189,
+      "ci95_coverage": 0.945,
+      "coverage_binomial_ci95": [
+        0.9037223555660872,
+        0.9722277454479935
+      ]
+    },
+    {
+      "option_type": "put",
+      "antithetic": false,
+      "strike": 80.0,
+      "maturity": 0.25,
+      "n_paths": 4000,
+      "n_effective": 4000,
+      "black_scholes_price": 0.03198520656350701,
+      "mean_price": 0.0317960322570096,
+      "bias": -0.0001891743064974049,
+      "rmse": 0.005531810979995022,
+      "mean_reported_se": 0.006047152150510954,
+      "covered_replications": 192,
+      "ci95_coverage": 0.96,
+      "coverage_binomial_ci95": [
+        0.922708031773984,
+        0.9825751910055194
+      ]
+    },
+    {
+      "option_type": "put",
+      "antithetic": false,
+      "strike": 80.0,
+      "maturity": 1.0,
+      "n_paths": 4000,
+      "n_effective": 4000,
+      "black_scholes_price": 0.8596339763674052,
+      "mean_price": 0.859464798900464,
+      "bias": -0.00016917746694126713,
+      "rmse": 0.04313483210838904,
+      "mean_reported_se": 0.04803895004609162,
+      "covered_replications": 195,
+      "ci95_coverage": 0.975,
+      "coverage_binomial_ci95": [
+        0.9426256488731541,
+        0.9918338338091575
+      ]
+    },
+    {
+      "option_type": "put",
+      "antithetic": false,
+      "strike": 80.0,
+      "maturity": 2.0,
+      "n_paths": 4000,
+      "n_effective": 4000,
+      "black_scholes_price": 2.0283851410002143,
+      "mean_price": 2.0313876668991173,
+      "bias": 0.003002525898903108,
+      "rmse": 0.08831026883213093,
+      "mean_reported_se": 0.08542911464432368,
+      "covered_replications": 194,
+      "ci95_coverage": 0.97,
+      "coverage_binomial_ci95": [
+        0.935849373294973,
+        0.9889125443277452
+      ]
+    },
+    {
+      "option_type": "put",
+      "antithetic": false,
+      "strike": 100.0,
+      "maturity": 0.25,
+      "n_paths": 4000,
+      "n_effective": 4000,
+      "black_scholes_price": 3.6104248153714025,
+      "mean_price": 3.608524079123526,
+      "bias": -0.0019007362478762734,
+      "rmse": 0.08000570803827418,
+      "mean_reported_se": 0.08293520747438463,
+      "covered_replications": 191,
+      "ci95_coverage": 0.955,
+      "coverage_binomial_ci95": [
+        0.916297311924146,
+        0.9792195777729956
+      ]
+    },
+    {
+      "option_type": "put",
+      "antithetic": false,
+      "strike": 100.0,
+      "maturity": 1.0,
+      "n_paths": 4000,
+      "n_effective": 4000,
+      "black_scholes_price": 6.457956738703835,
+      "mean_price": 6.455872889916832,
+      "bias": -0.0020838487870032062,
+      "rmse": 0.14127082711785524,
+      "mean_reported_se": 0.14773423931165175,
+      "covered_replications": 196,
+      "ci95_coverage": 0.98,
+      "coverage_binomial_ci95": [
+        0.9495863909101037,
+        0.9945244341204436
+      ]
+    },
+    {
+      "option_type": "put",
+      "antithetic": false,
+      "strike": 100.0,
+      "maturity": 2.0,
+      "n_paths": 4000,
+      "n_effective": 4000,
+      "black_scholes_price": 8.25008971876283,
+      "mean_price": 8.245307139828835,
+      "bias": -0.0047825789339942795,
+      "rmse": 0.1937037993889103,
+      "mean_reported_se": 0.18861077405792986,
+      "covered_replications": 190,
+      "ci95_coverage": 0.95,
+      "coverage_binomial_ci95": [
+        0.9099724622986486,
+        0.9757658345278915
+      ]
+    },
+    {
+      "option_type": "put",
+      "antithetic": false,
+      "strike": 120.0,
+      "maturity": 0.25,
+      "n_paths": 4000,
+      "n_effective": 4000,
+      "black_scholes_price": 19.280492384348975,
+      "mean_price": 19.28073601722369,
+      "bias": 0.00024363287471144802,
+      "rmse": 0.1550220080375575,
+      "mean_reported_se": 0.15186085139857658,
+      "covered_replications": 192,
+      "ci95_coverage": 0.96,
+      "coverage_binomial_ci95": [
+        0.922708031773984,
+        0.9825751910055194
+      ]
+    },
+    {
+      "option_type": "put",
+      "antithetic": false,
+      "strike": 120.0,
+      "maturity": 1.0,
+      "n_paths": 4000,
+      "n_effective": 4000,
+      "black_scholes_price": 19.220021665712395,
+      "mean_price": 19.206909180395236,
+      "bias": -0.013112485317156218,
+      "rmse": 0.23246921540190743,
+      "mean_reported_se": 0.24353514511451554,
+      "covered_replications": 191,
+      "ci95_coverage": 0.955,
+      "coverage_binomial_ci95": [
+        0.916297311924146,
+        0.9792195777729956
+      ]
+    },
+    {
+      "option_type": "put",
+      "antithetic": false,
+      "strike": 120.0,
+      "maturity": 2.0,
+      "n_paths": 4000,
+      "n_effective": 4000,
+      "black_scholes_price": 19.57779133170291,
+      "mean_price": 19.56738501116914,
+      "bias": -0.010406320533770242,
+      "rmse": 0.2892594499396547,
+      "mean_reported_se": 0.29016605134244466,
+      "covered_replications": 192,
+      "ci95_coverage": 0.96,
+      "coverage_binomial_ci95": [
+        0.922708031773984,
+        0.9825751910055194
+      ]
+    },
+    {
+      "option_type": "put",
+      "antithetic": true,
+      "strike": 80.0,
+      "maturity": 0.25,
+      "n_paths": 4000,
+      "n_effective": 2000,
+      "black_scholes_price": 0.03198520656350701,
+      "mean_price": 0.03207982814706041,
+      "bias": 9.46215835534044e-05,
+      "rmse": 0.00631166499043358,
+      "mean_reported_se": 0.0060230192214971645,
+      "covered_replications": 188,
+      "ci95_coverage": 0.94,
+      "coverage_binomial_ci95": [
+        0.8975381686916755,
+        0.9686160461065165
+      ]
+    },
+    {
+      "option_type": "put",
+      "antithetic": true,
+      "strike": 80.0,
+      "maturity": 1.0,
+      "n_paths": 4000,
+      "n_effective": 2000,
+      "black_scholes_price": 0.8596339763674052,
+      "mean_price": 0.8591825265082926,
+      "bias": -0.0004514498591125521,
+      "rmse": 0.04651265840892824,
+      "mean_reported_se": 0.046072897233800474,
+      "covered_replications": 189,
+      "ci95_coverage": 0.945,
+      "coverage_binomial_ci95": [
+        0.9037223555660872,
+        0.9722277454479935
+      ]
+    },
+    {
+      "option_type": "put",
+      "antithetic": true,
+      "strike": 80.0,
+      "maturity": 2.0,
+      "n_paths": 4000,
+      "n_effective": 2000,
+      "black_scholes_price": 2.0283851410002143,
+      "mean_price": 2.0219908485935756,
+      "bias": -0.006394292406638601,
+      "rmse": 0.07606089176987707,
+      "mean_reported_se": 0.07899515326403907,
+      "covered_replications": 194,
+      "ci95_coverage": 0.97,
+      "coverage_binomial_ci95": [
+        0.935849373294973,
+        0.9889125443277452
+      ]
+    },
+    {
+      "option_type": "put",
+      "antithetic": true,
+      "strike": 100.0,
+      "maturity": 0.25,
+      "n_paths": 4000,
+      "n_effective": 2000,
+      "black_scholes_price": 3.6104248153714025,
+      "mean_price": 3.6134818673457016,
+      "bias": 0.003057051974299456,
+      "rmse": 0.06424123232514356,
+      "mean_reported_se": 0.060073770441479574,
+      "covered_replications": 188,
+      "ci95_coverage": 0.94,
+      "coverage_binomial_ci95": [
+        0.8975381686916755,
+        0.9686160461065165
+      ]
+    },
+    {
+      "option_type": "put",
+      "antithetic": true,
+      "strike": 100.0,
+      "maturity": 1.0,
+      "n_paths": 4000,
+      "n_effective": 2000,
+      "black_scholes_price": 6.457956738703835,
+      "mean_price": 6.457588953123993,
+      "bias": -0.0003677855798424723,
+      "rmse": 0.11139953362182307,
+      "mean_reported_se": 0.10680303906627493,
+      "covered_replications": 190,
+      "ci95_coverage": 0.95,
+      "coverage_binomial_ci95": [
+        0.9099724622986486,
+        0.9757658345278915
+      ]
+    },
+    {
+      "option_type": "put",
+      "antithetic": true,
+      "strike": 100.0,
+      "maturity": 2.0,
+      "n_paths": 4000,
+      "n_effective": 2000,
+      "black_scholes_price": 8.25008971876283,
+      "mean_price": 8.24989045108105,
+      "bias": -0.00019926768177910947,
+      "rmse": 0.13230622241120876,
+      "mean_reported_se": 0.13621282268186471,
+      "covered_replications": 191,
+      "ci95_coverage": 0.955,
+      "coverage_binomial_ci95": [
+        0.916297311924146,
+        0.9792195777729956
+      ]
+    },
+    {
+      "option_type": "put",
+      "antithetic": true,
+      "strike": 120.0,
+      "maturity": 0.25,
+      "n_paths": 4000,
+      "n_effective": 2000,
+      "black_scholes_price": 19.280492384348975,
+      "mean_price": 19.28099490765917,
+      "bias": 0.0005025233101934745,
+      "rmse": 0.010847763151120427,
+      "mean_reported_se": 0.012008553882697582,
+      "covered_replications": 196,
+      "ci95_coverage": 0.98,
+      "coverage_binomial_ci95": [
+        0.9495863909101037,
+        0.9945244341204436
+      ]
+    },
+    {
+      "option_type": "put",
+      "antithetic": true,
+      "strike": 120.0,
+      "maturity": 1.0,
+      "n_paths": 4000,
+      "n_effective": 2000,
+      "black_scholes_price": 19.220021665712395,
+      "mean_price": 19.228971162020354,
+      "bias": 0.008949496307957557,
+      "rmse": 0.058501083145371585,
+      "mean_reported_se": 0.057569646005997635,
+      "covered_replications": 190,
+      "ci95_coverage": 0.95,
+      "coverage_binomial_ci95": [
+        0.9099724622986486,
+        0.9757658345278915
+      ]
+    },
+    {
+      "option_type": "put",
+      "antithetic": true,
+      "strike": 120.0,
+      "maturity": 2.0,
+      "n_paths": 4000,
+      "n_effective": 2000,
+      "black_scholes_price": 19.57779133170291,
+      "mean_price": 19.5838049453808,
+      "bias": 0.006013613677885577,
+      "rmse": 0.09875862532898985,
+      "mean_reported_se": 0.09782874596741369,
+      "covered_replications": 192,
+      "ci95_coverage": 0.96,
+      "coverage_binomial_ci95": [
+        0.922708031773984,
+        0.9825751910055194
+      ]
+    }
+  ],
+  "provenance": {
+    "code_version": "3bfa3c1bd45bea79b8dd3ef72c55f13c699b8c3f",
+    "source_sha256": {
+      "convergence.py": "036a3d46e5765c067b0f47196cf38042cd68586b4c2857fdcadde742233003e4",
+      "monte_carlo.py": "d636432c448d076b91901ab4459df5eef9851d8a5bd8c87dd57f159e956e24c5",
+      "gbm.py": "7c9a633ccbaffd086e0338eb242d5e809fd45f66c6371b9d3b54a33e8b840e60",
+      "black_scholes.py": "bcfd5e57c7a3d4fddb4f7eca9217e0d26f587817ddaedc28c68f9637494e3541"
+    },
+    "environment": {
+      "python": "3.12.14",
+      "numpy": "2.5.5",
+      "scipy": "1.18.1"
+    },
+    "data_version": "analytic-gbm-strike-maturity-grid-v1"
+  }
+}

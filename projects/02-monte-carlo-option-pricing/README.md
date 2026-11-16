@@ -153,6 +153,10 @@ that count is binomial and finite, every observed rate is accompanied by a
 two-sided 95% Clopper-Pearson interval rather than presented as an exactly known
 calibration probability.
 
+The recorded results and interpretation are in
+[results/coverage-grid.md](results/coverage-grid.md), with exact row-level
+evidence in [results/coverage-grid.json](results/coverage-grid.json).
+
 From the repository root after installing project 02:
 
 ```bash
