@@ -87,6 +87,10 @@ The JSON records the code version, source hashes, environment, deterministic
 configuration, maximum errors and their locations. No random seed or historical
 evaluation period applies because this is a deterministic numerical experiment.
 
+The recorded results and interpretation are in
+[results/stability.md](results/stability.md), with exact evidence in
+[results/stability.json](results/stability.json).
+
 ## Reproduce
 
 Create and activate a virtual environment (Windows PowerShell shown; see the repository root

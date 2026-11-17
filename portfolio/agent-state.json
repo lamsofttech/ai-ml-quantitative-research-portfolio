@@ -1,12 +1,12 @@
 {
   "schema_version": 1,
-  "updated_on": "2026-11-16",
+  "updated_on": "2026-11-17",
   "vision_file": "docs/PORTFOLIO_VISION.md",
   "expected_graduation": "2028-05",
   "active_milestone": "Verify foundations and establish reproducible delivery for projects 01/02",
-  "next_task": "Return to project 01 and add a compact, reproducible interpolation error/stability baseline that distinguishes approximation error from floating-point error; keep the foundations milestone active and recheck remote execution.",
+  "next_task": "Extend the project-01 stability study with a Chebyshev-Lobatto node comparison on the same Runge function and error decomposition; explain why node placement changes approximation error, and recheck remote execution.",
   "projects": {
-    "numerical-methods": "foundation-implemented; 23 existing tests passed on Python 3.12.14",
+    "numerical-methods": "foundation-implemented; 35 tests passed 2026-11-17 with warnings as errors; deterministic Runge error/stability baseline separates approximation from float64 error",
     "monte-carlo-options": "implemented; 92 tests passed 2026-11-16 with warnings as errors; 36-configuration strike/maturity coverage study recorded with exact binomial uncertainty",
     "financial-forecasting": "planned",
     "credit-risk": "planned",
@@ -15,71 +15,74 @@
   "github": {
     "branch": "main",
     "setup_status": "delivery contract established",
-    "last_implementation_commit": "3bfa3c1bd45bea79b8dd3ef72c55f13c699b8c3f",
+    "last_implementation_commit": "bc50e5f827b0a8d44491f8e0cdbc7faeaf925b2d",
     "validation": {
       "local_python": "3.12.14",
-      "tests_passed": 92,
-      "ruff": "project 02 passed 2026-11-16",
+      "tests_passed": 35,
+      "ruff": "project 01 passed 2026-11-17",
       "catalog": "12 regression tests passed on 2026-11-13; valid/invalid CLI checked with normal and optimized Python",
       "bandit": {
         "low": 0,
         "medium": 0,
         "high": 0,
-        "scope": "project 02 production source",
-        "production_lines": 610,
-        "checked_on": "2026-11-16"
+        "scope": "project 01 production source",
+        "production_lines": 483,
+        "checked_on": "2026-11-17"
       },
       "workflow_yaml_and_bash_syntax": "passed",
       "remote_runs": [
         {
-          "id": 43894512915,
+          "id": 44105724888,
           "name": "CI",
           "status": "completed",
           "conclusion": "failure before any job steps",
-          "url": "https://github.com/lamsofttech/ai-ml-quantitative-research-portfolio/actions/runs/43894512915"
+          "url": "https://github.com/lamsofttech/ai-ml-quantitative-research-portfolio/actions/runs/44105724888"
         },
         {
-          "id": 43894512833,
+          "id": 44105724785,
           "name": "Security",
           "status": "completed",
           "conclusion": "failure before the bandit step",
-          "url": "https://github.com/lamsofttech/ai-ml-quantitative-research-portfolio/actions/runs/43894512833"
+          "url": "https://github.com/lamsofttech/ai-ml-quantitative-research-portfolio/actions/runs/44105724785"
         }
       ],
       "limitations": [
-        "Python 3.12.14 local validation; other Python versions, Docker and app interaction not verified",
-        "Normal pricing intervals and Clopper-Pearson coverage intervals answer different uncertainty questions",
-        "Fresh Actions jobs again stopped before all steps on 2026-11-16; behavior matches the existing account billing lock, but the connector did not expose the fresh annotation text"
+        "Python 3.12.14 local validation; other Python versions, R, Docker and app interaction not verified",
+        "The 401-point grid estimates rather than proves the continuous maximum error",
+        "Fresh Actions jobs again stopped before all steps on 2026-11-17; behavior matches the existing account billing lock, but the connector did not expose the fresh annotation text"
       ],
-      "math_tests_last_run_on": "2026-11-16",
+      "math_tests_last_run_on": "2026-11-17",
       "catalog_tests_passed": 12,
+      "project01_tests_passed": 35,
+      "project01_tests_checked_on": "2026-11-17",
       "project02_tests_passed": 92,
       "project02_tests_checked_on": "2026-11-16",
-      "tests_passed_scope": "project 02 only on 2026-11-16; project 01 and catalog counts historical"
+      "tests_passed_scope": "project 01 only on 2026-11-17; project 02 and catalog counts historical"
     }
   },
   "hugging_face": {
     "repo_id": "nyakslamo/ai-ml-quantitative-research-portfolio",
     "repo_type": "space",
     "source": "spaces/portfolio-hub",
-    "status": "Public Space page reported sleeping due to inactivity on 2026-11-16 at existing commit 40efb957fa2f67f3100d16421a1ffc583fd1ebeb. Tested project-02 pin prepared, but upload/build/runtime are not verified. Publishing remains blocked by pre-step Actions failures; HF_TOKEN presence and validity are unknown.",
+    "status": "Public Space page reported sleeping due to inactivity on 2026-11-17. Tested project-01 pin prepared, but upload/build/runtime are not verified. Publishing remains blocked by pre-step Actions failures; HF_TOKEN presence and validity are unknown.",
     "workflow": ".github/workflows/publish-huggingface.yml",
     "publish_script": "scripts/publish_huggingface.py",
-    "runtime_checked_on": "2026-11-16",
+    "runtime_checked_on": "2026-11-17",
     "runtime_commit": "40efb957fa2f67f3100d16421a1ffc583fd1ebeb",
     "prepared_project02_pin": "3bfa3c1bd45bea79b8dd3ef72c55f13c699b8c3f",
-    "upload_status": "not performed; publish run 43894513414 failed before executing any steps, so credential check, validation, HF upload, Space build and runtime were not reached"
+    "prepared_project01_pin": "bc50e5f827b0a8d44491f8e0cdbc7faeaf925b2d",
+    "upload_status": "not performed; new project-01 dependency pin will trigger the existing publishing workflow, but prior runs failed before executing any steps"
   },
   "learning": {
     "status": "assigned; understanding not yet demonstrated",
     "reading": [
-      "projects/02-monte-carlo-option-pricing/results/coverage-grid.md",
-      "projects/02-monte-carlo-option-pricing/src/quant_mc_options/convergence.py",
-      "projects/02-monte-carlo-option-pricing/tests/test_convergence.py"
+      "projects/01-numerical-methods/results/stability.md",
+      "projects/01-numerical-methods/src/quant_numerical/stability.py",
+      "projects/01-numerical-methods/tests/test_stability.py"
     ],
-    "question": "If 188 of 200 intervals cover the benchmark, why report the exact binomial interval 0.8975-0.9686 as well as the point estimate 0.94?"
+    "question": "Why does the degree-16 equally spaced interpolant perform much worse than degree 4 even though its float64 discrepancy remains below 8e-13?"
   },
-  "latest_log": "portfolio/progress/2026-11-16.md",
+  "latest_log": "portfolio/progress/2026-11-17.md",
   "automation": {
     "id": "Automation_826d2e5b7734819180c3f3fc1c7b06c4",
     "schedule": "Daily around 08:00 America/Chicago; first run 2026-11-12",
@@ -88,19 +91,20 @@
   "weekly_review": {
     "baseline_on": "2026-11-12",
     "next_review_on": "2026-11-19",
-    "as_of": "2026-11-16",
-    "alignment": "Original five-project scope preserved. November-December foundations milestone remains active; project 02 now has replicated ATM convergence and strike/maturity coverage evidence, but no market-model validation claim.",
+    "as_of": "2026-11-17",
+    "alignment": "Original five-project scope preserved. November-December foundations milestone remains active; project 01 now has a high-precision stability baseline and project 02 has replicated convergence/coverage evidence. Neither is relabeled as a completed research track.",
     "demonstrable_skills": [
       "seeded Monte Carlo experimental design",
       "Black-Scholes benchmark validation",
       "exact binomial uncertainty for empirical coverage",
-      "tested Python package and reproducible evidence artifacts"
+      "tested Python package and reproducible evidence artifacts",
+      "high-precision numerical benchmarking and error decomposition"
     ],
     "repeated_blockers": [
       "GitHub Actions jobs stop before executing steps, preventing Python matrix, Docker, security and Hugging Face publishing verification",
       "Hugging Face authentication and the newly pinned build/runtime remain unverified"
     ],
-    "next_week_focus": "Validate project 01 error/stability evidence, then verify CI/security/Hugging Face when remote runners execute."
+    "next_week_focus": "Compare equidistant and Chebyshev-Lobatto nodes in project 01, then verify CI/security/Hugging Face when remote runners execute."
   },
   "research_baseline": {
     "file": "projects/02-monte-carlo-option-pricing/results/convergence.json",
@@ -130,5 +134,16 @@
     "coverage_range": "188/200 to 196/200 (94%-98%); all 36 exact 95% binomial intervals include 95%",
     "repeatability": "two byte-identical local executions on Python 3.12.14, NumPy 2.5.5 and SciPy 1.18.1",
     "evidence_type": "simulated numerical validation; not market fit or trading evidence"
+  },
+  "stability_baseline": {
+    "status": "recorded",
+    "code_commit": "bc50e5f827b0a8d44491f8e0cdbc7faeaf925b2d",
+    "artifact": "projects/01-numerical-methods/results/stability.json",
+    "report": "projects/01-numerical-methods/results/stability.md",
+    "artifact_sha256": "7982e07eaa7315af7a2dd50e57951e911e7bcd7a0591f9d83be7c12619ad097c",
+    "design": "Runge function on [-1,1]; equidistant degrees 4/8/12/16; 401-point grid; 80-decimal reference",
+    "result": "maximum approximation error grows from 0.438357 to 14.363078 while degree-16 maximum float64 discrepancy remains below 7.83e-13",
+    "repeatability": "two byte-identical local executions on Python 3.12.14 and NumPy 2.5.5",
+    "evidence_type": "deterministic simulated numerical validation; not forecasting or financial performance evidence"
   }
 }

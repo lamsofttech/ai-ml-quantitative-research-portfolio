@@ -1,0 +1,89 @@
+{
+  "schema_version": 1,
+  "study_type": "interpolation-error-stability-baseline",
+  "data": "deterministic simulated evaluations of the known Runge function",
+  "function": "f(x) = 1 / (1 + 25 x^2)",
+  "interval": [
+    -1.0,
+    1.0
+  ],
+  "node_design": "equally spaced, including both endpoints",
+  "degrees": [
+    4,
+    8,
+    12,
+    16
+  ],
+  "grid_size": 401,
+  "decimal_precision": 80,
+  "float_evaluator": "production barycentric lagrange_interpolate using NumPy float64",
+  "error_decomposition": {
+    "approximation": "abs(true Runge value - high-precision interpolation polynomial)",
+    "floating_point": "abs(float64 production result - high-precision interpolation polynomial)",
+    "total_float64": "abs(float64 production result - true Runge value)"
+  },
+  "random_seed": "not applicable; deterministic nodes and evaluation grid",
+  "evaluation_period": "not applicable; deterministic numerical experiment",
+  "rows": [
+    {
+      "degree": 4,
+      "n_nodes": 5,
+      "max_approximation_error": 0.43835663952556775,
+      "approximation_error_argmax": 0.795,
+      "max_floating_point_error": 3.3271870375244966e-16,
+      "floating_point_error_argmax": -0.115,
+      "max_total_float64_error": 0.43835663952556786,
+      "total_error_argmax": 0.795,
+      "approximation_error_at_total_argmax": 0.43835663952556775,
+      "floating_point_error_at_total_argmax": 1.0859877689130738e-16
+    },
+    {
+      "degree": 8,
+      "n_nodes": 9,
+      "max_approximation_error": 1.045173911783697,
+      "approximation_error_argmax": 0.92,
+      "max_floating_point_error": 1.4415604583023011e-15,
+      "floating_point_error_argmax": -0.885,
+      "max_total_float64_error": 1.0451739117836956,
+      "total_error_argmax": -0.92,
+      "approximation_error_at_total_argmax": 1.045173911783697,
+      "floating_point_error_at_total_argmax": 1.33704510393123e-15
+    },
+    {
+      "degree": 12,
+      "n_nodes": 13,
+      "max_approximation_error": 3.657717137850998,
+      "approximation_error_argmax": -0.955,
+      "max_floating_point_error": 6.605827144763073e-14,
+      "floating_point_error_argmax": -0.955,
+      "max_total_float64_error": 3.6577171378510642,
+      "total_error_argmax": -0.955,
+      "approximation_error_at_total_argmax": 3.657717137850998,
+      "floating_point_error_at_total_argmax": 6.605827144763073e-14
+    },
+    {
+      "degree": 16,
+      "n_nodes": 17,
+      "max_approximation_error": 14.363077716697498,
+      "approximation_error_argmax": -0.965,
+      "max_floating_point_error": 7.820175799440073e-13,
+      "floating_point_error_argmax": -0.955,
+      "max_total_float64_error": 14.363077716697362,
+      "total_error_argmax": -0.965,
+      "approximation_error_at_total_argmax": 14.363077716697498,
+      "floating_point_error_at_total_argmax": 1.3644517245001523e-13
+    }
+  ],
+  "provenance": {
+    "code_version": "bc50e5f827b0a8d44491f8e0cdbc7faeaf925b2d",
+    "source_sha256": {
+      "stability.py": "fe7f0df051e1b580c848b61343daf00730601f5ad7bf090589e64cc695e0d965",
+      "interpolation.py": "2badfd7546b841c556de1f647e3a82a21a537e1927e4f83cd268c94ba75ddff7"
+    },
+    "environment": {
+      "python": "3.12.14",
+      "numpy": "2.5.5"
+    },
+    "data_version": "analytic-runge-equispaced-v1"
+  }
+}
