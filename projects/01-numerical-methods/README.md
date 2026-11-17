@@ -57,6 +57,36 @@ calculation, not just the final estimate.
 - The Lagrange demonstration (`examples.py`) approximates \(e^x\) on \([0,1]\) using simulated function values.
 - `nevilles_method.py` is a standalone command-line runner for Neville's method (no Gradio required); `app.py` is an interactive Gradio interface over the same engine.
 
+## Error and stability baseline
+
+`src/quant_numerical/stability.py` separates two errors that are often mixed
+together:
+
+- **Approximation error:** the difference between the true Runge function and
+  the high-precision interpolation polynomial. This measures the limitation of
+  the chosen polynomial degree and equally spaced nodes.
+- **Floating-point error:** the difference between the production NumPy
+  float64 result and that high-precision polynomial. This measures binary
+  representation and numerical evaluation effects.
+
+The deterministic study uses the known function
+$f(x)=1/(1+25x^2)$ on $[-1,1]$, equally spaced nodes at degrees 4, 8, 12 and
+16, an 80-decimal-digit reference calculation and a 401-point evaluation grid.
+It is designed to show whether the Runge phenomenon is a polynomial/node-design
+problem or merely float64 roundoff.
+
+After installing the project, run:
+
+```bash
+python -m quant_numerical.stability \
+  --code-version YOUR_CHECKED_OUT_COMMIT \
+  --output projects/01-numerical-methods/results/stability.json
+```
+
+The JSON records the code version, source hashes, environment, deterministic
+configuration, maximum errors and their locations. No random seed or historical
+evaluation period applies because this is a deterministic numerical experiment.
+
 ## Reproduce
 
 Create and activate a virtual environment (Windows PowerShell shown; see the repository root
