@@ -70,10 +70,13 @@ together:
   representation and numerical evaluation effects.
 
 The deterministic study uses the known function
-$f(x)=1/(1+25x^2)$ on $[-1,1]$, equally spaced nodes at degrees 4, 8, 12 and
-16, an 80-decimal-digit reference calculation and a 401-point evaluation grid.
-It is designed to show whether the Runge phenomenon is a polynomial/node-design
-problem or merely float64 roundoff.
+$f(x)=1/(1+25x^2)$ on $[-1,1]$, degrees 4, 8, 12 and 16, an
+80-decimal-digit reference calculation and a 401-point evaluation grid. It
+compares equally spaced nodes with Chebyshev-Lobatto nodes
+$x_j=-\cos(\pi j/n)$. The latter cluster near the interval boundaries, where
+the equally spaced interpolant oscillates most. The study is designed to show
+whether the Runge phenomenon is a node-design problem or merely float64
+roundoff, and whether changing node placement reduces the approximation error.
 
 After installing the project, run:
 
@@ -155,7 +158,7 @@ This opens at `http://127.0.0.1:7860/` by default.
 
 ## Interpretation and limitations
 
-Interpolation describes a numerical approximation, not a predictive financial model. Error depends on smoothness, node placement, floating-point precision, and polynomial degree. High-degree interpolation at equally spaced nodes can oscillate near interval boundaries (Runge phenomenon). Extrapolation outside the observed interval is especially unreliable. Later work will compare node designs, piecewise splines, and error bounds.
+Interpolation describes a numerical approximation, not a predictive financial model. Error depends on smoothness, node placement, floating-point precision, and polynomial degree. High-degree interpolation at equally spaced nodes can oscillate near interval boundaries (Runge phenomenon). Chebyshev-Lobatto nodes reduce this example's maximum error but do not make every function or degree accurate. Extrapolation outside the observed interval is especially unreliable. Later work will compare piecewise splines and error bounds.
 
 ## Evidence classification
 
