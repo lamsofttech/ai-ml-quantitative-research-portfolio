@@ -1,13 +1,20 @@
 {
-  "schema_version": 1,
-  "study_type": "interpolation-error-stability-baseline",
+  "schema_version": 2,
+  "study_type": "interpolation-node-design-comparison",
   "data": "deterministic simulated evaluations of the known Runge function",
   "function": "f(x) = 1 / (1 + 25 x^2)",
   "interval": [
     -1.0,
     1.0
   ],
-  "node_design": "equally spaced, including both endpoints",
+  "node_designs": [
+    "equidistant",
+    "chebyshev-lobatto"
+  ],
+  "node_definition": {
+    "equidistant": "equally spaced, including both endpoints",
+    "chebyshev-lobatto": "x_j = -cos(pi*j/degree), including both endpoints; interior nodes represented in float64 and converted exactly for the Decimal reference"
+  },
   "degrees": [
     4,
     8,
@@ -26,6 +33,7 @@
   "evaluation_period": "not applicable; deterministic numerical experiment",
   "rows": [
     {
+      "node_design": "equidistant",
       "degree": 4,
       "n_nodes": 5,
       "max_approximation_error": 0.43835663952556775,
@@ -38,6 +46,7 @@
       "floating_point_error_at_total_argmax": 1.0859877689130738e-16
     },
     {
+      "node_design": "equidistant",
       "degree": 8,
       "n_nodes": 9,
       "max_approximation_error": 1.045173911783697,
@@ -50,6 +59,7 @@
       "floating_point_error_at_total_argmax": 1.33704510393123e-15
     },
     {
+      "node_design": "equidistant",
       "degree": 12,
       "n_nodes": 13,
       "max_approximation_error": 3.657717137850998,
@@ -62,6 +72,7 @@
       "floating_point_error_at_total_argmax": 6.605827144763073e-14
     },
     {
+      "node_design": "equidistant",
       "degree": 16,
       "n_nodes": 17,
       "max_approximation_error": 14.363077716697498,
@@ -72,18 +83,70 @@
       "total_error_argmax": -0.965,
       "approximation_error_at_total_argmax": 14.363077716697498,
       "floating_point_error_at_total_argmax": 1.3644517245001523e-13
+    },
+    {
+      "node_design": "chebyshev-lobatto",
+      "degree": 4,
+      "n_nodes": 5,
+      "max_approximation_error": 0.45994973874291506,
+      "approximation_error_argmax": -0.295,
+      "max_floating_point_error": 3.288378657053018e-16,
+      "floating_point_error_argmax": -0.145,
+      "max_total_float64_error": 0.4599497387429151,
+      "total_error_argmax": 0.295,
+      "approximation_error_at_total_argmax": 0.45994973874291495,
+      "floating_point_error_at_total_argmax": 1.7641788678479795e-16
+    },
+    {
+      "node_design": "chebyshev-lobatto",
+      "degree": 8,
+      "n_nodes": 9,
+      "max_approximation_error": 0.2046777071015519,
+      "approximation_error_argmax": -0.195,
+      "max_floating_point_error": 2.759029903411252e-16,
+      "floating_point_error_argmax": -0.09,
+      "max_total_float64_error": 0.20467770710155192,
+      "total_error_argmax": -0.195,
+      "approximation_error_at_total_argmax": 0.2046777071015519,
+      "floating_point_error_at_total_argmax": 4.7034666862853195e-17
+    },
+    {
+      "node_design": "chebyshev-lobatto",
+      "degree": 12,
+      "n_nodes": 13,
+      "max_approximation_error": 0.08439197787392237,
+      "approximation_error_argmax": -0.145,
+      "max_floating_point_error": 5.343185276129833e-16,
+      "floating_point_error_argmax": 0.055,
+      "max_total_float64_error": 0.0843919778739228,
+      "total_error_argmax": -0.145,
+      "approximation_error_at_total_argmax": 0.08439197787392237,
+      "floating_point_error_at_total_argmax": 4.310968238221049e-16
+    },
+    {
+      "node_design": "chebyshev-lobatto",
+      "degree": 16,
+      "n_nodes": 17,
+      "max_approximation_error": 0.03671289906931726,
+      "approximation_error_argmax": -0.285,
+      "max_floating_point_error": 4.786772151624192e-16,
+      "floating_point_error_argmax": 0.03,
+      "max_total_float64_error": 0.036712899069317385,
+      "total_error_argmax": -0.285,
+      "approximation_error_at_total_argmax": 0.03671289906931726,
+      "floating_point_error_at_total_argmax": 1.217948754816765e-16
     }
   ],
   "provenance": {
-    "code_version": "bc50e5f827b0a8d44491f8e0cdbc7faeaf925b2d",
+    "code_version": "95b1def15c3b0bceb1fa15607434ee1aa4279e8b",
     "source_sha256": {
-      "stability.py": "fe7f0df051e1b580c848b61343daf00730601f5ad7bf090589e64cc695e0d965",
+      "stability.py": "14d2781a68cae0aac144ced53a42d33f50216da6509c4d885d3634a6a8a8e658",
       "interpolation.py": "2badfd7546b841c556de1f647e3a82a21a537e1927e4f83cd268c94ba75ddff7"
     },
     "environment": {
       "python": "3.12.14",
       "numpy": "2.5.5"
     },
-    "data_version": "analytic-runge-equispaced-v1"
+    "data_version": "analytic-runge-node-comparison-v1"
   }
 }
