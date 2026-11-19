@@ -1,8 +1,9 @@
-# Interpolation node design and stability — November 18, 2026
+# Interpolation node design and conditioning — November 19, 2026
 
 This deterministic experiment compares equally spaced and Chebyshev-Lobatto
 nodes while separating polynomial approximation error from float64
-representation/evaluation error. It uses the known Runge function
+representation/evaluation error and estimating interpolation sensitivity. It
+uses the known Runge function
 
 $$f(x)=\frac{1}{1+25x^2},\qquad -1\le x\le 1,$$
 
@@ -31,21 +32,30 @@ The two error components are:
 2. **Floating-point error:** float64 production result minus the same
    high-precision polynomial.
 
+The conditioning diagnostic is the **Lebesgue function**
+
+$$\Lambda_n(x)=\sum_{j=0}^n |L_j(x)|.$$
+
+Its maximum over the evaluation grid estimates the worst-case factor by which
+small perturbations in supplied values can be amplified by interpolation. It
+depends on the nodes, not on the Runge function values. A value near 1 means
+little amplification; a large value signals a sensitive interpolation design.
+
 Exact configuration, source hashes, environment and row-level values are in
 [stability.json](stability.json).
 
 ## Results
 
-| Node design | Degree | Nodes | Maximum approximation error | Maximum float64 discrepancy | Total-error location |
-|---|---:|---:|---:|---:|---:|
-| Equidistant | 4 | 5 | 0.438357 | 3.33e-16 | 0.795 |
-| Equidistant | 8 | 9 | 1.045174 | 1.44e-15 | -0.920 |
-| Equidistant | 12 | 13 | 3.657717 | 6.61e-14 | -0.955 |
-| Equidistant | 16 | 17 | 14.363078 | 7.82e-13 | -0.965 |
-| Chebyshev-Lobatto | 4 | 5 | 0.459950 | 3.29e-16 | 0.295 |
-| Chebyshev-Lobatto | 8 | 9 | 0.204678 | 2.76e-16 | -0.195 |
-| Chebyshev-Lobatto | 12 | 13 | 0.084392 | 5.34e-16 | -0.145 |
-| Chebyshev-Lobatto | 16 | 17 | 0.036713 | 4.79e-16 | -0.285 |
+| Node design | Degree | Maximum approximation error | Maximum float64 discrepancy | Estimated Lebesgue constant |
+|---|---:|---:|---:|---:|
+| Equidistant | 4 | 0.438357 | 3.33e-16 | 2.208 |
+| Equidistant | 8 | 1.045174 | 1.44e-15 | 10.941 |
+| Equidistant | 12 | 3.657717 | 6.61e-14 | 89.253 |
+| Equidistant | 16 | 14.363078 | 7.82e-13 | 933.090 |
+| Chebyshev-Lobatto | 4 | 0.459950 | 3.29e-16 | 1.799 |
+| Chebyshev-Lobatto | 8 | 0.204678 | 2.76e-16 | 2.275 |
+| Chebyshev-Lobatto | 12 | 0.084392 | 5.34e-16 | 2.539 |
+| Chebyshev-Lobatto | 16 | 0.036713 | 4.79e-16 | 2.724 |
 
 At degree 16, Chebyshev-Lobatto placement reduces the measured maximum
 approximation error by about 391 times (99.74%) compared with equally spaced
@@ -60,27 +70,43 @@ guarantee a better global polynomial. For both designs, approximation error is
 far larger than the float64 discrepancy, so the improvement is not caused by
 switching numerical precision.
 
+## Conditioning interpretation
+
+At degree 16, the estimated Lebesgue constant is 933.090 for equally spaced
+nodes and 2.724 for Chebyshev-Lobatto nodes. The equidistant design therefore
+has a roughly 343-times larger measured worst-case amplification bound on this
+grid. This does not mean every perturbation is amplified by exactly that
+factor; it is an upper-bound diagnostic over possible sign patterns in the
+supplied values.
+
+The contrast explains why endpoint clustering is valuable beyond this one
+Runge-function result. The equidistant estimate grows from 2.208 to 933.090 as
+degree increases, while the Chebyshev-Lobatto estimate grows slowly from 1.799
+to 2.724. The error comparison shows what happened for the selected function;
+the Lebesgue diagnostic shows how node placement controls sensitivity to value
+errors more generally.
+
 ## Reproduce
 
 Install project 01, check out code commit
-`95b1def15c3b0bceb1fa15607434ee1aa4279e8b`, then run:
+`f486c7bcb7bc39c472159f21a9d198f75772314b`, then run:
 
 ```bash
 python -m quant_numerical.stability \
-  --code-version 95b1def15c3b0bceb1fa15607434ee1aa4279e8b \
+  --code-version f486c7bcb7bc39c472159f21a9d198f75772314b \
   --output projects/01-numerical-methods/results/stability.json
 ```
 
 Two executions on Python 3.12.14 with NumPy 2.5.5 produced byte-identical JSON.
 Cross-platform or cross-version bitwise equality is not promised. Artifact
-SHA-256: `d291d5e67a54a0dd1a0541188a5395f99a284882a018116f376e40599007ed4e`.
+SHA-256: `3854d8a729792030f554acd310d65740809efe1d152e64fc71acae24093a2ad0`.
 
 ## Limitations
 
 This study covers one difficult function, one interval, two node designs and
-four degrees. The 401-point grid estimates the continuous maximum error; it
-does not prove the exact supremum between grid points. The 80-digit reference
-is a strong numerical benchmark, not a symbolic proof. Interior
+four degrees. The 401-point grid estimates the continuous maximum error and
+Lebesgue constant; it does not prove either exact supremum between grid points.
+The 80-digit reference is a strong numerical benchmark, not a symbolic proof. Interior
 Chebyshev-Lobatto nodes use the platform's float64 cosine values. Absolute
 errors are reported; relative error near small function values would answer a
 different question. No extrapolation, splines or noisy observations are
@@ -88,11 +114,11 @@ evaluated.
 
 ## Read for 10-15 minutes
 
-Read this report and then trace `_interpolation_nodes` and
+Read this report and then trace `_decimal_lebesgue_value` and
 `run_stability_study` in `src/quant_numerical/stability.py`. Finally read
-`test_chebyshev_lobatto_nodes_reduce_degree_16_runge_error` in
+`test_chebyshev_lobatto_nodes_reduce_degree_16_error_amplification` in
 `tests/test_stability.py`.
 
-Question: why do Chebyshev-Lobatto nodes reduce the degree-16 boundary
-oscillation even though they use the same number of nodes and the same
-float64 evaluator as the equidistant design?
+Question: what does the estimated Lebesgue constant say about how a small error
+in one or more supplied values could affect the interpolated result, and why is
+933 more concerning than 2.7?

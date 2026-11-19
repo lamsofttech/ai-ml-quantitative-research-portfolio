@@ -1,5 +1,5 @@
 {
-  "schema_version": 2,
+  "schema_version": 3,
   "study_type": "interpolation-node-design-comparison",
   "data": "deterministic simulated evaluations of the known Runge function",
   "function": "f(x) = 1 / (1 + 25 x^2)",
@@ -29,6 +29,11 @@
     "floating_point": "abs(float64 production result - high-precision interpolation polynomial)",
     "total_float64": "abs(float64 production result - true Runge value)"
   },
+  "conditioning_diagnostic": {
+    "lebesgue_function": "Lambda(x) = sum_j abs(L_j(x))",
+    "estimated_lebesgue_constant": "maximum Lebesgue-function value on the recorded evaluation grid",
+    "interpretation": "worst-case amplification bound for perturbations in interpolation values; larger values indicate greater sensitivity"
+  },
   "random_seed": "not applicable; deterministic nodes and evaluation grid",
   "evaluation_period": "not applicable; deterministic numerical experiment",
   "rows": [
@@ -43,7 +48,9 @@
       "max_total_float64_error": 0.43835663952556786,
       "total_error_argmax": 0.795,
       "approximation_error_at_total_argmax": 0.43835663952556775,
-      "floating_point_error_at_total_argmax": 1.0859877689130738e-16
+      "floating_point_error_at_total_argmax": 1.0859877689130738e-16,
+      "estimated_lebesgue_constant": 2.20774444,
+      "lebesgue_argmax": -0.79
     },
     {
       "node_design": "equidistant",
@@ -56,7 +63,9 @@
       "max_total_float64_error": 1.0451739117836956,
       "total_error_argmax": -0.92,
       "approximation_error_at_total_argmax": 1.045173911783697,
-      "floating_point_error_at_total_argmax": 1.33704510393123e-15
+      "floating_point_error_at_total_argmax": 1.33704510393123e-15,
+      "estimated_lebesgue_constant": 10.941240083960329,
+      "lebesgue_argmax": -0.915
     },
     {
       "node_design": "equidistant",
@@ -69,7 +78,9 @@
       "max_total_float64_error": 3.6577171378510642,
       "total_error_argmax": -0.955,
       "approximation_error_at_total_argmax": 3.657717137850998,
-      "floating_point_error_at_total_argmax": 6.605827144763073e-14
+      "floating_point_error_at_total_argmax": 6.605827144763073e-14,
+      "estimated_lebesgue_constant": 89.25344998531645,
+      "lebesgue_argmax": 0.95
     },
     {
       "node_design": "equidistant",
@@ -82,7 +93,9 @@
       "max_total_float64_error": 14.363077716697362,
       "total_error_argmax": -0.965,
       "approximation_error_at_total_argmax": 14.363077716697498,
-      "floating_point_error_at_total_argmax": 1.3644517245001523e-13
+      "floating_point_error_at_total_argmax": 1.3644517245001523e-13,
+      "estimated_lebesgue_constant": 933.0899208624777,
+      "lebesgue_argmax": -0.965
     },
     {
       "node_design": "chebyshev-lobatto",
@@ -95,7 +108,9 @@
       "max_total_float64_error": 0.4599497387429151,
       "total_error_argmax": 0.295,
       "approximation_error_at_total_argmax": 0.45994973874291495,
-      "floating_point_error_at_total_argmax": 1.7641788678479795e-16
+      "floating_point_error_at_total_argmax": 1.7641788678479795e-16,
+      "estimated_lebesgue_constant": 1.7987269370063215,
+      "lebesgue_argmax": -0.37
     },
     {
       "node_design": "chebyshev-lobatto",
@@ -108,7 +123,9 @@
       "max_total_float64_error": 0.20467770710155192,
       "total_error_argmax": -0.195,
       "approximation_error_at_total_argmax": 0.2046777071015519,
-      "floating_point_error_at_total_argmax": 4.7034666862853195e-17
+      "floating_point_error_at_total_argmax": 4.7034666862853195e-17,
+      "estimated_lebesgue_constant": 2.274710131337581,
+      "lebesgue_argmax": 0.195
     },
     {
       "node_design": "chebyshev-lobatto",
@@ -121,7 +138,9 @@
       "max_total_float64_error": 0.0843919778739228,
       "total_error_argmax": -0.145,
       "approximation_error_at_total_argmax": 0.08439197787392237,
-      "floating_point_error_at_total_argmax": 4.310968238221049e-16
+      "floating_point_error_at_total_argmax": 4.310968238221049e-16,
+      "estimated_lebesgue_constant": 2.5392968738131696,
+      "lebesgue_argmax": -0.13
     },
     {
       "node_design": "chebyshev-lobatto",
@@ -134,19 +153,21 @@
       "max_total_float64_error": 0.036712899069317385,
       "total_error_argmax": -0.285,
       "approximation_error_at_total_argmax": 0.03671289906931726,
-      "floating_point_error_at_total_argmax": 1.217948754816765e-16
+      "floating_point_error_at_total_argmax": 1.217948754816765e-16,
+      "estimated_lebesgue_constant": 2.7238118470566963,
+      "lebesgue_argmax": -0.1
     }
   ],
   "provenance": {
-    "code_version": "95b1def15c3b0bceb1fa15607434ee1aa4279e8b",
+    "code_version": "f486c7bcb7bc39c472159f21a9d198f75772314b",
     "source_sha256": {
-      "stability.py": "14d2781a68cae0aac144ced53a42d33f50216da6509c4d885d3634a6a8a8e658",
+      "stability.py": "8167443fafdbaea918d337fe965e5a3d867ad6167d8411d1fdc515d7a22fa241",
       "interpolation.py": "2badfd7546b841c556de1f647e3a82a21a537e1927e4f83cd268c94ba75ddff7"
     },
     "environment": {
       "python": "3.12.14",
       "numpy": "2.5.5"
     },
-    "data_version": "analytic-runge-node-comparison-v1"
+    "data_version": "analytic-runge-node-conditioning-v2"
   }
 }
