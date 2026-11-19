@@ -45,6 +45,19 @@ def _decimal_barycentric_value(
     return numerator / sum(terms, Decimal(0))
 
 
+def _decimal_lebesgue_value(
+    nodes: list[Decimal],
+    weights: list[Decimal],
+    point: Decimal,
+) -> Decimal:
+    """Return the Lebesgue function for a represented node set at one point."""
+    if point in nodes:
+        return Decimal(1)
+    terms = [weight / (point - node) for node, weight in zip(nodes, weights, strict=True)]
+    denominator = sum(terms, Decimal(0))
+    return sum((abs(term / denominator) for term in terms), Decimal(0))
+
+
 def _max_error(errors: list[Decimal], grid: list[Decimal]) -> tuple[Decimal, Decimal, int]:
     index = max(range(len(errors)), key=errors.__getitem__)
     return errors[index], grid[index], index
@@ -77,7 +90,7 @@ def run_stability_study(
     grid_size: int = 401,
     decimal_precision: int = 80,
 ) -> dict:
-    """Separate interpolation approximation error from float64 numerical error.
+    """Compare approximation, float64 evaluation and conditioning by node design.
 
     The high-precision polynomial and production implementation use the same
     represented nodes and Runge-function values. Their difference captures
@@ -132,6 +145,9 @@ def run_stability_study(
                 decimal_estimates = [
                     _decimal_barycentric_value(nodes, values, weights, point) for point in grid
                 ]
+                lebesgue_values = [
+                    _decimal_lebesgue_value(nodes, weights, point) for point in grid
+                ]
                 float_estimates = np.asarray(
                     lagrange_interpolate(
                         [float(node) for node in nodes],
@@ -159,6 +175,7 @@ def run_stability_study(
                 max_approximation, approximation_argmax, _ = _max_error(approximation, grid)
                 max_floating, floating_argmax, _ = _max_error(floating_point, grid)
                 max_total, total_argmax, total_index = _max_error(total_float64, grid)
+                max_lebesgue, lebesgue_argmax, _ = _max_error(lebesgue_values, grid)
                 rows.append({
                     "node_design": design,
                     "degree": degree,
@@ -171,10 +188,12 @@ def run_stability_study(
                     "total_error_argmax": float(total_argmax),
                     "approximation_error_at_total_argmax": float(approximation[total_index]),
                     "floating_point_error_at_total_argmax": float(floating_point[total_index]),
+                    "estimated_lebesgue_constant": float(max_lebesgue),
+                    "lebesgue_argmax": float(lebesgue_argmax),
                 })
 
     return {
-        "schema_version": 2,
+        "schema_version": 3,
         "study_type": "interpolation-node-design-comparison",
         "data": "deterministic simulated evaluations of the known Runge function",
         "function": "f(x) = 1 / (1 + 25 x^2)",
@@ -198,6 +217,16 @@ def run_stability_study(
             ),
             "total_float64": "abs(float64 production result - true Runge value)",
         },
+        "conditioning_diagnostic": {
+            "lebesgue_function": "Lambda(x) = sum_j abs(L_j(x))",
+            "estimated_lebesgue_constant": (
+                "maximum Lebesgue-function value on the recorded evaluation grid"
+            ),
+            "interpretation": (
+                "worst-case amplification bound for perturbations in interpolation values; "
+                "larger values indicate greater sensitivity"
+            ),
+        },
         "random_seed": "not applicable; deterministic nodes and evaluation grid",
         "evaluation_period": "not applicable; deterministic numerical experiment",
         "rows": rows,
@@ -219,7 +248,7 @@ def main(argv: list[str] | None = None) -> int:
             for name in ("stability.py", "interpolation.py")
         },
         "environment": {"python": platform.python_version(), "numpy": np.__version__},
-        "data_version": "analytic-runge-node-comparison-v1",
+        "data_version": "analytic-runge-node-conditioning-v2",
     }
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(report, indent=2, allow_nan=False) + "\n", encoding="utf-8")

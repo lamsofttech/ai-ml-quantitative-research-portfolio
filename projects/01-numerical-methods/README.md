@@ -68,6 +68,10 @@ together:
 - **Floating-point error:** the difference between the production NumPy
   float64 result and that high-precision polynomial. This measures binary
   representation and numerical evaluation effects.
+- **Lebesgue function:** the sum of the absolute Lagrange basis values at each
+  evaluation point. Its grid maximum estimates the worst-case factor by which
+  interpolation can amplify small perturbations in the supplied function
+  values; it measures conditioning rather than the Runge function's error.
 
 The deterministic study uses the known function
 $f(x)=1/(1+25x^2)$ on $[-1,1]$, degrees 4, 8, 12 and 16, an
@@ -76,7 +80,8 @@ compares equally spaced nodes with Chebyshev-Lobatto nodes
 $x_j=-\cos(\pi j/n)$. The latter cluster near the interval boundaries, where
 the equally spaced interpolant oscillates most. The study is designed to show
 whether the Runge phenomenon is a node-design problem or merely float64
-roundoff, and whether changing node placement reduces the approximation error.
+roundoff, whether changing node placement reduces approximation error, and why
+the two designs have different sensitivity to perturbed input values.
 
 After installing the project, run:
 

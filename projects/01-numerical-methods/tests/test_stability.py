@@ -30,10 +30,13 @@ def test_error_decomposition_has_nonnegative_finite_metrics():
         "max_total_float64_error",
         "approximation_error_at_total_argmax",
         "floating_point_error_at_total_argmax",
+        "estimated_lebesgue_constant",
     ):
         assert row[field] >= 0.0
         assert row[field] < float("inf")
     assert -1.0 <= row["total_error_argmax"] <= 1.0
+    assert -1.0 <= row["lebesgue_argmax"] <= 1.0
+    assert row["estimated_lebesgue_constant"] >= 1.0
 
 
 def test_runge_growth_is_approximation_error_not_float64_roundoff():
@@ -63,6 +66,21 @@ def test_chebyshev_lobatto_nodes_reduce_degree_16_runge_error():
     assert chebyshev["max_approximation_error"] < equidistant["max_approximation_error"] / 100
     assert chebyshev["max_approximation_error"] > 1_000_000 * chebyshev[
         "max_floating_point_error"
+    ]
+
+
+def test_linear_interpolation_has_lebesgue_constant_one():
+    study = run_stability_study(degrees=(1,), grid_size=41, decimal_precision=50)
+
+    assert [row["estimated_lebesgue_constant"] for row in study["rows"]] == [1.0, 1.0]
+
+
+def test_chebyshev_lobatto_nodes_reduce_degree_16_error_amplification():
+    study = run_stability_study(degrees=(16,), grid_size=401, decimal_precision=80)
+    equidistant, chebyshev = study["rows"]
+
+    assert equidistant["estimated_lebesgue_constant"] > 100 * chebyshev[
+        "estimated_lebesgue_constant"
     ]
 
 
