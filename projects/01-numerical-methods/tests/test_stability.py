@@ -31,12 +31,17 @@ def test_error_decomposition_has_nonnegative_finite_metrics():
         "approximation_error_at_total_argmax",
         "floating_point_error_at_total_argmax",
         "estimated_lebesgue_constant",
+        "perturbation_magnitude",
+        "observed_output_change",
+        "observed_amplification",
+        "lebesgue_bound_gap",
     ):
         assert row[field] >= 0.0
         assert row[field] < float("inf")
     assert -1.0 <= row["total_error_argmax"] <= 1.0
     assert -1.0 <= row["lebesgue_argmax"] <= 1.0
     assert row["estimated_lebesgue_constant"] >= 1.0
+    assert row["perturbation_magnitude"] == 1e-6
 
 
 def test_runge_growth_is_approximation_error_not_float64_roundoff():
@@ -82,6 +87,22 @@ def test_chebyshev_lobatto_nodes_reduce_degree_16_error_amplification():
     assert equidistant["estimated_lebesgue_constant"] > 100 * chebyshev[
         "estimated_lebesgue_constant"
     ]
+
+
+def test_adversarial_perturbation_attains_recorded_lebesgue_bound():
+    study = run_stability_study(degrees=(16,), grid_size=401, decimal_precision=80)
+
+    for row in study["rows"]:
+        assert row["perturbation_target"] == row["lebesgue_argmax"]
+        assert row["observed_amplification"] == pytest.approx(
+            row["estimated_lebesgue_constant"], rel=1e-14, abs=1e-14
+        )
+        assert row["observed_output_change"] == pytest.approx(
+            row["perturbation_magnitude"] * row["estimated_lebesgue_constant"],
+            rel=1e-14,
+            abs=1e-14,
+        )
+        assert row["lebesgue_bound_gap"] < 1e-70
 
 
 def test_node_design_order_does_not_change_output():

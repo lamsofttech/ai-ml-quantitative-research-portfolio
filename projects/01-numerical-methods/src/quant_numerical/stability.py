@@ -45,17 +45,28 @@ def _decimal_barycentric_value(
     return numerator / sum(terms, Decimal(0))
 
 
+def _decimal_cardinal_values(
+    nodes: list[Decimal],
+    weights: list[Decimal],
+    point: Decimal,
+) -> list[Decimal]:
+    """Return all Lagrange cardinal-basis values at one point."""
+    if point in nodes:
+        exact_index = nodes.index(point)
+        return [Decimal(index == exact_index) for index in range(len(nodes))]
+    terms = [weight / (point - node) for node, weight in zip(nodes, weights, strict=True)]
+    denominator = sum(terms, Decimal(0))
+    return [term / denominator for term in terms]
+
+
 def _decimal_lebesgue_value(
     nodes: list[Decimal],
     weights: list[Decimal],
     point: Decimal,
 ) -> Decimal:
     """Return the Lebesgue function for a represented node set at one point."""
-    if point in nodes:
-        return Decimal(1)
-    terms = [weight / (point - node) for node, weight in zip(nodes, weights, strict=True)]
-    denominator = sum(terms, Decimal(0))
-    return sum((abs(term / denominator) for term in terms), Decimal(0))
+    cardinal_values = _decimal_cardinal_values(nodes, weights, point)
+    return sum((abs(value) for value in cardinal_values), Decimal(0))
 
 
 def _max_error(errors: list[Decimal], grid: list[Decimal]) -> tuple[Decimal, Decimal, int]:
@@ -135,6 +146,7 @@ def run_stability_study(
         denominator = Decimal(grid_size - 1)
         grid = [Decimal(-1) + Decimal(2 * index) / denominator for index in range(grid_size)]
         true_values = [_runge(point) for point in grid]
+        perturbation_magnitude = Decimal("1e-6")
         rows = []
 
         for design in ordered_designs:
@@ -176,6 +188,25 @@ def run_stability_study(
                 max_floating, floating_argmax, _ = _max_error(floating_point, grid)
                 max_total, total_argmax, total_index = _max_error(total_float64, grid)
                 max_lebesgue, lebesgue_argmax, _ = _max_error(lebesgue_values, grid)
+                cardinal_values = _decimal_cardinal_values(
+                    nodes, weights, lebesgue_argmax
+                )
+                perturbations = [
+                    perturbation_magnitude if value >= 0 else -perturbation_magnitude
+                    for value in cardinal_values
+                ]
+                perturbed_values = [
+                    value + perturbation
+                    for value, perturbation in zip(values, perturbations, strict=True)
+                ]
+                baseline_at_target = _decimal_barycentric_value(
+                    nodes, values, weights, lebesgue_argmax
+                )
+                perturbed_at_target = _decimal_barycentric_value(
+                    nodes, perturbed_values, weights, lebesgue_argmax
+                )
+                observed_change = abs(perturbed_at_target - baseline_at_target)
+                observed_amplification = observed_change / perturbation_magnitude
                 rows.append({
                     "node_design": design,
                     "degree": degree,
@@ -190,10 +221,15 @@ def run_stability_study(
                     "floating_point_error_at_total_argmax": float(floating_point[total_index]),
                     "estimated_lebesgue_constant": float(max_lebesgue),
                     "lebesgue_argmax": float(lebesgue_argmax),
+                    "perturbation_magnitude": float(perturbation_magnitude),
+                    "perturbation_target": float(lebesgue_argmax),
+                    "observed_output_change": float(observed_change),
+                    "observed_amplification": float(observed_amplification),
+                    "lebesgue_bound_gap": float(abs(max_lebesgue - observed_amplification)),
                 })
 
     return {
-        "schema_version": 3,
+        "schema_version": 4,
         "study_type": "interpolation-node-design-comparison",
         "data": "deterministic simulated evaluations of the known Runge function",
         "function": "f(x) = 1 / (1 + 25 x^2)",
@@ -227,6 +263,21 @@ def run_stability_study(
                 "larger values indicate greater sensitivity"
             ),
         },
+        "perturbation_experiment": {
+            "magnitude": float(perturbation_magnitude),
+            "pattern": (
+                "at each design/degree grid maximum, perturb each node value by "
+                "+/- magnitude using the sign of its cardinal basis value"
+            ),
+            "purpose": (
+                "construct a deterministic worst-case sign pattern that attains the "
+                "recorded grid-based Lebesgue amplification bound"
+            ),
+            "scope": (
+                "bounded synthetic value perturbations; not random measurement noise "
+                "or a probability statement"
+            ),
+        },
         "random_seed": "not applicable; deterministic nodes and evaluation grid",
         "evaluation_period": "not applicable; deterministic numerical experiment",
         "rows": rows,
@@ -248,7 +299,7 @@ def main(argv: list[str] | None = None) -> int:
             for name in ("stability.py", "interpolation.py")
         },
         "environment": {"python": platform.python_version(), "numpy": np.__version__},
-        "data_version": "analytic-runge-node-conditioning-v2",
+        "data_version": "analytic-runge-node-perturbation-v3",
     }
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(report, indent=2, allow_nan=False) + "\n", encoding="utf-8")

@@ -72,6 +72,11 @@ together:
   evaluation point. Its grid maximum estimates the worst-case factor by which
   interpolation can amplify small perturbations in the supplied function
   values; it measures conditioning rather than the Runge function's error.
+- **Bounded perturbation experiment:** each node value is changed by at most
+  $10^{-6}$, with deterministic signs chosen from the cardinal basis at the
+  Lebesgue maximum. The observed output change demonstrates that the recorded
+  grid-based amplification bound can be attained; it is not random noise or a
+  probability claim.
 
 The deterministic study uses the known function
 $f(x)=1/(1+25x^2)$ on $[-1,1]$, degrees 4, 8, 12 and 16, an
