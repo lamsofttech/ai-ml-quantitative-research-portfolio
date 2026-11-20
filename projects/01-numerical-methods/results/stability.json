@@ -1,5 +1,5 @@
 {
-  "schema_version": 3,
+  "schema_version": 4,
   "study_type": "interpolation-node-design-comparison",
   "data": "deterministic simulated evaluations of the known Runge function",
   "function": "f(x) = 1 / (1 + 25 x^2)",
@@ -34,6 +34,12 @@
     "estimated_lebesgue_constant": "maximum Lebesgue-function value on the recorded evaluation grid",
     "interpretation": "worst-case amplification bound for perturbations in interpolation values; larger values indicate greater sensitivity"
   },
+  "perturbation_experiment": {
+    "magnitude": 1e-06,
+    "pattern": "at each design/degree grid maximum, perturb each node value by +/- magnitude using the sign of its cardinal basis value",
+    "purpose": "construct a deterministic worst-case sign pattern that attains the recorded grid-based Lebesgue amplification bound",
+    "scope": "bounded synthetic value perturbations; not random measurement noise or a probability statement"
+  },
   "random_seed": "not applicable; deterministic nodes and evaluation grid",
   "evaluation_period": "not applicable; deterministic numerical experiment",
   "rows": [
@@ -50,7 +56,12 @@
       "approximation_error_at_total_argmax": 0.43835663952556775,
       "floating_point_error_at_total_argmax": 1.0859877689130738e-16,
       "estimated_lebesgue_constant": 2.20774444,
-      "lebesgue_argmax": -0.79
+      "lebesgue_argmax": -0.79,
+      "perturbation_magnitude": 1e-06,
+      "perturbation_target": -0.79,
+      "observed_output_change": 2.20774444e-06,
+      "observed_amplification": 2.20774444,
+      "lebesgue_bound_gap": 0.0
     },
     {
       "node_design": "equidistant",
@@ -65,7 +76,12 @@
       "approximation_error_at_total_argmax": 1.045173911783697,
       "floating_point_error_at_total_argmax": 1.33704510393123e-15,
       "estimated_lebesgue_constant": 10.941240083960329,
-      "lebesgue_argmax": -0.915
+      "lebesgue_argmax": -0.915,
+      "perturbation_magnitude": 1e-06,
+      "perturbation_target": -0.915,
+      "observed_output_change": 1.0941240083960329e-05,
+      "observed_amplification": 10.941240083960329,
+      "lebesgue_bound_gap": 2e-74
     },
     {
       "node_design": "equidistant",
@@ -80,7 +96,12 @@
       "approximation_error_at_total_argmax": 3.657717137850998,
       "floating_point_error_at_total_argmax": 6.605827144763073e-14,
       "estimated_lebesgue_constant": 89.25344998531645,
-      "lebesgue_argmax": 0.95
+      "lebesgue_argmax": 0.95,
+      "perturbation_magnitude": 1e-06,
+      "perturbation_target": 0.95,
+      "observed_output_change": 8.925344998531645e-05,
+      "observed_amplification": 89.25344998531645,
+      "lebesgue_bound_gap": 1.0011e-73
     },
     {
       "node_design": "equidistant",
@@ -95,7 +116,12 @@
       "approximation_error_at_total_argmax": 14.363077716697498,
       "floating_point_error_at_total_argmax": 1.3644517245001523e-13,
       "estimated_lebesgue_constant": 933.0899208624777,
-      "lebesgue_argmax": -0.965
+      "lebesgue_argmax": -0.965,
+      "perturbation_magnitude": 1e-06,
+      "perturbation_target": -0.965,
+      "observed_output_change": 0.0009330899208624778,
+      "observed_amplification": 933.0899208624777,
+      "lebesgue_bound_gap": 5.99869e-72
     },
     {
       "node_design": "chebyshev-lobatto",
@@ -110,7 +136,12 @@
       "approximation_error_at_total_argmax": 0.45994973874291495,
       "floating_point_error_at_total_argmax": 1.7641788678479795e-16,
       "estimated_lebesgue_constant": 1.7987269370063215,
-      "lebesgue_argmax": -0.37
+      "lebesgue_argmax": -0.37,
+      "perturbation_magnitude": 1e-06,
+      "perturbation_target": -0.37,
+      "observed_output_change": 1.7987269370063216e-06,
+      "observed_amplification": 1.7987269370063215,
+      "lebesgue_bound_gap": 4.5229e-75
     },
     {
       "node_design": "chebyshev-lobatto",
@@ -125,7 +156,12 @@
       "approximation_error_at_total_argmax": 0.2046777071015519,
       "floating_point_error_at_total_argmax": 4.7034666862853195e-17,
       "estimated_lebesgue_constant": 2.274710131337581,
-      "lebesgue_argmax": 0.195
+      "lebesgue_argmax": 0.195,
+      "perturbation_magnitude": 1e-06,
+      "perturbation_target": 0.195,
+      "observed_output_change": 2.2747101313375808e-06,
+      "observed_amplification": 2.274710131337581,
+      "lebesgue_bound_gap": 7.5606e-75
     },
     {
       "node_design": "chebyshev-lobatto",
@@ -140,7 +176,12 @@
       "approximation_error_at_total_argmax": 0.08439197787392237,
       "floating_point_error_at_total_argmax": 4.310968238221049e-16,
       "estimated_lebesgue_constant": 2.5392968738131696,
-      "lebesgue_argmax": -0.13
+      "lebesgue_argmax": -0.13,
+      "perturbation_magnitude": 1e-06,
+      "perturbation_target": -0.13,
+      "observed_output_change": 2.5392968738131694e-06,
+      "observed_amplification": 2.5392968738131696,
+      "lebesgue_bound_gap": 3.81366e-74
     },
     {
       "node_design": "chebyshev-lobatto",
@@ -155,19 +196,24 @@
       "approximation_error_at_total_argmax": 0.03671289906931726,
       "floating_point_error_at_total_argmax": 1.217948754816765e-16,
       "estimated_lebesgue_constant": 2.7238118470566963,
-      "lebesgue_argmax": -0.1
+      "lebesgue_argmax": -0.1,
+      "perturbation_magnitude": 1e-06,
+      "perturbation_target": -0.1,
+      "observed_output_change": 2.723811847056696e-06,
+      "observed_amplification": 2.7238118470566963,
+      "lebesgue_bound_gap": 2.42898e-74
     }
   ],
   "provenance": {
-    "code_version": "f486c7bcb7bc39c472159f21a9d198f75772314b",
+    "code_version": "d589f3bb56659499a5409be0cfe1c91fed2a07c0",
     "source_sha256": {
-      "stability.py": "8167443fafdbaea918d337fe965e5a3d867ad6167d8411d1fdc515d7a22fa241",
+      "stability.py": "9d1be1f2bddcf72a6479bc71a102251403fa37977202a9253c3cc71a5f807f94",
       "interpolation.py": "2badfd7546b841c556de1f647e3a82a21a537e1927e4f83cd268c94ba75ddff7"
     },
     "environment": {
       "python": "3.12.14",
       "numpy": "2.5.5"
     },
-    "data_version": "analytic-runge-node-conditioning-v2"
+    "data_version": "analytic-runge-node-perturbation-v3"
   }
 }
