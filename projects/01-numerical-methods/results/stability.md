@@ -107,23 +107,29 @@ errors more generally.
 ## Reproduce
 
 Install project 01, check out code commit
-`d589f3bb56659499a5409be0cfe1c91fed2a07c0`, then run:
+`6862aa4f5cabae59151efd5f907ba2977732031a`, then run:
 
 ```bash
 python -m quant_numerical.stability \
-  --code-version d589f3bb56659499a5409be0cfe1c91fed2a07c0 \
-  --output projects/01-numerical-methods/results/stability.json
+  --code-version 6862aa4f5cabae59151efd5f907ba2977732031a \
+  --output projects/01-numerical-methods/results/stability.json \
+  --refinement-output projects/01-numerical-methods/results/grid-refinement.json
 ```
 
-Two executions on Python 3.12.14 with NumPy 2.5.5 produced byte-identical JSON.
+Two executions on Python 3.12.14 with NumPy 2.3.5 produced byte-identical JSON.
 Cross-platform or cross-version bitwise equality is not promised. Artifact
-SHA-256: `11823680c7efbad3224d9dc4bc240e2aa869cc0150a08963ca69ed3b6d46a4f0`.
+SHA-256: `6b3e0f1362c01f6a879704baabb0c645e8515f8d28a1fb9737e9650c9c1867dc`.
+The companion [grid-refinement report](grid-refinement.md) shows that the
+degree-16 estimates change by only 0.1425% and 0.0314% when the grid grows from
+401 to 1601 points.
 
 ## Limitations
 
 This study covers one difficult function, one interval, two node designs and
 four degrees. The 401-point grid estimates the continuous maximum error and
 Lebesgue constant; it does not prove either exact supremum between grid points.
+The 401/801/1601 sensitivity check reduces concern about this particular grid
+choice but still does not provide a continuous optimization proof.
 The 80-digit reference is a strong numerical benchmark, not a symbolic proof. Interior
 Chebyshev-Lobatto nodes use the platform's float64 cosine values. Absolute
 errors are reported; relative error near small function values would answer a

@@ -77,6 +77,9 @@ together:
   Lebesgue maximum. The observed output change demonstrates that the recorded
   grid-based amplification bound can be attained; it is not random noise or a
   probability claim.
+- **Grid-refinement sensitivity:** the degree-16 Lebesgue estimates are
+  recomputed on 401, 801 and 1601 points to test whether the node-design
+  conclusion depends materially on the original grid resolution.
 
 The deterministic study uses the known function
 $f(x)=1/(1+25x^2)$ on $[-1,1]$, degrees 4, 8, 12 and 16, an
@@ -93,7 +96,8 @@ After installing the project, run:
 ```bash
 python -m quant_numerical.stability \
   --code-version YOUR_CHECKED_OUT_COMMIT \
-  --output projects/01-numerical-methods/results/stability.json
+  --output projects/01-numerical-methods/results/stability.json \
+  --refinement-output projects/01-numerical-methods/results/grid-refinement.json
 ```
 
 The JSON records the code version, source hashes, environment, deterministic
@@ -102,7 +106,10 @@ evaluation period applies because this is a deterministic numerical experiment.
 
 The recorded results and interpretation are in
 [results/stability.md](results/stability.md), with exact evidence in
-[results/stability.json](results/stability.json).
+[results/stability.json](results/stability.json). The degree-16 sensitivity
+check is documented in [results/grid-refinement.md](results/grid-refinement.md),
+with exact evidence in
+[results/grid-refinement.json](results/grid-refinement.json).
 
 ## Reproduce
 

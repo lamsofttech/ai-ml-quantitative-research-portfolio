@@ -205,14 +205,14 @@
     }
   ],
   "provenance": {
-    "code_version": "d589f3bb56659499a5409be0cfe1c91fed2a07c0",
+    "code_version": "6862aa4f5cabae59151efd5f907ba2977732031a",
     "source_sha256": {
-      "stability.py": "9d1be1f2bddcf72a6479bc71a102251403fa37977202a9253c3cc71a5f807f94",
+      "stability.py": "e957e73a8556e0ab610c0b90e7d7da0d8bb37c85552ec26c7ef6c4d1d6692f2a",
       "interpolation.py": "2badfd7546b841c556de1f647e3a82a21a537e1927e4f83cd268c94ba75ddff7"
     },
     "environment": {
       "python": "3.12.14",
-      "numpy": "2.5.5"
+      "numpy": "2.3.5"
     },
     "data_version": "analytic-runge-node-perturbation-v3"
   }

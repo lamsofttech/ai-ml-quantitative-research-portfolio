@@ -1,0 +1,134 @@
+{
+  "schema_version": 1,
+  "study_type": "lebesgue-grid-refinement-sensitivity",
+  "data": "deterministic simulated evaluations of interpolation cardinal bases",
+  "interval": [
+    -1.0,
+    1.0
+  ],
+  "degree": 16,
+  "node_designs": [
+    "equidistant",
+    "chebyshev-lobatto"
+  ],
+  "grid_sizes": [
+    401,
+    801,
+    1601
+  ],
+  "decimal_precision": 80,
+  "relative_stability_tolerance": 0.005,
+  "location_comparison": "absolute coordinates because symmetric node sets can have equal +/- maxima",
+  "rows": [
+    {
+      "node_design": "equidistant",
+      "degree": 16,
+      "grid_size": 401,
+      "grid_spacing": 0.005,
+      "estimated_lebesgue_constant": 933.0899208624777,
+      "lebesgue_argmax": -0.965,
+      "absolute_lebesgue_argmax": 0.965
+    },
+    {
+      "node_design": "equidistant",
+      "degree": 16,
+      "grid_size": 801,
+      "grid_spacing": 0.0025,
+      "estimated_lebesgue_constant": 934.2339692563187,
+      "lebesgue_argmax": -0.9675,
+      "absolute_lebesgue_argmax": 0.9675
+    },
+    {
+      "node_design": "equidistant",
+      "degree": 16,
+      "grid_size": 1601,
+      "grid_spacing": 0.00125,
+      "estimated_lebesgue_constant": 934.4213737822107,
+      "lebesgue_argmax": 0.96625,
+      "absolute_lebesgue_argmax": 0.96625
+    },
+    {
+      "node_design": "chebyshev-lobatto",
+      "degree": 16,
+      "grid_size": 401,
+      "grid_spacing": 0.005,
+      "estimated_lebesgue_constant": 2.7238118470566963,
+      "lebesgue_argmax": -0.1,
+      "absolute_lebesgue_argmax": 0.1
+    },
+    {
+      "node_design": "chebyshev-lobatto",
+      "degree": 16,
+      "grid_size": 801,
+      "grid_spacing": 0.0025,
+      "estimated_lebesgue_constant": 2.724667117324948,
+      "lebesgue_argmax": -0.0975,
+      "absolute_lebesgue_argmax": 0.0975
+    },
+    {
+      "node_design": "chebyshev-lobatto",
+      "degree": 16,
+      "grid_size": 1601,
+      "grid_spacing": 0.00125,
+      "estimated_lebesgue_constant": 2.724667117324948,
+      "lebesgue_argmax": -0.0975,
+      "absolute_lebesgue_argmax": 0.0975
+    }
+  ],
+  "summaries": [
+    {
+      "node_design": "equidistant",
+      "coarsest_grid_size": 401,
+      "finest_grid_size": 1601,
+      "coarsest_estimate": 933.0899208624777,
+      "finest_estimate": 934.4213737822107,
+      "coarse_to_fine_relative_change": 0.0014248956167855567,
+      "absolute_argmax_movement": 0.0012500000000000844,
+      "stable_within_tolerance": true
+    },
+    {
+      "node_design": "chebyshev-lobatto",
+      "coarsest_grid_size": 401,
+      "finest_grid_size": 1601,
+      "coarsest_estimate": 2.7238118470566963,
+      "finest_estimate": 2.724667117324948,
+      "coarse_to_fine_relative_change": 0.00031389899441790334,
+      "absolute_argmax_movement": 0.0025000000000000022,
+      "stable_within_tolerance": true
+    }
+  ],
+  "design_ratios": [
+    {
+      "grid_size": 401,
+      "equidistant_to_chebyshev_ratio": 342.56768574920414
+    },
+    {
+      "grid_size": 801,
+      "equidistant_to_chebyshev_ratio": 342.88003966280496
+    },
+    {
+      "grid_size": 1601,
+      "equidistant_to_chebyshev_ratio": 342.94882036805166
+    }
+  ],
+  "conclusion": {
+    "all_estimates_stable_within_tolerance": true,
+    "equidistant_over_100x_chebyshev_on_every_grid": true,
+    "stable": true,
+    "scope": "an operational grid-sensitivity check, not a proof of the continuous Lebesgue constants"
+  },
+  "random_seed": "not applicable; deterministic nodes and evaluation grids",
+  "evaluation_period": "not applicable; deterministic numerical experiment",
+  "provenance": {
+    "code_version": "6862aa4f5cabae59151efd5f907ba2977732031a",
+    "source_sha256": {
+      "stability.py": "e957e73a8556e0ab610c0b90e7d7da0d8bb37c85552ec26c7ef6c4d1d6692f2a",
+      "interpolation.py": "2badfd7546b841c556de1f647e3a82a21a537e1927e4f83cd268c94ba75ddff7"
+    },
+    "environment": {
+      "python": "3.12.14",
+      "numpy": "2.3.5"
+    },
+    "data_version": "analytic-lebesgue-grid-refinement-v1"
+  }
+}
