@@ -284,9 +284,179 @@ def run_stability_study(
     }
 
 
+def run_grid_refinement_study(
+    degree: int = 16,
+    grid_sizes: tuple[int, ...] = (401, 801, 1601),
+    node_designs: tuple[str, ...] = ("equidistant", "chebyshev-lobatto"),
+    decimal_precision: int = 80,
+    relative_stability_tolerance: float = 0.005,
+) -> dict:
+    """Measure how evaluation-grid resolution affects Lebesgue estimates.
+
+    The continuous Lebesgue constant is approximated by the maximum on each
+    equally spaced grid. Symmetric node sets can produce equal maxima at
+    positive and negative locations, so location comparisons use absolute
+    coordinates and do not treat a sign flip as movement.
+    """
+    if isinstance(degree, bool) or not isinstance(degree, int) or degree < 1:
+        raise ValueError("degree must be a positive integer")
+    if (
+        not grid_sizes
+        or any(
+            isinstance(grid_size, bool)
+            or not isinstance(grid_size, int)
+            or grid_size < 3
+            for grid_size in grid_sizes
+        )
+        or len(set(grid_sizes)) != len(grid_sizes)
+    ):
+        raise ValueError("grid_sizes must contain unique integers >= 3")
+    supported_designs = {"equidistant", "chebyshev-lobatto"}
+    if (
+        not node_designs
+        or any(
+            not isinstance(design, str) or design not in supported_designs
+            for design in node_designs
+        )
+        or len(set(node_designs)) != len(node_designs)
+    ):
+        raise ValueError(
+            "node_designs must contain unique values from: "
+            "equidistant, chebyshev-lobatto"
+        )
+    if (
+        isinstance(decimal_precision, bool)
+        or not isinstance(decimal_precision, int)
+        or decimal_precision < 30
+    ):
+        raise ValueError("decimal_precision must be an integer >= 30")
+    if (
+        isinstance(relative_stability_tolerance, bool)
+        or not isinstance(relative_stability_tolerance, (int, float))
+        or not math.isfinite(relative_stability_tolerance)
+        or relative_stability_tolerance <= 0
+    ):
+        raise ValueError("relative_stability_tolerance must be finite and positive")
+
+    ordered_grid_sizes = tuple(sorted(grid_sizes))
+    ordered_designs = tuple(
+        design for design in ("equidistant", "chebyshev-lobatto") if design in node_designs
+    )
+    rows = []
+    with localcontext() as context:
+        context.prec = decimal_precision
+        for design in ordered_designs:
+            nodes = _interpolation_nodes(design, degree)
+            weights = _decimal_barycentric_weights(nodes)
+            for grid_size in ordered_grid_sizes:
+                denominator = Decimal(grid_size - 1)
+                grid = [
+                    Decimal(-1) + Decimal(2 * index) / denominator
+                    for index in range(grid_size)
+                ]
+                lebesgue_values = [
+                    _decimal_lebesgue_value(nodes, weights, point) for point in grid
+                ]
+                maximum, argmax, _ = _max_error(lebesgue_values, grid)
+                rows.append({
+                    "node_design": design,
+                    "degree": degree,
+                    "grid_size": grid_size,
+                    "grid_spacing": float(Decimal(2) / denominator),
+                    "estimated_lebesgue_constant": float(maximum),
+                    "lebesgue_argmax": float(argmax),
+                    "absolute_lebesgue_argmax": float(abs(argmax)),
+                })
+
+    summaries = []
+    for design in ordered_designs:
+        design_rows = [row for row in rows if row["node_design"] == design]
+        coarsest = design_rows[0]
+        finest = design_rows[-1]
+        relative_change = abs(
+            finest["estimated_lebesgue_constant"]
+            - coarsest["estimated_lebesgue_constant"]
+        ) / finest["estimated_lebesgue_constant"]
+        summaries.append({
+            "node_design": design,
+            "coarsest_grid_size": coarsest["grid_size"],
+            "finest_grid_size": finest["grid_size"],
+            "coarsest_estimate": coarsest["estimated_lebesgue_constant"],
+            "finest_estimate": finest["estimated_lebesgue_constant"],
+            "coarse_to_fine_relative_change": relative_change,
+            "absolute_argmax_movement": abs(
+                finest["absolute_lebesgue_argmax"]
+                - coarsest["absolute_lebesgue_argmax"]
+            ),
+            "stable_within_tolerance": relative_change
+            <= relative_stability_tolerance,
+        })
+
+    design_ratios = []
+    if set(ordered_designs) == {"equidistant", "chebyshev-lobatto"}:
+        for grid_size in ordered_grid_sizes:
+            by_design = {
+                row["node_design"]: row["estimated_lebesgue_constant"]
+                for row in rows
+                if row["grid_size"] == grid_size
+            }
+            design_ratios.append({
+                "grid_size": grid_size,
+                "equidistant_to_chebyshev_ratio": (
+                    by_design["equidistant"] / by_design["chebyshev-lobatto"]
+                ),
+            })
+
+    all_estimates_stable = all(
+        summary["stable_within_tolerance"] for summary in summaries
+    )
+    lower_conditioning_conclusion_stable = (
+        bool(design_ratios)
+        and all(
+            row["equidistant_to_chebyshev_ratio"] > 100
+            for row in design_ratios
+        )
+    )
+    return {
+        "schema_version": 1,
+        "study_type": "lebesgue-grid-refinement-sensitivity",
+        "data": "deterministic simulated evaluations of interpolation cardinal bases",
+        "interval": [-1.0, 1.0],
+        "degree": degree,
+        "node_designs": list(ordered_designs),
+        "grid_sizes": list(ordered_grid_sizes),
+        "decimal_precision": decimal_precision,
+        "relative_stability_tolerance": relative_stability_tolerance,
+        "location_comparison": (
+            "absolute coordinates because symmetric node sets can have equal +/- maxima"
+        ),
+        "rows": rows,
+        "summaries": summaries,
+        "design_ratios": design_ratios,
+        "conclusion": {
+            "all_estimates_stable_within_tolerance": all_estimates_stable,
+            "equidistant_over_100x_chebyshev_on_every_grid": (
+                lower_conditioning_conclusion_stable
+            ),
+            "stable": all_estimates_stable and lower_conditioning_conclusion_stable,
+            "scope": (
+                "an operational grid-sensitivity check, not a proof of the continuous "
+                "Lebesgue constants"
+            ),
+        },
+        "random_seed": "not applicable; deterministic nodes and evaluation grids",
+        "evaluation_period": "not applicable; deterministic numerical experiment",
+    }
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument(
+        "--refinement-output",
+        type=Path,
+        help="optional path for the degree-16 grid-refinement sensitivity artifact",
+    )
     parser.add_argument("--code-version", required=True, help="Git commit containing this runner")
     args = parser.parse_args(argv)
 
@@ -304,6 +474,26 @@ def main(argv: list[str] | None = None) -> int:
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(report, indent=2, allow_nan=False) + "\n", encoding="utf-8")
     print(f"Wrote {len(report['rows'])} stability rows to {args.output}")
+    if args.refinement_output is not None:
+        refinement = run_grid_refinement_study()
+        refinement["provenance"] = {
+            "code_version": args.code_version,
+            "source_sha256": {
+                name: hashlib.sha256((source / name).read_bytes()).hexdigest()
+                for name in ("stability.py", "interpolation.py")
+            },
+            "environment": {"python": platform.python_version(), "numpy": np.__version__},
+            "data_version": "analytic-lebesgue-grid-refinement-v1",
+        }
+        args.refinement_output.parent.mkdir(parents=True, exist_ok=True)
+        args.refinement_output.write_text(
+            json.dumps(refinement, indent=2, allow_nan=False) + "\n",
+            encoding="utf-8",
+        )
+        print(
+            f"Wrote {len(refinement['rows'])} grid-refinement rows to "
+            f"{args.refinement_output}"
+        )
     return 0
 
 

@@ -2,7 +2,11 @@ import json
 
 import pytest
 
-from quant_numerical.stability import main, run_stability_study
+from quant_numerical.stability import (
+    main,
+    run_grid_refinement_study,
+    run_stability_study,
+)
 
 
 def test_stability_study_is_reproducible_and_degree_order_independent():
@@ -105,6 +109,64 @@ def test_adversarial_perturbation_attains_recorded_lebesgue_bound():
         assert row["lebesgue_bound_gap"] < 1e-70
 
 
+def test_degree_16_lebesgue_conclusion_is_stable_under_grid_refinement():
+    study = run_grid_refinement_study()
+
+    assert study["grid_sizes"] == [401, 801, 1601]
+    assert len(study["rows"]) == 6
+    assert study["conclusion"] == {
+        "all_estimates_stable_within_tolerance": True,
+        "equidistant_over_100x_chebyshev_on_every_grid": True,
+        "stable": True,
+        "scope": (
+            "an operational grid-sensitivity check, not a proof of the continuous "
+            "Lebesgue constants"
+        ),
+    }
+    for summary in study["summaries"]:
+        assert summary["coarse_to_fine_relative_change"] <= 0.005
+        assert summary["absolute_argmax_movement"] <= 0.005
+    assert all(
+        row["equidistant_to_chebyshev_ratio"] > 300
+        for row in study["design_ratios"]
+    )
+
+
+def test_grid_refinement_study_is_order_independent():
+    first = run_grid_refinement_study(
+        grid_sizes=(401, 801),
+        node_designs=("equidistant", "chebyshev-lobatto"),
+        decimal_precision=50,
+    )
+    reordered = run_grid_refinement_study(
+        grid_sizes=(801, 401),
+        node_designs=("chebyshev-lobatto", "equidistant"),
+        decimal_precision=50,
+    )
+
+    assert first == reordered
+
+
+@pytest.mark.parametrize("kwargs", [
+    {"degree": 0},
+    {"degree": True},
+    {"grid_sizes": ()},
+    {"grid_sizes": (2,)},
+    {"grid_sizes": (401, 401)},
+    {"grid_sizes": (True,)},
+    {"node_designs": ()},
+    {"node_designs": ("unknown",)},
+    {"node_designs": ("equidistant", "equidistant")},
+    {"decimal_precision": 29},
+    {"relative_stability_tolerance": 0},
+    {"relative_stability_tolerance": float("inf")},
+    {"relative_stability_tolerance": True},
+])
+def test_invalid_grid_refinement_configuration(kwargs):
+    with pytest.raises(ValueError):
+        run_grid_refinement_study(**kwargs)
+
+
 def test_node_design_order_does_not_change_output():
     first = run_stability_study(
         degrees=(4,),
@@ -143,7 +205,15 @@ def test_invalid_stability_configuration(kwargs):
 
 def test_cli_writes_provenance_and_valid_json(tmp_path):
     output = tmp_path / "stability.json"
-    assert main(["--output", str(output), "--code-version", "test-commit"]) == 0
+    refinement_output = tmp_path / "grid-refinement.json"
+    assert main([
+        "--output",
+        str(output),
+        "--refinement-output",
+        str(refinement_output),
+        "--code-version",
+        "test-commit",
+    ]) == 0
 
     report = json.loads(output.read_text(encoding="utf-8"))
     assert report["provenance"]["code_version"] == "test-commit"
@@ -151,3 +221,6 @@ def test_cli_writes_provenance_and_valid_json(tmp_path):
         "stability.py",
         "interpolation.py",
     }
+    refinement = json.loads(refinement_output.read_text(encoding="utf-8"))
+    assert refinement["provenance"]["code_version"] == "test-commit"
+    assert refinement["conclusion"]["stable"] is True
