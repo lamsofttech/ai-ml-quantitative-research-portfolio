@@ -1,13 +1,13 @@
 {
   "schema_version": 1,
-  "updated_on": "2026-11-21",
+  "updated_on": "2026-11-22",
   "vision_file": "docs/PORTFOLIO_VISION.md",
   "expected_graduation": "2028-05",
   "active_milestone": "Verify foundations and establish reproducible delivery for projects 01/02",
-  "next_task": "Add a deterministic local peak-refinement calculation around each 1601-point degree-16 Lebesgue maximum, quantify residual grid bias, add regression coverage, and recheck remote execution.",
+  "next_task": "Add an employer-facing project-01 case study grounded in the validated stability, grid-refinement and peak-refinement artifacts, with an automated evidence-link check, and recheck remote execution.",
   "projects": {
-    "numerical-methods": "foundation-implemented; 59 tests passed 2026-11-21 with warnings as errors; degree-16 Lebesgue conclusion is stable across 401/801/1601-point grids under explicit sensitivity criteria",
-    "monte-carlo-options": "implemented; 92 tests passed 2026-11-21 with warnings as errors; 36-configuration strike/maturity coverage study recorded with exact binomial uncertainty",
+    "numerical-methods": "foundation-implemented; 78 tests passed 2026-11-22 with warnings as errors; bounded local peak refinement found only 0.01206% and 0.001525% residual grid bias and preserved the 342.98x conditioning ratio",
+    "monte-carlo-options": "implemented; 92 tests passed 2026-11-22 with warnings as errors; 36-configuration strike/maturity coverage study recorded with exact binomial uncertainty",
     "financial-forecasting": "planned",
     "credit-risk": "planned",
     "financial-nlp": "planned"
@@ -15,75 +15,75 @@
   "github": {
     "branch": "main",
     "setup_status": "delivery contract established",
-    "last_implementation_commit": "6862aa4f5cabae59151efd5f907ba2977732031a",
-    "last_evidence_commit": "7c1af4900906b45390abe9632e14e15380aee65e",
+    "last_implementation_commit": "68a8c0618e99edf058ad34fd5f37edf45bf7c6e2",
+    "last_evidence_commit": "32277ec058424eefc2f8333068fc736a5924c14b",
     "validation": {
       "local_python": "3.12.14",
-      "tests_passed": 151,
-      "ruff": "scripts and projects 01/02 passed 2026-11-21",
-      "catalog": "12 regression tests passed 2026-11-21; valid CLI checked with normal and optimized Python",
+      "tests_passed": 170,
+      "ruff": "scripts and projects 01/02 passed 2026-11-22",
+      "catalog": "12 regression tests passed 2026-11-22; valid CLI checked with normal and optimized Python",
       "bandit": {
         "low": 0,
         "medium": 0,
         "high": 0,
         "scope": "projects 01/02 production source, apps, portfolio Space and scripts; tests excluded",
-        "production_lines": 2035,
-        "checked_on": "2026-11-21"
+        "production_lines": 2265,
+        "checked_on": "2026-11-22"
       },
-      "workflow_yaml_syntax": "ci.yml, security.yml and publish-huggingface.yml parsed with PyYAML 6.0.2 on 2026-11-21; repository has no scripts/*.sh files",
+      "workflow_yaml_syntax": "ci.yml, security.yml and publish-huggingface.yml parsed with PyYAML 6.0.2 on 2026-11-22; repository has no scripts/*.sh files",
       "remote_runs": [
         {
-          "id": 44913354534,
+          "id": 45033073354,
           "name": "CI",
           "status": "completed",
           "conclusion": "failure; all nine jobs stopped with zero exposed steps and no logs",
-          "url": "https://github.com/lamsofttech/ai-ml-quantitative-research-portfolio/actions/runs/44913354534"
+          "url": "https://github.com/lamsofttech/ai-ml-quantitative-research-portfolio/actions/runs/45033073354"
         },
         {
-          "id": 44913354655,
+          "id": 45033073359,
           "name": "Security",
           "status": "completed",
           "conclusion": "failure; bandit job stopped with zero exposed steps and no logs",
-          "url": "https://github.com/lamsofttech/ai-ml-quantitative-research-portfolio/actions/runs/44913354655"
+          "url": "https://github.com/lamsofttech/ai-ml-quantitative-research-portfolio/actions/runs/45033073359"
         }
       ],
       "limitations": [
         "Python 3.12.14 local validation; Python 3.10/3.14, R, Docker and app interaction not verified; Rscript and Docker are unavailable in the execution environment",
-        "The 401/801/1601 grid study strengthens but does not prove the continuous Lebesgue maxima",
-        "Fresh Actions jobs again stopped before all steps on 2026-11-21; step lists were absent and log retrieval returned 404 BlobNotFound, so no remote check result or precise platform cause is claimed"
+        "The local golden-section searches reduce between-grid uncertainty but do not prove the global continuous Lebesgue maxima",
+        "Fresh Actions jobs again stopped before all steps on 2026-11-22; step lists were absent and log retrieval returned 404 BlobNotFound, so no remote check result or precise platform cause is claimed"
       ],
-      "math_tests_last_run_on": "2026-11-21",
+      "math_tests_last_run_on": "2026-11-22",
       "catalog_tests_passed": 12,
-      "project01_tests_passed": 59,
-      "project01_tests_checked_on": "2026-11-21",
+      "project01_tests_passed": 78,
+      "project01_tests_checked_on": "2026-11-22",
       "project02_tests_passed": 92,
-      "project02_tests_checked_on": "2026-11-21",
-      "tests_passed_scope": "projects 01 and 02 together on 2026-11-21 with warnings as errors"
+      "project02_tests_checked_on": "2026-11-22",
+      "tests_passed_scope": "projects 01 and 02 together on 2026-11-22 with warnings as errors"
     }
   },
   "hugging_face": {
     "repo_id": "nyakslamo/ai-ml-quantitative-research-portfolio",
     "repo_type": "space",
     "source": "spaces/portfolio-hub",
-    "status": "Public Space page reported sleeping due to inactivity on 2026-11-21. Tested project-01 pin prepared, but upload/build/runtime are not verified. Publishing remains blocked by pre-step Actions failures; HF_TOKEN presence and validity are unknown.",
+    "status": "Public Space page reported sleeping due to inactivity when checked on 2026-11-22. Tested project-01 pin prepared, but upload/build/runtime are not verified. Publishing remains blocked by pre-step Actions failures; HF_TOKEN presence and validity are unknown.",
     "workflow": ".github/workflows/publish-huggingface.yml",
     "publish_script": "scripts/publish_huggingface.py",
-    "runtime_checked_on": "2026-11-21",
+    "runtime_checked_on": "2026-11-22",
     "runtime_commit": "40efb957fa2f67f3100d16421a1ffc583fd1ebeb",
     "prepared_project02_pin": "3bfa3c1bd45bea79b8dd3ef72c55f13c699b8c3f",
-    "prepared_project01_pin": "6862aa4f5cabae59151efd5f907ba2977732031a",
-    "upload_status": "not performed; publish run 44913354570 failed with no exposed steps and log retrieval returned 404 BlobNotFound, so credential check, validation, HF upload, Space build and runtime were not reached"
+    "prepared_project01_pin": "68a8c0618e99edf058ad34fd5f37edf45bf7c6e2",
+    "upload_status": "not performed; publish run 45033073401 failed with no exposed steps and log retrieval returned 404 BlobNotFound, so credential check, validation, HF upload, Space build and runtime were not reached"
   },
   "learning": {
     "status": "assigned; understanding not yet demonstrated",
     "reading": [
-      "projects/01-numerical-methods/results/grid-refinement.md",
-      "run_grid_refinement_study in projects/01-numerical-methods/src/quant_numerical/stability.py",
-      "test_degree_16_lebesgue_conclusion_is_stable_under_grid_refinement in projects/01-numerical-methods/tests/test_stability.py"
+      "projects/01-numerical-methods/results/peak-refinement.md",
+      "_decimal_golden_section_maximum and run_peak_refinement_study in projects/01-numerical-methods/src/quant_numerical/stability.py",
+      "test_degree_16_local_peak_refinement_has_small_residual_grid_bias in projects/01-numerical-methods/tests/test_stability.py"
     ],
-    "question": "Why does the 1601-point estimate being close to the 401-point estimate strengthen the conditioning conclusion without proving the exact continuous Lebesgue constant?"
+    "question": "What uncertainty does local peak refinement reduce, and why does it still not prove the global continuous Lebesgue constant?"
   },
-  "latest_log": "portfolio/progress/2026-11-21.md",
+  "latest_log": "portfolio/progress/2026-11-22.md",
   "automation": {
     "id": "Automation_826d2e5b7734819180c3f3fc1c7b06c4",
     "schedule": "Daily around 08:00 America/Chicago; first run 2026-11-12",
@@ -92,8 +92,8 @@
   "weekly_review": {
     "baseline_on": "2026-11-12",
     "next_review_on": "2026-11-26",
-    "as_of": "2026-11-21",
-    "alignment": "Original five-project scope preserved. November-December foundations milestone remains active; project 01 now tests its degree-16 conditioning conclusion across three grid resolutions after constructing an explicit bounded perturbation, and project 02 retains replicated convergence/coverage evidence. Neither is relabeled as a completed research track, and project 03 remains planned.",
+    "as_of": "2026-11-22",
+    "alignment": "Original five-project scope preserved. November-December foundations milestone remains active; project 01 now bounds the residual bias around its 1601-point conditioning peaks after grid-refinement and adversarial-perturbation studies, and project 02 retains replicated convergence/coverage evidence. Neither is relabeled as a completed research track, and project 03 remains planned.",
     "demonstrable_skills": [
       "seeded Monte Carlo experimental design",
       "Black-Scholes benchmark validation",
@@ -103,13 +103,14 @@
       "experimental comparison of equidistant and Chebyshev-Lobatto interpolation nodes",
       "Lebesgue-function conditioning analysis and worst-case error-amplification interpretation",
       "construction and verification of an adversarial perturbation that attains a numerical stability bound",
-      "grid-refinement sensitivity analysis with explicit operational decision criteria"
+      "grid-refinement sensitivity analysis with explicit operational decision criteria",
+      "dependency-free bounded golden-section optimization and residual grid-bias analysis"
     ],
     "repeated_blockers": [
       "GitHub Actions jobs stop before executing steps, preventing Python matrix, Docker, security and Hugging Face publishing verification",
       "Hugging Face authentication, upload, build and the newly pinned runtime remain unverified"
     ],
-    "next_week_focus": "Locally refine the degree-16 Lebesgue peaks to estimate remaining grid bias, then verify CI/security/Hugging Face when remote runners execute."
+    "next_week_focus": "Turn the validated project-01 evidence into an employer-facing case study with checked evidence links, then verify CI/security/Hugging Face when remote runners execute."
   },
   "research_baseline": {
     "file": "projects/02-monte-carlo-option-pricing/results/convergence.json",
@@ -142,10 +143,10 @@
   },
   "stability_baseline": {
     "status": "recorded",
-    "code_commit": "6862aa4f5cabae59151efd5f907ba2977732031a",
+    "code_commit": "68a8c0618e99edf058ad34fd5f37edf45bf7c6e2",
     "artifact": "projects/01-numerical-methods/results/stability.json",
     "report": "projects/01-numerical-methods/results/stability.md",
-    "artifact_sha256": "6b3e0f1362c01f6a879704baabb0c645e8515f8d28a1fb9737e9650c9c1867dc",
+    "artifact_sha256": "66ac48c7e54be67cc97da98b6f6949abd41af941d65f5c2e6483115f3a215032",
     "design": "Runge function on [-1,1]; equidistant versus Chebyshev-Lobatto degrees 4/8/12/16; 401-point grid; 80-decimal error and Lebesgue-function diagnostics; deterministic +/-1e-6 value perturbations aligned with cardinal-basis signs at each grid maximum",
     "result": "at degree 16, bounded perturbations produced output changes 9.330899e-4 for equidistant and 2.723812e-6 for Chebyshev-Lobatto nodes; observed amplification matched the respective 933.090 and 2.724 grid-estimated Lebesgue constants",
     "repeatability": "two byte-identical local executions on Python 3.12.14 and NumPy 2.3.5",
@@ -153,13 +154,24 @@
   },
   "grid_refinement": {
     "status": "recorded",
-    "code_commit": "6862aa4f5cabae59151efd5f907ba2977732031a",
+    "code_commit": "68a8c0618e99edf058ad34fd5f37edf45bf7c6e2",
     "artifact": "projects/01-numerical-methods/results/grid-refinement.json",
     "report": "projects/01-numerical-methods/results/grid-refinement.md",
-    "artifact_sha256": "f938afa46856af2487891210db20ce8bff6dd44cc392475884b47d12f045d5c4",
+    "artifact_sha256": "0b60f9659db19f505485b5fff75e24093a5260e823a5d32b84cd05fff2e079ea",
     "design": "degree 16; equidistant and Chebyshev-Lobatto nodes; 401/801/1601-point uniform grids; 80-decimal Lebesgue evaluations; 0.5% estimate-stability and 100x design-ratio criteria",
     "result": "401-to-1601 estimates changed 0.1425% and 0.0314%; equidistant-to-Chebyshev ratio stayed between 342.57 and 342.95; both operational criteria passed",
     "repeatability": "two byte-identical local executions on Python 3.12.14 and NumPy 2.3.5",
     "evidence_type": "deterministic simulated numerical sensitivity analysis; not a proof of the continuous maxima"
+  },
+  "peak_refinement": {
+    "status": "recorded",
+    "code_commit": "68a8c0618e99edf058ad34fd5f37edf45bf7c6e2",
+    "artifact": "projects/01-numerical-methods/results/peak-refinement.json",
+    "report": "projects/01-numerical-methods/results/peak-refinement.md",
+    "artifact_sha256": "ec926709dcfe1aa532c18335c1c5485697fc5b4271fe300f06fd3ad587d6264c",
+    "design": "degree 16; 1601-point grid brackets; equidistant and Chebyshev-Lobatto nodes; 80-decimal bounded golden-section maximization; 1e-30 bracket tolerance; 0.05% residual-bias and 100x design-ratio criteria",
+    "result": "refined estimates were 934.534111 and 2.724709; relative residual grid bias was 0.01206% and 0.001525%; refined design ratio was 342.98; both operational criteria passed",
+    "repeatability": "two byte-identical local executions on Python 3.12.14 and NumPy 2.3.5",
+    "evidence_type": "deterministic local numerical optimization; not a proof of the global continuous maxima"
   }
 }
