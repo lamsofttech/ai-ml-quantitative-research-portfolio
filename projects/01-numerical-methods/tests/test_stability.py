@@ -5,6 +5,7 @@ import pytest
 from quant_numerical.stability import (
     main,
     run_grid_refinement_study,
+    run_peak_refinement_study,
     run_stability_study,
 )
 
@@ -147,6 +148,72 @@ def test_grid_refinement_study_is_order_independent():
     assert first == reordered
 
 
+def test_degree_16_local_peak_refinement_has_small_residual_grid_bias():
+    study = run_peak_refinement_study()
+
+    assert len(study["rows"]) == 2
+    assert study["refined_equidistant_to_chebyshev_ratio"] > 300
+    assert study["conclusion"] == {
+        "all_local_searches_converged": True,
+        "all_residuals_within_tolerance": True,
+        "equidistant_over_100x_chebyshev_after_refinement": True,
+        "stable": True,
+        "scope": (
+            "a deterministic local sensitivity check around grid-selected peaks, "
+            "not a proof of the global continuous supremum"
+        ),
+    }
+    for row in study["rows"]:
+        assert row["refined_estimate"] >= row["grid_estimate"]
+        assert 0 < row["relative_residual"] <= 0.0005
+        assert row["absolute_location_shift"] <= row["base_grid_spacing"]
+        assert row["search_bracket"][0] <= row["refined_argmax"]
+        assert row["refined_argmax"] <= row["search_bracket"][1]
+        assert row["iterations"] < study["max_iterations"]
+        assert row["final_bracket_width"] <= float(study["local_tolerance"])
+
+
+def test_peak_refinement_study_is_node_design_order_independent():
+    first = run_peak_refinement_study(
+        base_grid_size=401,
+        node_designs=("equidistant", "chebyshev-lobatto"),
+        decimal_precision=50,
+        local_tolerance="1e-15",
+    )
+    reordered = run_peak_refinement_study(
+        base_grid_size=401,
+        node_designs=("chebyshev-lobatto", "equidistant"),
+        decimal_precision=50,
+        local_tolerance="1e-15",
+    )
+
+    assert first == reordered
+
+
+@pytest.mark.parametrize("kwargs", [
+    {"degree": 0},
+    {"degree": True},
+    {"base_grid_size": 2},
+    {"base_grid_size": True},
+    {"node_designs": ()},
+    {"node_designs": ("unknown",)},
+    {"node_designs": ("equidistant", "equidistant")},
+    {"decimal_precision": 29},
+    {"local_tolerance": 0.1},
+    {"local_tolerance": "not-a-number"},
+    {"local_tolerance": "0"},
+    {"local_tolerance": "Infinity"},
+    {"max_iterations": 0},
+    {"max_iterations": True},
+    {"relative_residual_tolerance": 0},
+    {"relative_residual_tolerance": float("inf")},
+    {"relative_residual_tolerance": True},
+])
+def test_invalid_peak_refinement_configuration(kwargs):
+    with pytest.raises(ValueError):
+        run_peak_refinement_study(**kwargs)
+
+
 @pytest.mark.parametrize("kwargs", [
     {"degree": 0},
     {"degree": True},
@@ -206,11 +273,14 @@ def test_invalid_stability_configuration(kwargs):
 def test_cli_writes_provenance_and_valid_json(tmp_path):
     output = tmp_path / "stability.json"
     refinement_output = tmp_path / "grid-refinement.json"
+    peak_output = tmp_path / "peak-refinement.json"
     assert main([
         "--output",
         str(output),
         "--refinement-output",
         str(refinement_output),
+        "--peak-output",
+        str(peak_output),
         "--code-version",
         "test-commit",
     ]) == 0
@@ -224,3 +294,6 @@ def test_cli_writes_provenance_and_valid_json(tmp_path):
     refinement = json.loads(refinement_output.read_text(encoding="utf-8"))
     assert refinement["provenance"]["code_version"] == "test-commit"
     assert refinement["conclusion"]["stable"] is True
+    peak_refinement = json.loads(peak_output.read_text(encoding="utf-8"))
+    assert peak_refinement["provenance"]["code_version"] == "test-commit"
+    assert peak_refinement["conclusion"]["stable"] is True

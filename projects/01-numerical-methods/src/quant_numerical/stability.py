@@ -7,7 +7,9 @@ import hashlib
 import json
 import math
 import platform
+from collections.abc import Callable
 from decimal import Decimal, localcontext
+from functools import partial
 from pathlib import Path
 
 import numpy as np
@@ -449,6 +451,218 @@ def run_grid_refinement_study(
     }
 
 
+def _decimal_golden_section_maximum(
+    function: Callable[[Decimal], Decimal],
+    left: Decimal,
+    right: Decimal,
+    tolerance: Decimal,
+    max_iterations: int,
+) -> tuple[Decimal, Decimal, int, Decimal]:
+    """Return a deterministic local maximum from a bounded Decimal interval."""
+    ratio = (Decimal(5).sqrt() - Decimal(1)) / Decimal(2)
+    inner_left = right - ratio * (right - left)
+    inner_right = left + ratio * (right - left)
+    value_left = function(inner_left)
+    value_right = function(inner_right)
+    iterations = 0
+
+    while right - left > tolerance and iterations < max_iterations:
+        if value_left < value_right:
+            left = inner_left
+            inner_left = inner_right
+            value_left = value_right
+            inner_right = left + ratio * (right - left)
+            value_right = function(inner_right)
+        else:
+            right = inner_right
+            inner_right = inner_left
+            value_right = value_left
+            inner_left = right - ratio * (right - left)
+            value_left = function(inner_left)
+        iterations += 1
+
+    midpoint = (left + right) / Decimal(2)
+    candidates = [
+        (function(left), left),
+        (function(right), right),
+        (value_left, inner_left),
+        (value_right, inner_right),
+        (function(midpoint), midpoint),
+    ]
+    maximum, argmax = max(candidates, key=lambda candidate: candidate[0])
+    return maximum, argmax, iterations, right - left
+
+
+def run_peak_refinement_study(
+    degree: int = 16,
+    base_grid_size: int = 1601,
+    node_designs: tuple[str, ...] = ("equidistant", "chebyshev-lobatto"),
+    decimal_precision: int = 80,
+    local_tolerance: str = "1e-30",
+    max_iterations: int = 300,
+    relative_residual_tolerance: float = 0.0005,
+) -> dict:
+    """Refine each uniform-grid Lebesgue peak inside its neighboring cells.
+
+    A bounded golden-section search starts one base-grid step on each side of
+    the recorded maximum. The result estimates the residual grid bias without
+    adding a SciPy dependency to this independently installable project.
+    """
+    if isinstance(degree, bool) or not isinstance(degree, int) or degree < 1:
+        raise ValueError("degree must be a positive integer")
+    if (
+        isinstance(base_grid_size, bool)
+        or not isinstance(base_grid_size, int)
+        or base_grid_size < 3
+    ):
+        raise ValueError("base_grid_size must be an integer >= 3")
+    supported_designs = {"equidistant", "chebyshev-lobatto"}
+    if (
+        not node_designs
+        or any(
+            not isinstance(design, str) or design not in supported_designs
+            for design in node_designs
+        )
+        or len(set(node_designs)) != len(node_designs)
+    ):
+        raise ValueError(
+            "node_designs must contain unique values from: "
+            "equidistant, chebyshev-lobatto"
+        )
+    if (
+        isinstance(decimal_precision, bool)
+        or not isinstance(decimal_precision, int)
+        or decimal_precision < 30
+    ):
+        raise ValueError("decimal_precision must be an integer >= 30")
+    if not isinstance(local_tolerance, str):
+        raise ValueError("local_tolerance must be a positive finite Decimal string")
+    try:
+        decimal_tolerance = Decimal(local_tolerance)
+    except ArithmeticError as error:
+        raise ValueError(
+            "local_tolerance must be a positive finite Decimal string"
+        ) from error
+    if not decimal_tolerance.is_finite() or decimal_tolerance <= 0:
+        raise ValueError("local_tolerance must be a positive finite Decimal string")
+    if (
+        isinstance(max_iterations, bool)
+        or not isinstance(max_iterations, int)
+        or max_iterations < 1
+    ):
+        raise ValueError("max_iterations must be a positive integer")
+    if (
+        isinstance(relative_residual_tolerance, bool)
+        or not isinstance(relative_residual_tolerance, (int, float))
+        or not math.isfinite(relative_residual_tolerance)
+        or relative_residual_tolerance <= 0
+    ):
+        raise ValueError("relative_residual_tolerance must be finite and positive")
+
+    ordered_designs = tuple(
+        design for design in ("equidistant", "chebyshev-lobatto") if design in node_designs
+    )
+    rows = []
+    with localcontext() as context:
+        context.prec = decimal_precision
+        denominator = Decimal(base_grid_size - 1)
+        grid = [
+            Decimal(-1) + Decimal(2 * index) / denominator
+            for index in range(base_grid_size)
+        ]
+        spacing = Decimal(2) / denominator
+        for design in ordered_designs:
+            nodes = _interpolation_nodes(design, degree)
+            weights = _decimal_barycentric_weights(nodes)
+            function = partial(_decimal_lebesgue_value, nodes, weights)
+            grid_values = [function(point) for point in grid]
+            grid_maximum, grid_argmax, grid_index = _max_error(grid_values, grid)
+            bracket_left = grid[max(0, grid_index - 1)]
+            bracket_right = grid[min(base_grid_size - 1, grid_index + 1)]
+            refined_maximum, refined_argmax, iterations, final_width = (
+                _decimal_golden_section_maximum(
+                    function,
+                    bracket_left,
+                    bracket_right,
+                    decimal_tolerance,
+                    max_iterations,
+                )
+            )
+            if refined_maximum < grid_maximum:
+                refined_maximum = grid_maximum
+                refined_argmax = grid_argmax
+            residual = refined_maximum - grid_maximum
+            relative_residual = residual / refined_maximum
+            rows.append({
+                "node_design": design,
+                "degree": degree,
+                "base_grid_size": base_grid_size,
+                "base_grid_spacing": float(spacing),
+                "grid_estimate": float(grid_maximum),
+                "grid_argmax": float(grid_argmax),
+                "search_bracket": [float(bracket_left), float(bracket_right)],
+                "refined_estimate": float(refined_maximum),
+                "refined_argmax": float(refined_argmax),
+                "absolute_residual": float(residual),
+                "relative_residual": float(relative_residual),
+                "absolute_location_shift": float(abs(refined_argmax - grid_argmax)),
+                "iterations": iterations,
+                "final_bracket_width": float(final_width),
+                "converged": final_width <= decimal_tolerance,
+                "residual_within_tolerance": (
+                    relative_residual <= Decimal(str(relative_residual_tolerance))
+                ),
+            })
+
+    refined_design_ratio = None
+    if set(ordered_designs) == {"equidistant", "chebyshev-lobatto"}:
+        by_design = {row["node_design"]: row["refined_estimate"] for row in rows}
+        refined_design_ratio = (
+            by_design["equidistant"] / by_design["chebyshev-lobatto"]
+        )
+    all_converged = all(row["converged"] for row in rows)
+    all_residuals_within_tolerance = all(
+        row["residual_within_tolerance"] for row in rows
+    )
+    lower_conditioning_conclusion_stable = (
+        refined_design_ratio is not None and refined_design_ratio > 100
+    )
+    return {
+        "schema_version": 1,
+        "study_type": "lebesgue-local-peak-refinement",
+        "data": "deterministic simulated evaluations of interpolation cardinal bases",
+        "interval": [-1.0, 1.0],
+        "degree": degree,
+        "node_designs": list(ordered_designs),
+        "base_grid_size": base_grid_size,
+        "decimal_precision": decimal_precision,
+        "method": "bounded golden-section maximization in the neighboring grid cells",
+        "local_tolerance": local_tolerance,
+        "max_iterations": max_iterations,
+        "relative_residual_tolerance": relative_residual_tolerance,
+        "rows": rows,
+        "refined_equidistant_to_chebyshev_ratio": refined_design_ratio,
+        "conclusion": {
+            "all_local_searches_converged": all_converged,
+            "all_residuals_within_tolerance": all_residuals_within_tolerance,
+            "equidistant_over_100x_chebyshev_after_refinement": (
+                lower_conditioning_conclusion_stable
+            ),
+            "stable": (
+                all_converged
+                and all_residuals_within_tolerance
+                and lower_conditioning_conclusion_stable
+            ),
+            "scope": (
+                "a deterministic local sensitivity check around grid-selected peaks, "
+                "not a proof of the global continuous supremum"
+            ),
+        },
+        "random_seed": "not applicable; deterministic nodes and evaluations",
+        "evaluation_period": "not applicable; deterministic numerical experiment",
+    }
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", type=Path, required=True)
@@ -456,6 +670,11 @@ def main(argv: list[str] | None = None) -> int:
         "--refinement-output",
         type=Path,
         help="optional path for the degree-16 grid-refinement sensitivity artifact",
+    )
+    parser.add_argument(
+        "--peak-output",
+        type=Path,
+        help="optional path for the degree-16 local peak-refinement artifact",
     )
     parser.add_argument("--code-version", required=True, help="Git commit containing this runner")
     args = parser.parse_args(argv)
@@ -493,6 +712,26 @@ def main(argv: list[str] | None = None) -> int:
         print(
             f"Wrote {len(refinement['rows'])} grid-refinement rows to "
             f"{args.refinement_output}"
+        )
+    if args.peak_output is not None:
+        peak_refinement = run_peak_refinement_study()
+        peak_refinement["provenance"] = {
+            "code_version": args.code_version,
+            "source_sha256": {
+                name: hashlib.sha256((source / name).read_bytes()).hexdigest()
+                for name in ("stability.py", "interpolation.py")
+            },
+            "environment": {"python": platform.python_version(), "numpy": np.__version__},
+            "data_version": "analytic-lebesgue-local-peak-refinement-v1",
+        }
+        args.peak_output.parent.mkdir(parents=True, exist_ok=True)
+        args.peak_output.write_text(
+            json.dumps(peak_refinement, indent=2, allow_nan=False) + "\n",
+            encoding="utf-8",
+        )
+        print(
+            f"Wrote {len(peak_refinement['rows'])} local peak-refinement rows to "
+            f"{args.peak_output}"
         )
     return 0
 
