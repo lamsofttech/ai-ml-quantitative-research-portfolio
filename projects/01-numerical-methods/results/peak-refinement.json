@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "study_type": "lebesgue-local-peak-refinement",
+  "data": "deterministic simulated evaluations of interpolation cardinal bases",
+  "interval": [
+    -1.0,
+    1.0
+  ],
+  "degree": 16,
+  "node_designs": [
+    "equidistant",
+    "chebyshev-lobatto"
+  ],
+  "base_grid_size": 1601,
+  "decimal_precision": 80,
+  "method": "bounded golden-section maximization in the neighboring grid cells",
+  "local_tolerance": "1e-30",
+  "max_iterations": 300,
+  "relative_residual_tolerance": 0.0005,
+  "rows": [
+    {
+      "node_design": "equidistant",
+      "degree": 16,
+      "base_grid_size": 1601,
+      "base_grid_spacing": 0.00125,
+      "grid_estimate": 934.4213737822107,
+      "grid_argmax": 0.96625,
+      "search_bracket": [
+        0.965,
+        0.9675
+      ],
+      "refined_estimate": 934.5341114532667,
+      "refined_argmax": 0.9667279504193511,
+      "absolute_residual": 0.11273767105602422,
+      "relative_residual": 0.00012063515892502753,
+      "absolute_location_shift": 0.0004779504193510809,
+      "iterations": 132,
+      "final_bracket_width": 6.47994762545352e-31,
+      "converged": true,
+      "residual_within_tolerance": true
+    },
+    {
+      "node_design": "chebyshev-lobatto",
+      "degree": 16,
+      "base_grid_size": 1601,
+      "base_grid_spacing": 0.00125,
+      "grid_estimate": 2.724667117324948,
+      "grid_argmax": -0.0975,
+      "search_bracket": [
+        -0.09875,
+        -0.09625
+      ],
+      "refined_estimate": 2.724708677216087,
+      "refined_argmax": -0.097942869447547,
+      "absolute_residual": 4.1559891138944015e-05,
+      "relative_residual": 1.5252966853471819e-05,
+      "absolute_location_shift": 0.0004428694475470068,
+      "iterations": 132,
+      "final_bracket_width": 6.47994762545352e-31,
+      "converged": true,
+      "residual_within_tolerance": true
+    }
+  ],
+  "refined_equidistant_to_chebyshev_ratio": 342.9849654268753,
+  "conclusion": {
+    "all_local_searches_converged": true,
+    "all_residuals_within_tolerance": true,
+    "equidistant_over_100x_chebyshev_after_refinement": true,
+    "stable": true,
+    "scope": "a deterministic local sensitivity check around grid-selected peaks, not a proof of the global continuous supremum"
+  },
+  "random_seed": "not applicable; deterministic nodes and evaluations",
+  "evaluation_period": "not applicable; deterministic numerical experiment",
+  "provenance": {
+    "code_version": "68a8c0618e99edf058ad34fd5f37edf45bf7c6e2",
+    "source_sha256": {
+      "stability.py": "f28db7491c00858e69882a9e3d27a52fa7ed93900b96dc3e0be3f578f04ebee5",
+      "interpolation.py": "2badfd7546b841c556de1f647e3a82a21a537e1927e4f83cd268c94ba75ddff7"
+    },
+    "environment": {
+      "python": "3.12.14",
+      "numpy": "2.3.5"
+    },
+    "data_version": "analytic-lebesgue-local-peak-refinement-v1"
+  }
+}

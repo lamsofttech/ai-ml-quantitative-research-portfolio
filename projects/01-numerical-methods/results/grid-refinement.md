@@ -42,20 +42,23 @@ equidistant nodes remain far more sensitive to supplied-value perturbations.
 ## Reproduce
 
 Check out implementation commit
-`6862aa4f5cabae59151efd5f907ba2977732031a`, install project 01 and run:
+`68a8c0618e99edf058ad34fd5f37edf45bf7c6e2`, install project 01 and run:
 
 ```bash
 python -m quant_numerical.stability \
-  --code-version 6862aa4f5cabae59151efd5f907ba2977732031a \
+  --code-version 68a8c0618e99edf058ad34fd5f37edf45bf7c6e2 \
   --output projects/01-numerical-methods/results/stability.json \
-  --refinement-output projects/01-numerical-methods/results/grid-refinement.json
+  --refinement-output projects/01-numerical-methods/results/grid-refinement.json \
+  --peak-output projects/01-numerical-methods/results/peak-refinement.json
 ```
 
 Two executions on Python 3.12.14 with NumPy 2.3.5 produced byte-identical JSON.
 The grid-refinement artifact SHA-256 is
-`f938afa46856af2487891210db20ce8bff6dd44cc392475884b47d12f045d5c4`.
+`0b60f9659db19f505485b5fff75e24093a5260e823a5d32b84cd05fff2e079ea`.
 Exact row values, criteria, source hashes and environment are recorded in
 [grid-refinement.json](grid-refinement.json).
+The follow-up [local peak-refinement report](peak-refinement.md) estimates the
+remaining bias beyond the 1601-point grid.
 
 ## Limitations
 

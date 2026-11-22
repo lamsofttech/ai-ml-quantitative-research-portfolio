@@ -107,21 +107,24 @@ errors more generally.
 ## Reproduce
 
 Install project 01, check out code commit
-`6862aa4f5cabae59151efd5f907ba2977732031a`, then run:
+`68a8c0618e99edf058ad34fd5f37edf45bf7c6e2`, then run:
 
 ```bash
 python -m quant_numerical.stability \
-  --code-version 6862aa4f5cabae59151efd5f907ba2977732031a \
+  --code-version 68a8c0618e99edf058ad34fd5f37edf45bf7c6e2 \
   --output projects/01-numerical-methods/results/stability.json \
-  --refinement-output projects/01-numerical-methods/results/grid-refinement.json
+  --refinement-output projects/01-numerical-methods/results/grid-refinement.json \
+  --peak-output projects/01-numerical-methods/results/peak-refinement.json
 ```
 
 Two executions on Python 3.12.14 with NumPy 2.3.5 produced byte-identical JSON.
 Cross-platform or cross-version bitwise equality is not promised. Artifact
-SHA-256: `6b3e0f1362c01f6a879704baabb0c645e8515f8d28a1fb9737e9650c9c1867dc`.
+SHA-256: `66ac48c7e54be67cc97da98b6f6949abd41af941d65f5c2e6483115f3a215032`.
 The companion [grid-refinement report](grid-refinement.md) shows that the
 degree-16 estimates change by only 0.1425% and 0.0314% when the grid grows from
 401 to 1601 points.
+The [local peak-refinement report](peak-refinement.md) estimates the remaining
+1601-grid bias as 0.01206% and 0.001525% for the two node designs.
 
 ## Limitations
 
@@ -130,6 +133,8 @@ four degrees. The 401-point grid estimates the continuous maximum error and
 Lebesgue constant; it does not prove either exact supremum between grid points.
 The 401/801/1601 sensitivity check reduces concern about this particular grid
 choice but still does not provide a continuous optimization proof.
+The bounded local searches reduce the remaining between-grid uncertainty but
+still do not prove that no higher maximum exists in an unselected interval.
 The 80-digit reference is a strong numerical benchmark, not a symbolic proof. Interior
 Chebyshev-Lobatto nodes use the platform's float64 cosine values. Absolute
 errors are reported; relative error near small function values would answer a

@@ -2,4 +2,4 @@ gradio==5.50.0
 matplotlib>=3.8,<4
 pandas>=2.1,<3
 quant-mc-option-pricing @ git+https://github.com/lamsofttech/ai-ml-quantitative-research-portfolio.git@3bfa3c1bd45bea79b8dd3ef72c55f13c699b8c3f#subdirectory=projects/02-monte-carlo-option-pricing
-quant-numerical-methods @ git+https://github.com/lamsofttech/ai-ml-quantitative-research-portfolio.git@6862aa4f5cabae59151efd5f907ba2977732031a#subdirectory=projects/01-numerical-methods
+quant-numerical-methods @ git+https://github.com/lamsofttech/ai-ml-quantitative-research-portfolio.git@68a8c0618e99edf058ad34fd5f37edf45bf7c6e2#subdirectory=projects/01-numerical-methods

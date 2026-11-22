@@ -80,6 +80,9 @@ together:
 - **Grid-refinement sensitivity:** the degree-16 Lebesgue estimates are
   recomputed on 401, 801 and 1601 points to test whether the node-design
   conclusion depends materially on the original grid resolution.
+- **Local peak refinement:** a bounded high-precision golden-section search
+  starts around each 1601-point grid maximum and quantifies the remaining
+  between-grid bias without adding a SciPy dependency.
 
 The deterministic study uses the known function
 $f(x)=1/(1+25x^2)$ on $[-1,1]$, degrees 4, 8, 12 and 16, an
@@ -97,7 +100,8 @@ After installing the project, run:
 python -m quant_numerical.stability \
   --code-version YOUR_CHECKED_OUT_COMMIT \
   --output projects/01-numerical-methods/results/stability.json \
-  --refinement-output projects/01-numerical-methods/results/grid-refinement.json
+  --refinement-output projects/01-numerical-methods/results/grid-refinement.json \
+  --peak-output projects/01-numerical-methods/results/peak-refinement.json
 ```
 
 The JSON records the code version, source hashes, environment, deterministic
@@ -110,6 +114,9 @@ The recorded results and interpretation are in
 check is documented in [results/grid-refinement.md](results/grid-refinement.md),
 with exact evidence in
 [results/grid-refinement.json](results/grid-refinement.json).
+The bounded local search is documented in
+[results/peak-refinement.md](results/peak-refinement.md), with exact evidence
+in [results/peak-refinement.json](results/peak-refinement.json).
 
 ## Reproduce
 
