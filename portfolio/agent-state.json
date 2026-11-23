@@ -1,12 +1,12 @@
 {
   "schema_version": 1,
-  "updated_on": "2026-11-22",
+  "updated_on": "2026-11-23",
   "vision_file": "docs/PORTFOLIO_VISION.md",
   "expected_graduation": "2028-05",
   "active_milestone": "Verify foundations and establish reproducible delivery for projects 01/02",
-  "next_task": "Add an employer-facing project-01 case study grounded in the validated stability, grid-refinement and peak-refinement artifacts, with an automated evidence-link check, and recheck remote execution.",
+  "next_task": "Add an employer-facing project-02 case study grounded in the validated convergence and strike/maturity coverage artifacts, extend the evidence-link check to both case studies, and recheck remote execution.",
   "projects": {
-    "numerical-methods": "foundation-implemented; 78 tests passed 2026-11-22 with warnings as errors; bounded local peak refinement found only 0.01206% and 0.001525% residual grid bias and preserved the 342.98x conditioning ratio",
+    "numerical-methods": "foundation-implemented; 78 tests passed 2026-11-22 with warnings as errors; employer-facing evidence-linked case study added 2026-11-23; local case-study validator checks 9 repository links",
     "monte-carlo-options": "implemented; 92 tests passed 2026-11-22 with warnings as errors; 36-configuration strike/maturity coverage study recorded with exact binomial uncertainty",
     "financial-forecasting": "planned",
     "credit-risk": "planned",
@@ -15,8 +15,8 @@
   "github": {
     "branch": "main",
     "setup_status": "delivery contract established",
-    "last_implementation_commit": "68a8c0618e99edf058ad34fd5f37edf45bf7c6e2",
-    "last_evidence_commit": "32277ec058424eefc2f8333068fc736a5924c14b",
+    "last_implementation_commit": "36dbc2af44c2a3efd742feb6bfcb97afb2cc1c58",
+    "last_evidence_commit": "36dbc2af44c2a3efd742feb6bfcb97afb2cc1c58",
     "validation": {
       "local_python": "3.12.14",
       "tests_passed": 170,
@@ -33,24 +33,25 @@
       "workflow_yaml_syntax": "ci.yml, security.yml and publish-huggingface.yml parsed with PyYAML 6.0.2 on 2026-11-22; repository has no scripts/*.sh files",
       "remote_runs": [
         {
-          "id": 45033073354,
+          "id": 45204320261,
           "name": "CI",
           "status": "completed",
-          "conclusion": "failure; all nine jobs stopped with zero exposed steps and no logs",
-          "url": "https://github.com/lamsofttech/ai-ml-quantitative-research-portfolio/actions/runs/45033073354"
+          "conclusion": "failure; all nine jobs stopped with zero exposed steps",
+          "url": "https://github.com/lamsofttech/ai-ml-quantitative-research-portfolio/actions/runs/45204320261"
         },
         {
-          "id": 45033073359,
+          "id": 45204320531,
           "name": "Security",
           "status": "completed",
-          "conclusion": "failure; bandit job stopped with zero exposed steps and no logs",
-          "url": "https://github.com/lamsofttech/ai-ml-quantitative-research-portfolio/actions/runs/45033073359"
+          "conclusion": "failure; bandit job stopped with zero exposed steps",
+          "url": "https://github.com/lamsofttech/ai-ml-quantitative-research-portfolio/actions/runs/45204320531"
         }
       ],
       "limitations": [
-        "Python 3.12.14 local validation; Python 3.10/3.14, R, Docker and app interaction not verified; Rscript and Docker are unavailable in the execution environment",
+        "The 2026-11-23 change was validated in a reconstructed repository subset: seven focused link-validator tests, nine live local paths, compileall, Ruff and CI YAML syntax passed; the unchanged project 01/02 math suites were not rerun on 2026-11-23",
+        "Python 3.10/3.14, R, Docker and app interaction remain unverified; Rscript and Docker were unavailable in the previous full validation environment",
         "The local golden-section searches reduce between-grid uncertainty but do not prove the global continuous Lebesgue maxima",
-        "Fresh Actions jobs again stopped before all steps on 2026-11-22; step lists were absent and log retrieval returned 404 BlobNotFound, so no remote check result or precise platform cause is claimed"
+        "Fresh Actions jobs again stopped before all steps on 2026-11-23; step lists were empty, so no remote check result or precise platform cause is claimed"
       ],
       "math_tests_last_run_on": "2026-11-22",
       "catalog_tests_passed": 12,
@@ -58,32 +59,41 @@
       "project01_tests_checked_on": "2026-11-22",
       "project02_tests_passed": 92,
       "project02_tests_checked_on": "2026-11-22",
-      "tests_passed_scope": "projects 01 and 02 together on 2026-11-22 with warnings as errors"
+      "tests_passed_scope": "projects 01 and 02 together on 2026-11-22 with warnings as errors",
+      "case_study_links": {
+        "checked_on": "2026-11-23",
+        "links_checked": 9,
+        "focused_tests_passed": 7,
+        "cli": "passed",
+        "compileall": "passed",
+        "ruff": "passed with ruff 0.16.6",
+        "scope": "projects/01-numerical-methods/CASE_STUDY.md and new validator/tests"
+      }
     }
   },
   "hugging_face": {
     "repo_id": "nyakslamo/ai-ml-quantitative-research-portfolio",
     "repo_type": "space",
     "source": "spaces/portfolio-hub",
-    "status": "Public Space page reported sleeping due to inactivity when checked on 2026-11-22. Tested project-01 pin prepared, but upload/build/runtime are not verified. Publishing remains blocked by pre-step Actions failures; HF_TOKEN presence and validity are unknown.",
+    "status": "Public Space page reported sleeping due to inactivity when checked on 2026-11-23. No Space source changed in this run, no publish workflow was triggered, and upload/build/runtime remain unverified. HF_TOKEN presence and validity are unknown.",
     "workflow": ".github/workflows/publish-huggingface.yml",
     "publish_script": "scripts/publish_huggingface.py",
-    "runtime_checked_on": "2026-11-22",
+    "runtime_checked_on": "2026-11-23",
     "runtime_commit": "40efb957fa2f67f3100d16421a1ffc583fd1ebeb",
     "prepared_project02_pin": "3bfa3c1bd45bea79b8dd3ef72c55f13c699b8c3f",
     "prepared_project01_pin": "68a8c0618e99edf058ad34fd5f37edf45bf7c6e2",
-    "upload_status": "not performed; publish run 45033073401 failed with no exposed steps and log retrieval returned 404 BlobNotFound, so credential check, validation, HF upload, Space build and runtime were not reached"
+    "upload_status": "not attempted in this run because spaces/portfolio-hub and the publish script were unchanged; authenticated publishing, build and working runtime remain unverified"
   },
   "learning": {
     "status": "assigned; understanding not yet demonstrated",
     "reading": [
-      "projects/01-numerical-methods/results/peak-refinement.md",
-      "_decimal_golden_section_maximum and run_peak_refinement_study in projects/01-numerical-methods/src/quant_numerical/stability.py",
-      "test_degree_16_local_peak_refinement_has_small_residual_grid_bias in projects/01-numerical-methods/tests/test_stability.py"
+      "projects/01-numerical-methods/CASE_STUDY.md",
+      "projects/01-numerical-methods/results/stability.md (Results and Conditioning interpretation)",
+      "projects/01-numerical-methods/results/peak-refinement.md (Results and Limitations)"
     ],
-    "question": "What uncertainty does local peak refinement reduce, and why does it still not prove the global continuous Lebesgue constant?"
+    "question": "In an interview, how would you explain why the 342.98x figure compares numerical conditioning rather than forecasting accuracy or investment performance?"
   },
-  "latest_log": "portfolio/progress/2026-11-22.md",
+  "latest_log": "portfolio/progress/2026-11-23.md",
   "automation": {
     "id": "Automation_826d2e5b7734819180c3f3fc1c7b06c4",
     "schedule": "Daily around 08:00 America/Chicago; first run 2026-11-12",
@@ -92,25 +102,23 @@
   "weekly_review": {
     "baseline_on": "2026-11-12",
     "next_review_on": "2026-11-26",
-    "as_of": "2026-11-22",
-    "alignment": "Original five-project scope preserved. November-December foundations milestone remains active; project 01 now bounds the residual bias around its 1601-point conditioning peaks after grid-refinement and adversarial-perturbation studies, and project 02 retains replicated convergence/coverage evidence. Neither is relabeled as a completed research track, and project 03 remains planned.",
+    "as_of": "2026-11-23",
+    "alignment": "Original five-project scope preserved. The November-December projects-01/02 foundations milestone remains active. Project 01 now converts its validated stability, grid-refinement and peak-refinement evidence into an employer-facing case study with checked local links; project 02 retains replicated convergence and strike/maturity coverage evidence. Project 03 remains planned.",
     "demonstrable_skills": [
       "seeded Monte Carlo experimental design",
       "Black-Scholes benchmark validation",
       "exact binomial uncertainty for empirical coverage",
-      "tested Python package and reproducible evidence artifacts",
       "high-precision numerical benchmarking and error decomposition",
-      "experimental comparison of equidistant and Chebyshev-Lobatto interpolation nodes",
-      "Lebesgue-function conditioning analysis and worst-case error-amplification interpretation",
-      "construction and verification of an adversarial perturbation that attains a numerical stability bound",
-      "grid-refinement sensitivity analysis with explicit operational decision criteria",
-      "dependency-free bounded golden-section optimization and residual grid-bias analysis"
+      "Lebesgue-function conditioning analysis and adversarial perturbation design",
+      "grid and bounded local peak sensitivity analysis",
+      "tested Python packages and reproducible evidence artifacts",
+      "evidence-linked employer communication with automated link-integrity checks"
     ],
     "repeated_blockers": [
-      "GitHub Actions jobs stop before executing steps, preventing Python matrix, Docker, security and Hugging Face publishing verification",
-      "Hugging Face authentication, upload, build and the newly pinned runtime remain unverified"
+      "GitHub Actions jobs stop before executing steps, preventing Python matrix, Docker and security verification",
+      "Hugging Face authentication, upload, build and working demo remain unverified"
     ],
-    "next_week_focus": "Turn the validated project-01 evidence into an employer-facing case study with checked evidence links, then verify CI/security/Hugging Face when remote runners execute."
+    "next_week_focus": "Create the parallel project-02 employer case study from the validated convergence and coverage evidence, extend link validation to both case studies, and verify CI/security/Hugging Face when remote runners execute."
   },
   "research_baseline": {
     "file": "projects/02-monte-carlo-option-pricing/results/convergence.json",
@@ -173,5 +181,14 @@
     "result": "refined estimates were 934.534111 and 2.724709; relative residual grid bias was 0.01206% and 0.001525%; refined design ratio was 342.98; both operational criteria passed",
     "repeatability": "two byte-identical local executions on Python 3.12.14 and NumPy 2.3.5",
     "evidence_type": "deterministic local numerical optimization; not a proof of the global continuous maxima"
+  },
+  "case_study": {
+    "status": "recorded",
+    "implementation_commit": "36dbc2af44c2a3efd742feb6bfcb97afb2cc1c58",
+    "file": "projects/01-numerical-methods/CASE_STUDY.md",
+    "validator": "scripts/validate_case_study_links.py",
+    "local_links_checked": 9,
+    "focused_tests_passed": 7,
+    "evidence_type": "employer-facing synthesis of already validated deterministic numerical artifacts; no new performance experiment"
   }
 }
