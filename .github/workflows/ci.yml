@@ -20,6 +20,7 @@ jobs:
       - run: python -m pip install -r requirements-dev.txt
       - run: python scripts/validate_catalog.py
       - run: python -O scripts/validate_catalog.py
+      - run: python scripts/validate_case_study_links.py
       - run: python -m unittest discover -s scripts/tests -v
       - run: python -m ruff check scripts
 

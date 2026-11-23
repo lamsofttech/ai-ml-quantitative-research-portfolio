@@ -4,6 +4,8 @@
 
 How accurately and reliably can polynomial interpolation approximate a smooth function between observed values, and what numerical risks appear as the number or spacing of nodes changes?
 
+For a concise employer-facing explanation of the problem, decisions, evidence and limitations, read the [project case study](CASE_STUDY.md).
+
 ## Mathematical foundation
 
 Given distinct nodes \(x_0,\ldots,x_n\) and values \(y_j=f(x_j)\), the interpolating polynomial is
