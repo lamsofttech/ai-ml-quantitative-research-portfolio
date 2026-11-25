@@ -1,13 +1,13 @@
 {
   "schema_version": 1,
-  "updated_on": "2026-11-23",
+  "updated_on": "2026-11-25",
   "vision_file": "docs/PORTFOLIO_VISION.md",
   "expected_graduation": "2028-05",
   "active_milestone": "Verify foundations and establish reproducible delivery for projects 01/02",
-  "next_task": "Add an employer-facing project-02 case study grounded in the validated convergence and strike/maturity coverage artifacts, extend the evidence-link check to both case studies, and recheck remote execution.",
+  "next_task": "Add a machine-checked consistency test that verifies the project-02 case study's headline convergence and coverage values against the committed JSON artifacts, then recheck remote execution.",
   "projects": {
     "numerical-methods": "foundation-implemented; 78 tests passed 2026-11-22 with warnings as errors; employer-facing evidence-linked case study added 2026-11-23; local case-study validator checks 9 repository links",
-    "monte-carlo-options": "implemented; 92 tests passed 2026-11-22 with warnings as errors; 36-configuration strike/maturity coverage study recorded with exact binomial uncertainty",
+    "monte-carlo-options": "implemented; 92 tests passed 2026-11-22 with warnings as errors; 36-configuration strike/maturity coverage study recorded; employer-facing evidence-linked case study added 2026-11-25",
     "financial-forecasting": "planned",
     "credit-risk": "planned",
     "financial-nlp": "planned"
@@ -15,8 +15,8 @@
   "github": {
     "branch": "main",
     "setup_status": "delivery contract established",
-    "last_implementation_commit": "36dbc2af44c2a3efd742feb6bfcb97afb2cc1c58",
-    "last_evidence_commit": "36dbc2af44c2a3efd742feb6bfcb97afb2cc1c58",
+    "last_implementation_commit": "270f97e23023320d9aa081c1fbd7d050e7d952fd",
+    "last_evidence_commit": "270f97e23023320d9aa081c1fbd7d050e7d952fd",
     "validation": {
       "local_python": "3.12.14",
       "tests_passed": 170,
@@ -33,25 +33,25 @@
       "workflow_yaml_syntax": "ci.yml, security.yml and publish-huggingface.yml parsed with PyYAML 6.0.2 on 2026-11-22; repository has no scripts/*.sh files",
       "remote_runs": [
         {
-          "id": 45204320261,
+          "id": 45631859905,
           "name": "CI",
           "status": "completed",
           "conclusion": "failure; all nine jobs stopped with zero exposed steps",
-          "url": "https://github.com/lamsofttech/ai-ml-quantitative-research-portfolio/actions/runs/45204320261"
+          "url": "https://github.com/lamsofttech/ai-ml-quantitative-research-portfolio/actions/runs/45631859905"
         },
         {
-          "id": 45204320531,
+          "id": 45631859616,
           "name": "Security",
           "status": "completed",
           "conclusion": "failure; bandit job stopped with zero exposed steps",
-          "url": "https://github.com/lamsofttech/ai-ml-quantitative-research-portfolio/actions/runs/45204320531"
+          "url": "https://github.com/lamsofttech/ai-ml-quantitative-research-portfolio/actions/runs/45631859616"
         }
       ],
       "limitations": [
-        "The 2026-11-23 change was validated in a reconstructed repository subset: seven focused link-validator tests, nine live local paths, compileall, Ruff and CI YAML syntax passed; the unchanged project 01/02 math suites were not rerun on 2026-11-23",
-        "Python 3.10/3.14, R, Docker and app interaction remain unverified; Rscript and Docker were unavailable in the previous full validation environment",
-        "The local golden-section searches reduce between-grid uncertainty but do not prove the global continuous Lebesgue maxima",
-        "Fresh Actions jobs again stopped before all steps on 2026-11-23; step lists were empty, so no remote check result or precise platform cause is claimed"
+        "The 2026-11-25 change was validated in a reconstructed repository subset: seven focused validator tests, 20 live local paths, compileall and Ruff passed; exact case-study values were independently read from the committed convergence and coverage JSON artifacts",
+        "The unchanged project 01/02 mathematical suites were not rerun on 2026-11-25; their last full 78/92-test passing run remains 2026-11-22",
+        "Python 3.10/3.14, R, Docker and interactive simulation execution were not verified in this run",
+        "Fresh Actions jobs again stopped before all steps on 2026-11-25; step lists were empty, so no remote check result or precise platform cause is claimed"
       ],
       "math_tests_last_run_on": "2026-11-22",
       "catalog_tests_passed": 12,
@@ -61,13 +61,14 @@
       "project02_tests_checked_on": "2026-11-22",
       "tests_passed_scope": "projects 01 and 02 together on 2026-11-22 with warnings as errors",
       "case_study_links": {
-        "checked_on": "2026-11-23",
-        "links_checked": 9,
+        "checked_on": "2026-11-25",
+        "case_studies": 2,
+        "links_checked": 20,
         "focused_tests_passed": 7,
         "cli": "passed",
         "compileall": "passed",
         "ruff": "passed with ruff 0.16.6",
-        "scope": "projects/01-numerical-methods/CASE_STUDY.md and new validator/tests"
+        "scope": "project 01 and project 02 employer-facing case studies"
       }
     }
   },
@@ -75,25 +76,25 @@
     "repo_id": "nyakslamo/ai-ml-quantitative-research-portfolio",
     "repo_type": "space",
     "source": "spaces/portfolio-hub",
-    "status": "Public Space page reported sleeping due to inactivity when checked on 2026-11-23. No Space source changed in this run, no publish workflow was triggered, and upload/build/runtime remain unverified. HF_TOKEN presence and validity are unknown.",
+    "status": "Public Space page reported Running on Zero and its rendered interface was reachable on 2026-11-25, including the overview, Neville, Monte Carlo and GPU tabs. Simulation buttons were not exercised. The deployed source revision, HF_TOKEN presence/validity, authenticated upload and build provenance remain unverified, so GitHub/Hugging Face synchronization is not claimed.",
     "workflow": ".github/workflows/publish-huggingface.yml",
     "publish_script": "scripts/publish_huggingface.py",
-    "runtime_checked_on": "2026-11-23",
+    "runtime_checked_on": "2026-11-25",
     "runtime_commit": "40efb957fa2f67f3100d16421a1ffc583fd1ebeb",
     "prepared_project02_pin": "3bfa3c1bd45bea79b8dd3ef72c55f13c699b8c3f",
     "prepared_project01_pin": "68a8c0618e99edf058ad34fd5f37edf45bf7c6e2",
-    "upload_status": "not attempted in this run because spaces/portfolio-hub and the publish script were unchanged; authenticated publishing, build and working runtime remain unverified"
+    "upload_status": "No Space source or project package changed in this run, so no publish workflow was triggered. Public interface rendering was verified; authenticated upload/build provenance and source synchronization remain unknown."
   },
   "learning": {
     "status": "assigned; understanding not yet demonstrated",
     "reading": [
-      "projects/01-numerical-methods/CASE_STUDY.md",
-      "projects/01-numerical-methods/results/stability.md (Results and Conditioning interpretation)",
-      "projects/01-numerical-methods/results/peak-refinement.md (Results and Limitations)"
+      "projects/02-monte-carlo-option-pricing/CASE_STUDY.md",
+      "projects/02-monte-carlo-option-pricing/results/README.md",
+      "projects/02-monte-carlo-option-pricing/results/coverage-grid.md"
     ],
-    "question": "In an interview, how would you explain why the 342.98x figure compares numerical conditioning rather than forecasting accuracy or investment performance?"
+    "question": "Why does 188 covered intervals out of 200 require a binomial confidence interval, and why does that result still not validate GBM against real option markets?"
   },
-  "latest_log": "portfolio/progress/2026-11-23.md",
+  "latest_log": "portfolio/progress/2026-11-25.md",
   "automation": {
     "id": "Automation_826d2e5b7734819180c3f3fc1c7b06c4",
     "schedule": "Daily around 08:00 America/Chicago; first run 2026-11-12",
@@ -102,23 +103,23 @@
   "weekly_review": {
     "baseline_on": "2026-11-12",
     "next_review_on": "2026-11-26",
-    "as_of": "2026-11-23",
-    "alignment": "Original five-project scope preserved. The November-December projects-01/02 foundations milestone remains active. Project 01 now converts its validated stability, grid-refinement and peak-refinement evidence into an employer-facing case study with checked local links; project 02 retains replicated convergence and strike/maturity coverage evidence. Project 03 remains planned.",
+    "as_of": "2026-11-25",
+    "alignment": "Original five-project scope preserved. The November-December projects-01/02 foundations milestone remains active and on pace. Both implemented foundation projects now have employer-facing case studies linked to validated artifacts and protected by one automated local-link check. Project 03 remains planned.",
     "demonstrable_skills": [
-      "seeded Monte Carlo experimental design",
-      "Black-Scholes benchmark validation",
+      "seeded Monte Carlo experimental design and reproducible random streams",
+      "Black-Scholes benchmark validation and Monte Carlo convergence analysis",
+      "antithetic variance reduction with statistically correct pair-average uncertainty",
       "exact binomial uncertainty for empirical coverage",
-      "high-precision numerical benchmarking and error decomposition",
-      "Lebesgue-function conditioning analysis and adversarial perturbation design",
-      "grid and bounded local peak sensitivity analysis",
+      "high-precision interpolation benchmarking and conditioning analysis",
       "tested Python packages and reproducible evidence artifacts",
-      "evidence-linked employer communication with automated link-integrity checks"
+      "evidence-linked employer communication with automated link-integrity checks",
+      "honest separation of numerical validation, model risk and financial claims"
     ],
     "repeated_blockers": [
       "GitHub Actions jobs stop before executing steps, preventing Python matrix, Docker and security verification",
-      "Hugging Face authentication, upload, build and working demo remain unverified"
+      "Hugging Face authenticated publishing and deployed-source provenance remain unverified even though the public interface now renders"
     ],
-    "next_week_focus": "Create the parallel project-02 employer case study from the validated convergence and coverage evidence, extend link validation to both case studies, and verify CI/security/Hugging Face when remote runners execute."
+    "next_week_focus": "Add machine-checked numeric consistency between project-02 narrative claims and JSON artifacts, then continue diagnosing remote pre-step failures and verify deployed-source provenance when accessible."
   },
   "research_baseline": {
     "file": "projects/02-monte-carlo-option-pricing/results/convergence.json",
@@ -190,5 +191,15 @@
     "local_links_checked": 9,
     "focused_tests_passed": 7,
     "evidence_type": "employer-facing synthesis of already validated deterministic numerical artifacts; no new performance experiment"
+  },
+  "project02_case_study": {
+    "status": "recorded",
+    "implementation_commit": "270f97e23023320d9aa081c1fbd7d050e7d952fd",
+    "file": "projects/02-monte-carlo-option-pricing/CASE_STUDY.md",
+    "validator": "scripts/validate_case_study_links.py",
+    "total_case_studies_checked": 2,
+    "total_local_links_checked": 20,
+    "focused_tests_passed": 7,
+    "evidence_type": "employer-facing synthesis of validated simulated GBM convergence and exact-binomial coverage artifacts; no market or trading evidence"
   }
 }
