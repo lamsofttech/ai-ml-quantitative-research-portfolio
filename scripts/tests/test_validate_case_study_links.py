@@ -16,8 +16,15 @@ SPEC.loader.exec_module(MODULE)
 
 class EvidenceLinkValidationTests(unittest.TestCase):
     def test_repository_case_study_links_resolve(self):
-        case_study = ROOT / "projects/01-numerical-methods/CASE_STUDY.md"
-        self.assertGreaterEqual(MODULE.validate_case_study(case_study), 9)
+        expected_minimums = {
+            ROOT / "projects/01-numerical-methods/CASE_STUDY.md": 9,
+            ROOT / "projects/02-monte-carlo-option-pricing/CASE_STUDY.md": 11,
+        }
+        for case_study, expected_minimum in expected_minimums.items():
+            with self.subTest(case_study=case_study):
+                self.assertGreaterEqual(
+                    MODULE.validate_case_study(case_study), expected_minimum
+                )
 
     def test_external_and_anchor_links_are_ignored(self):
         markdown = "[section](#results) [web](https://example.com/x) [file](results.md)"

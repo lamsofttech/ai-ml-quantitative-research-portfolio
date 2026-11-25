@@ -10,6 +10,8 @@ once a payoff or risk measure has no closed form (path-dependent options,
 multi-asset baskets, non-Gaussian risk models); this project validates the
 methodology against the one case where an exact answer is known.
 
+For an employer-facing explanation of the experimental design, evidence and model-risk limits, read the [project case study](CASE_STUDY.md).
+
 ## Mathematical foundation
 
 Under the risk-neutral measure with continuously compounded rate $r$ and

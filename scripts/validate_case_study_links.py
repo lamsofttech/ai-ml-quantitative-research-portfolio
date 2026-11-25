@@ -7,7 +7,10 @@ from pathlib import Path
 from urllib.parse import unquote, urlsplit
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_CASE_STUDIES = (ROOT / "projects/01-numerical-methods/CASE_STUDY.md",)
+DEFAULT_CASE_STUDIES = (
+    ROOT / "projects/01-numerical-methods/CASE_STUDY.md",
+    ROOT / "projects/02-monte-carlo-option-pricing/CASE_STUDY.md",
+)
 MARKDOWN_LINK = re.compile(r"(?<!!)\[[^\]]+\]\(([^)]+)\)")
 
 
