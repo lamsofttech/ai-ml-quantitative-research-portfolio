@@ -119,6 +119,7 @@ python -m quant_mc_options.convergence --study coverage-grid \
   --code-version 3bfa3c1bd45bea79b8dd3ef72c55f13c699b8c3f \
   --output projects/02-monte-carlo-option-pricing/results/coverage-grid.json
 python scripts/validate_case_study_links.py
+python scripts/validate_case_study_evidence.py
 ```
 
 Each recorded artifact was reproduced twice byte-for-byte in its documented
