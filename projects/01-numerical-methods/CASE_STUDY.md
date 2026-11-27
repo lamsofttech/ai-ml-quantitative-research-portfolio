@@ -93,6 +93,7 @@ python -m quant_numerical.stability \
   --refinement-output projects/01-numerical-methods/results/grid-refinement.json \
   --peak-output projects/01-numerical-methods/results/peak-refinement.json
 python scripts/validate_case_study_links.py
+python scripts/validate_case_study_evidence.py
 ```
 
 The existing artifacts were generated twice on Python 3.12.14 and were
