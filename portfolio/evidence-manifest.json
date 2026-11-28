@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "purpose": "Lock employer-facing evidence artifacts to reviewed bytes and generating code versions.",
+  "artifacts": [
+    {
+      "id": "project01-stability",
+      "project": "numerical-methods",
+      "artifact": "projects/01-numerical-methods/results/stability.json",
+      "report": "projects/01-numerical-methods/results/stability.md",
+      "sha256": "66ac48c7e54be67cc97da98b6f6949abd41af941d65f5c2e6483115f3a215032",
+      "code_version": "68a8c0618e99edf058ad34fd5f37edf45bf7c6e2",
+      "source_root": "projects/01-numerical-methods/src/quant_numerical",
+      "source_files": [
+        "interpolation.py",
+        "stability.py"
+      ]
+    },
+    {
+      "id": "project01-grid-refinement",
+      "project": "numerical-methods",
+      "artifact": "projects/01-numerical-methods/results/grid-refinement.json",
+      "report": "projects/01-numerical-methods/results/grid-refinement.md",
+      "sha256": "0b60f9659db19f505485b5fff75e24093a5260e823a5d32b84cd05fff2e079ea",
+      "code_version": "68a8c0618e99edf058ad34fd5f37edf45bf7c6e2",
+      "source_root": "projects/01-numerical-methods/src/quant_numerical",
+      "source_files": [
+        "interpolation.py",
+        "stability.py"
+      ]
+    },
+    {
+      "id": "project01-peak-refinement",
+      "project": "numerical-methods",
+      "artifact": "projects/01-numerical-methods/results/peak-refinement.json",
+      "report": "projects/01-numerical-methods/results/peak-refinement.md",
+      "sha256": "ec926709dcfe1aa532c18335c1c5485697fc5b4271fe300f06fd3ad587d6264c",
+      "code_version": "68a8c0618e99edf058ad34fd5f37edf45bf7c6e2",
+      "source_root": "projects/01-numerical-methods/src/quant_numerical",
+      "source_files": [
+        "interpolation.py",
+        "stability.py"
+      ]
+    },
+    {
+      "id": "project02-convergence",
+      "project": "monte-carlo-options",
+      "artifact": "projects/02-monte-carlo-option-pricing/results/convergence.json",
+      "report": "projects/02-monte-carlo-option-pricing/results/README.md",
+      "sha256": "8bd0e2ded247f45487ad10ae0874ff9b8754c68ba4acf789aa977492f7904c43",
+      "code_version": "ba4e31c5212fba8a6a38d79ee785fc5bc022a537",
+      "source_root": "projects/02-monte-carlo-option-pricing/src/quant_mc_options",
+      "source_files": [
+        "black_scholes.py",
+        "convergence.py",
+        "gbm.py",
+        "monte_carlo.py"
+      ]
+    },
+    {
+      "id": "project02-coverage-grid",
+      "project": "monte-carlo-options",
+      "artifact": "projects/02-monte-carlo-option-pricing/results/coverage-grid.json",
+      "report": "projects/02-monte-carlo-option-pricing/results/coverage-grid.md",
+      "sha256": "61d8ce315b1791b3664b98597c434a34c1ef78f945cc6a50c8d9adc4b0d2cf93",
+      "code_version": "3bfa3c1bd45bea79b8dd3ef72c55f13c699b8c3f",
+      "source_root": "projects/02-monte-carlo-option-pricing/src/quant_mc_options",
+      "source_files": [
+        "black_scholes.py",
+        "convergence.py",
+        "gbm.py",
+        "monte_carlo.py"
+      ]
+    }
+  ]
+}

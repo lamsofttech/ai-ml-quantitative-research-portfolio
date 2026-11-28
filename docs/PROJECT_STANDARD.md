@@ -14,4 +14,7 @@ Every project README should answer:
 10. What fairness, explainability, security, and responsible-AI risks apply?
 
 Generated outputs must record the code version, environment, data version, parameters, random seed, and evaluation period.
+Employer-facing evidence artifacts must also be listed in `portfolio/evidence-manifest.json`.
+CI verifies each artifact's exact SHA-256 digest, generating code version, linked report, and
+historical source-file hashes so that evidence changes require explicit review.
 
